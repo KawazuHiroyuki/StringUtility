@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+namespace string_utility
+{
 enum class AsciiCharacter : char {
     Null = 0x00, //<! 空文字
     StartOfHeading, //<! SOH: ヘッダ開始
@@ -130,110 +132,8 @@ enum class AsciiCharacter : char {
     Tilde, //<! ~: チルダ (波線/波形記号/近似)
     Delete = 0x7F, //<! DEL: 一文字削除
 };
-
-enum class AsciiCharacterType {
-    Control = 0, //!< 制御文字
-    Printable, //!< 印刷可能文字
-    WhiteSpace, //!< 空白類文字
-    Blank, //!< ブランク文字
-    Graphical, //!< グラフィック表現
-    Alphabetic, //!< 英字
-    UpperCase, //!< 英字小文字
-    LowerCase, //!< 英字大文字
-    Numeric, //!< 数字
-    Decimal, //!< 10進数字
-    Hexadecimal, //!< 16進数字
-    Bracket, //!< 括弧
-    Quote, //!< 引用符
-};
-
-bool isAscii(signed char character)
-{
-
 }
 
-bool isAscii(unsigned char character)
-{
-
-}
-
-bool isAscii(char character)
-{
-
-}
-
-bool isControl(AsciiCharacter character)
-{
-    if (AsciiCharacter::Null <= character && AsciiCharacter::UnitSeparator >= character) {
-        return true;
-    }
-    if (AsciiCharacter::Delete == character) {
-        return true;
-    }
-    return false;
-}
-
-bool isPrintable(AsciiCharacter character)
-{
-    if (AsciiCharacter::Null <= character && AsciiCharacter::UnitSeparator >= character) {
-        return true;
-    }
-}
-
-bool isWhiteSpace(AsciiCharacter character)
-{
-
-}
-
-bool isBlank(AsciiCharacter character)
-{
-
-}
-
-bool isGraphical(AsciiCharacter character)
-{
-
-}
-
-bool isAlphanumeric(AsciiCharacter character)
-{
-
-}
-
-bool isAlphabetic(AsciiCharacter character)
-{
-
-}
-
-bool isUpperCase(AsciiCharacter character)
-{
-
-}
-
-bool isLowerCase(AsciiCharacter character)
-{
-
-}
-
-bool isNumeric(AsciiCharacter character)
-{
-
-}
-
-bool isDigit(AsciiCharacter character)
-{
-
-}
-
-bool isDecimal(AsciiCharacter character)
-{
-
-}
-
-bool isHexadecimal(AsciiCharacter character)
-{
-
-}
 
 
 /*

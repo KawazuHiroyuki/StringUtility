@@ -13,15 +13,54 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="ソース ファイル\001">
+      <UniqueIdentifier>{6a288919-ae68-4d44-b1c7-7cf4f9540d8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\002">
+      <UniqueIdentifier>{265d34f2-47fa-4abe-8c00-b155bd9f2d8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\003">
+      <UniqueIdentifier>{0dbfd799-f3ec-4273-acf2-5128d8065ee5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="StringUtility.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="NumberTextAlternate.cpp">
+      <Filter>ソース ファイル\002</Filter>
+    </ClCompile>
+    <ClCompile Include="StringEx.cpp">
+      <Filter>ソース ファイル\002</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="StringUtility.h">
+      <Filter>ソース ファイル\001</Filter>
+    </ClInclude>
     <ClInclude Include="AsciiCharacter.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ソース ファイル\001</Filter>
+    </ClInclude>
+    <ClInclude Include="AsciiCharacterType.h">
+      <Filter>ソース ファイル\001</Filter>
+    </ClInclude>
+    <ClInclude Include="NumberTextAlternate.h">
+      <Filter>ソース ファイル\002</Filter>
+    </ClInclude>
+    <ClInclude Include="StringEx.h">
+      <Filter>ソース ファイル\002</Filter>
+    </ClInclude>
+    <ClInclude Include="BinaryPrefixType.h">
+      <Filter>ソース ファイル\003</Filter>
+    </ClInclude>
+    <ClInclude Include="BinaryPrefixUtility.h">
+      <Filter>ソース ファイル\003</Filter>
+    </ClInclude>
+    <ClInclude Include="SIPrefixUtility.h">
+      <Filter>ソース ファイル\003</Filter>
+    </ClInclude>
+    <ClInclude Include="SIPrefixType.h">
+      <Filter>ソース ファイル\003</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

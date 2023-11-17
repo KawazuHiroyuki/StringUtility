@@ -139,10 +139,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="StringUtility.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="NumberTextAlternate.cpp" />
+    <ClCompile Include="StringEx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AsciiCharacter.h" />
+    <ClInclude Include="AsciiCharacterType.h" />
+    <ClInclude Include="BinaryPrefixType.h" />
+    <ClInclude Include="BinaryPrefixUtility.h" />
+    <ClInclude Include="NumberTextAlternate.h" />
+    <ClInclude Include="SIPrefixType.h" />
+    <ClInclude Include="SIPrefixUtility.h" />
+    <ClInclude Include="StringEx.h" />
+    <ClInclude Include="StringUtility.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
