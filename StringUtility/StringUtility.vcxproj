@@ -88,6 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -102,6 +103,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -142,6 +144,9 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="NumberTextAlternate.cpp" />
     <ClCompile Include="StringEx.cpp" />
+    <ClCompile Include="Test001.cpp" />
+    <ClCompile Include="Test002.cpp" />
+    <ClCompile Include="Test003.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AsciiCharacter.h" />
@@ -153,6 +158,7 @@
     <ClInclude Include="SIPrefixUtility.h" />
     <ClInclude Include="StringEx.h" />
     <ClInclude Include="StringUtility.h" />
+    <ClInclude Include="Test.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

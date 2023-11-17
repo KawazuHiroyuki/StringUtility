@@ -2,10 +2,15 @@
 //
 
 #include <iostream>
+#include "Test.h"
 
 int main()
 {
     std::cout << "Hello World!\n";
+
+    Test001();
+    Test002();
+    Test003();
 }
 
 // プログラムの実行: Ctrl + F5 または [デバッグ] > [デバッグなしで開始] メニュー

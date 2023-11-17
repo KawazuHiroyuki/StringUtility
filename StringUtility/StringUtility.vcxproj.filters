@@ -33,6 +33,15 @@
     <ClCompile Include="StringEx.cpp">
       <Filter>ソース ファイル\002</Filter>
     </ClCompile>
+    <ClCompile Include="Test001.cpp">
+      <Filter>ソース ファイル\001</Filter>
+    </ClCompile>
+    <ClCompile Include="Test002.cpp">
+      <Filter>ソース ファイル\002</Filter>
+    </ClCompile>
+    <ClCompile Include="Test003.cpp">
+      <Filter>ソース ファイル\003</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="StringUtility.h">
@@ -61,6 +70,9 @@
     </ClInclude>
     <ClInclude Include="SIPrefixType.h">
       <Filter>ソース ファイル\003</Filter>
+    </ClInclude>
+    <ClInclude Include="Test.h">
+      <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
