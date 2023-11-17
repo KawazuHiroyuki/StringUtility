@@ -5,6 +5,8 @@
 #include <map>
 #include <functional>
 #include <string>
+#include <vector>
+#include <algorithm>
 
 #include "SIPrefixType.h"
 
@@ -30,9 +32,42 @@ public:
     using Peta = std::chrono::duration<double, std::ratio_multiply<Base::period, std::peta>>;
     using Exa = std::chrono::duration<double, std::ratio_multiply<Base::period, std::exa>>;
 
+    static std::vector<SIPrefix> getAscendingSIPrefixes() {
+        std::vector prefixes = {
+            SIPrefix::Atto,
+            SIPrefix::Femto,
+            SIPrefix::Pico,
+            SIPrefix::Nano,
+            SIPrefix::Micro,
+            SIPrefix::Milli,
+            SIPrefix::Centi,
+            SIPrefix::Deci,
+            SIPrefix::Base,
+            SIPrefix::Deca,
+            SIPrefix::Hecto,
+            SIPrefix::Kilo,
+            SIPrefix::Mega,
+            SIPrefix::Giga,
+            SIPrefix::Tera,
+            SIPrefix::Peta,
+            SIPrefix::Exa,
+        };
+        return prefixes;
+    }
+
+    static std::vector<SIPrefix> getDescendingSIPrefixes() {
+        auto prefixes = getAscendingSIPrefixes();
+        std::reverse(prefixes.begin(), prefixes.end());
+        return prefixes;
+    }
+
     template <typename Type = double>
     static Type getValue(SIPrefix prefix) {
         return static_cast<Type>(infos.at(prefix).value());
+    }
+
+    static std::string getName(SIPrefix prefix) {
+        return infos.at(prefix).name;
     }
 
     static std::string getText(SIPrefix prefix) {
@@ -55,98 +90,134 @@ public:
         return static_cast<Type>(infos.at(to).to(infos.at(from).to(value)));
     }
 
+    template <typename Result, typename Type>
+    static Type to(Type value, SIPrefix from, SIPrefix to) {
+        return static_cast<Result>(infos.at(to).to(infos.at(from).to(value)));
+    }
+
+    // readable
+    template <typename Type>
+    static SIPrefix readbable(Type value) {
+        for (auto prefix : getDescendingSIPrefixes()) {
+            if (infos.at(prefix).greaterEqualThan(value)) {
+                return prefix;
+            }
+        }
+        return SIPrefix::Base;
+    }
+
+
 private:
     struct SIPrefixInfo {
         std::function<double()> value;
+        std::string name;
         std::string text;
         std::function<double(double)> to;
+        std::function<bool(double)> greaterEqualThan;
     };
 
     static inline std::map<SIPrefix, SIPrefixInfo> infos = {
         {SIPrefix::Atto, SIPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Atto{1}).count(); },
-            std::string{"a"},
-            [](double value) { return std::chrono::duration_cast<Atto>(Base{value}).count(); }}
-        },
+            "Atto", std::string{"a"},
+            [](double value) { return std::chrono::duration_cast<Atto>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Atto{1}; }
+        }},
         {SIPrefix::Femto, SIPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Femto{1}).count(); },
-            std::string{"f"},
-            [](double value) { return std::chrono::duration_cast<Femto>(Base{value}).count(); }}
-        },
+            "Femto", std::string{"f"},
+            [](double value) { return std::chrono::duration_cast<Femto>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Femto{1}; }
+        }},
         {SIPrefix::Pico, SIPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Pico{1}).count(); },
-            std::string{"p"},
-            [](double value) { return std::chrono::duration_cast<Pico>(Base{value}).count(); }}
-        },
+            "Pico", std::string{"p"},
+            [](double value) { return std::chrono::duration_cast<Pico>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Pico{1}; }
+        }},
         {SIPrefix::Nano, SIPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Nano{1}).count(); },
-            std::string{"n"},
-            [](double value) { return std::chrono::duration_cast<Nano>(Base{value}).count(); }}
-        },
+            "Nano", std::string{"n"},
+            [](double value) { return std::chrono::duration_cast<Nano>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Nano{1}; }
+        }},
         {SIPrefix::Micro, SIPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Micro{1}).count(); },
-            std::string{"u"},
-            [](double value) { return std::chrono::duration_cast<Micro>(Base{value}).count(); }}
-        },
+            "Micro", std::string{"u"},
+            [](double value) { return std::chrono::duration_cast<Micro>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Micro{1}; }
+        }},
         {SIPrefix::Milli, SIPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Milli{1}).count(); },
-            std::string{"m"},
-            [](double value) { return std::chrono::duration_cast<Milli>(Base{value}).count(); }}
-        },
+            "Milli", std::string{"m"},
+            [](double value) { return std::chrono::duration_cast<Milli>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Milli{1}; }
+        }},
         {SIPrefix::Centi, SIPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Centi{1}).count(); },
-            std::string{"c"},
-            [](double value) { return std::chrono::duration_cast<Centi>(Base{value}).count(); }}
-        },
+            "Centi", std::string{"c"},
+            [](double value) { return std::chrono::duration_cast<Centi>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Centi{1}; }
+        }},
         {SIPrefix::Deci, SIPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Deci{1}).count(); },
-            std::string{"d"},
-            [](double value) { return std::chrono::duration_cast<Deci>(Base{value}).count(); }}
-        },
+            "Deci", std::string{"d"},
+            [](double value) { return std::chrono::duration_cast<Deci>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Deci{1}; }
+        }},
         {SIPrefix::Base, SIPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Base{1}).count(); },
-            std::string{""},
-            [](double value) { return value; }}
-        },
+            "Base", std::string{""},
+            [](double value) { return value; },
+            [](double value) { return Base{value} >= Base{1}; }
+        }},
         {SIPrefix::Deca, SIPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Deca{1}).count(); },
-            std::string{"da"},
-            [](double value) { return std::chrono::duration_cast<Deca>(Base{value}).count(); }}
-        },
+            "Deca", std::string{"da"},
+            [](double value) { return std::chrono::duration_cast<Deca>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Deca{1}; }
+        }},
         {SIPrefix::Hecto, SIPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Hecto{1}).count(); },
-            std::string{"h"},
-            [](double value) { return std::chrono::duration_cast<Hecto>(Base{value}).count(); }}
-        },
+            "Hecto", std::string{"h"},
+            [](double value) { return std::chrono::duration_cast<Hecto>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Hecto{1}; }
+        }},
         {SIPrefix::Kilo, SIPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Kilo{1}).count(); },
-            std::string{"k"},
-            [](double value) { return std::chrono::duration_cast<Kilo>(Base{value}).count(); }}
-        },
+            "Kilo", std::string{"k"},
+            [](double value) { return std::chrono::duration_cast<Kilo>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Kilo{1}; }
+        }},
         {SIPrefix::Mega, SIPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Mega{1}).count(); },
-            std::string{"M"},
-            [](double value) { return std::chrono::duration_cast<Mega>(Base{value}).count(); }}
-        },
+            "Mega", std::string{"M"},
+            [](double value) { return std::chrono::duration_cast<Mega>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Mega{1}; }
+        }},
         {SIPrefix::Giga, SIPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Giga{1}).count(); },
-            std::string{"G"},
-            [](double value) { return std::chrono::duration_cast<Giga>(Base{value}).count(); }}
-        },
+            "Giga", std::string{"G"},
+            [](double value) { return std::chrono::duration_cast<Giga>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Giga{1}; }
+        }},
         {SIPrefix::Tera, SIPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Tera{1}).count(); },
-            std::string{"T"},
-            [](double value) { return std::chrono::duration_cast<Tera>(Base{value}).count(); }}
-        },
+            "Tera", std::string{"T"},
+            [](double value) { return std::chrono::duration_cast<Tera>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Tera{1}; }
+        }},
         {SIPrefix::Peta, SIPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Peta{1}).count(); },
-            std::string{"P"},
-            [](double value) { return std::chrono::duration_cast<Peta>(Base{value}).count(); }}
-        },
+            "Peta", std::string{"P"},
+            [](double value) { return std::chrono::duration_cast<Peta>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Peta{1}; }
+        }},
         {SIPrefix::Exa, SIPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Exa{1}).count(); },
-            std::string{"E"},
-            [](double value) { return std::chrono::duration_cast<Exa>(Base{value}).count(); }}
-        },
+            "Exa", std::string{"E"},
+            [](double value) { return std::chrono::duration_cast<Exa>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Exa{1}; }
+        }},
     };
 };

@@ -22,6 +22,10 @@ public:
         return static_cast<Type>(infos.at(prefix).value());
     }
 
+    static std::string getName(BinaryPrefix prefix) {
+        return infos.at(prefix).name;
+    }
+
     static std::string getText(BinaryPrefix prefix) {
         return infos.at(prefix).text;
     }
@@ -46,46 +50,55 @@ public:
 private:
     struct BinaryPrefixInfo {
         std::function<double()> value;
+        std::string name;
         std::string text;
         std::string siPrefixLikeText;
         std::function<double(double)> to;
+        std::function<bool(double)> greaterEqualThan;
     };
 
     static inline std::map<BinaryPrefix, BinaryPrefixInfo> infos = {
         {BinaryPrefix::Base, BinaryPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Base{1}).count(); },
-            "", "",
-            [](double value) { return value; }}
-        },
+            "Base", "", "",
+            [](double value) { return value; },
+            [](double value) { return Base{value} >= Base{1}; }
+        }},
         {BinaryPrefix::Kibi, BinaryPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Kibi{1}).count(); },
-            "Ki", "k",
-            [](double value) { return std::chrono::duration_cast<Kibi>(Base{value}).count(); }}
-        },
+            "Kibi", "Ki", "k",
+            [](double value) { return std::chrono::duration_cast<Kibi>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Kibi{1}; }
+        }},
         {BinaryPrefix::Mebi, BinaryPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Mebi{1}).count(); },
-            "Mi", "M",
-            [](double value) { return std::chrono::duration_cast<Mebi>(Base{value}).count(); }}
-        },
+            "Mebi", "Mi", "M",
+            [](double value) { return std::chrono::duration_cast<Mebi>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Mebi{1}; }
+        }},
         {BinaryPrefix::Gibi, BinaryPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Gibi{1}).count(); },
-            "Gi", "G",
-            [](double value) { return std::chrono::duration_cast<Gibi>(Base{value}).count(); }}
-        },
+            "Gibi", "Gi", "G",
+            [](double value) { return std::chrono::duration_cast<Gibi>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Gibi{1}; }
+        }},
         {BinaryPrefix::Tebi, BinaryPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Tebi{1}).count(); },
-            "Ti", "T",
-            [](double value) { return std::chrono::duration_cast<Tebi>(Base{value}).count(); }}
-        },
+            "Tebi", "Ti", "T",
+            [](double value) { return std::chrono::duration_cast<Tebi>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Tebi{1}; }
+        }},
         {BinaryPrefix::Pebi, BinaryPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Pebi{1}).count(); },
-            "Pi", "P",
-            [](double value) { return std::chrono::duration_cast<Pebi>(Base{value}).count(); }}
-        },
+            "Pebi", "Pi", "P",
+            [](double value) { return std::chrono::duration_cast<Pebi>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Pebi{1}; }
+        }},
         {BinaryPrefix::Exbi, BinaryPrefixInfo{
             []() { return std::chrono::duration_cast<Base>(Exbi{1}).count(); },
-            "Ei", "E",
-            [](double value) { return std::chrono::duration_cast<Exbi>(Base{value}).count(); }}
-        },
+            "Exbi", "Ei", "E",
+            [](double value) { return std::chrono::duration_cast<Exbi>(Base{value}).count(); },
+            [](double value) { return Base{value} >= Exbi{1}; }
+        }},
     };
 };
