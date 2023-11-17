@@ -5,36 +5,36 @@
 #include <vector>
 
 class NumberTextAlternate {
-    std::vector<std::string> m_positiveSigns;
-    std::vector<std::string> m_negativeSigns;
-    std::vector<std::string> m_zeroSigns;
-    std::vector<std::string> m_points;
-    std::vector<std::string> m_infinities;
-    std::vector<std::string> m_nans;
+    std::string m_positiveSign;
+    std::string m_negativeSign;
+    std::string m_zeroSign;
+    std::string m_point;
+    std::string m_infinity;
+    std::string m_nan;
 
 public:
-    NumberTextAlternate& addPositiveSign(std::string_view alternate) {
-        m_positiveSigns.emplace_back(alternate);
+    NumberTextAlternate& setPositiveSign(std::string_view alternate) {
+        m_positiveSign = std::string{ alternate };
         return *this;
     }
-    NumberTextAlternate& addNegativeSign(std::string_view alternate) {
-        m_negativeSigns.emplace_back(alternate);
+    NumberTextAlternate& setNegativeSign(std::string_view alternate) {
+        m_negativeSign = std::string{ alternate };
         return *this;
     }
-    NumberTextAlternate& addZeroSign(std::string_view alternate) {
-        m_zeroSigns.emplace_back(alternate);
+    NumberTextAlternate& setZeroSign(std::string_view alternate) {
+        m_zeroSign = std::string{ alternate };
         return *this;
     }
-    NumberTextAlternate& addPoint(std::string_view alternate) {
-        m_points.emplace_back(alternate);
+    NumberTextAlternate& setPoint(std::string_view alternate) {
+        m_point = std::string{ alternate };
         return *this;
     }
-    NumberTextAlternate& addInfinity(std::string_view alternate) {
-        m_infinities.emplace_back(alternate);
+    NumberTextAlternate& setInfinity(std::string_view alternate) {
+        m_infinity = std::string{ alternate };
         return *this;
     }
-    NumberTextAlternate& addNan(std::string_view alternate) {
-        m_nans.emplace_back(alternate);
+    NumberTextAlternate& setNan(std::string_view alternate) {
+        m_nan = std::string{alternate};
         return *this;
     }
 

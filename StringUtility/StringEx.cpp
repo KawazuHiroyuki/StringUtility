@@ -104,11 +104,54 @@ bool StringEx::validateSingPart(std::string_view text, const NumberTextAlternate
     std::string text2 = trimAll(text);
 
     // 重複チェック
+    int positive = 0;
+    if (alternate.containtsPositiveSign(text2)) {
+        positive++;
+    }
+    if (containts(text2, getDefaultPositiveSignNumberText())) {
+        positive++;
+    }
+    if (positive != 0) {
+        return false;
+    }
+
+    int negative = 0;
+    if (alternate.containtsNegativeSign(text2)) {
+        negative++;
+    }
+    if (containts(text2, getDefaultNegativeSignNumberText())) {
+        negative++;
+    }
+    if (negative != 0) {
+        return false;
+    }
+
+    int zero = 0;
+    if (alternate.containtsZeroSign(text2)) {
+        zero++;
+    }
+
+    int sum = positive + negative + zero;
+    if ((positive + negative + zero) > 1) {
+        return false;
+    }
+
     // 符号先頭チェック
-
-
-    bool exists = false;
-
+    if (positive != 0) {
+        if (!alternate.startsWithPositiveSign(text2) && !text2.starts_with(getDefaultPositiveSignNumberText())) {
+            return false;
+        }
+    }
+    if (negative != 0) {
+        if (!alternate.startsWithNegativeSign(text2) && !text2.starts_with(getDefaultNegativeSignNumberText())) {
+            return false;
+        }
+    }
+    if (zero != 0) {
+        if (!alternate.startsWithZeroSign(text2)) {
+            return false;
+        }
+    }
     return true;
 }
 
