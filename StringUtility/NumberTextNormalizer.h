@@ -5,6 +5,7 @@
 #include <cstddef>
 #include <vector>
 #include <optional>
+#include <limits>
 
 class NumberTextNormalizer {
     bool m_keepPositiveSign = false;
@@ -58,6 +59,40 @@ public:
         return *this;
     }
 
+    static std::string getDefaultPositiveSignNumberText()
+    {
+        return "+";
+    }
+
+    static std::string getDefaultNegativeSignNumberText()
+    {
+        return "-";
+    }
+
+    static std::string getDefaultPointNumberText()
+    {
+        return ".";
+    }
+
+    static std::string getDefaultZeroNumberText()
+    {
+        return "0";
+    }
+
+    static std::string getDefaultInfinityNumberText()
+    {
+        static constexpr double value = std::numeric_limits<double>::infinity();
+        std::string text = std::to_string(value);
+        return text;
+    }
+
+    static std::string getDefaultNanNumberText()
+    {
+        static constexpr double value = std::numeric_limits<double>::quiet_NaN();
+        std::string text = std::to_string(value);
+        return text;
+    }
+
     std::size_t countPositiveSign(std::string_view text) const;
     bool containtsPositiveSign(std::string_view text) const;
     bool startsWithPositiveSign(std::string_view text) const;
@@ -85,6 +120,6 @@ public:
     bool containtsNan(std::string_view text) const;
     bool isNan(std::string_view text) const;
 
-    std::string replace(std::string_view text) const;
+    //std::string replace(std::string_view text) const;
     std::string normalize(std::string_view text) const;
 };

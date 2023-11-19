@@ -21,23 +21,23 @@ public:
     static std::string getDefaultInfinityNumberText();
     static std::string getDefaultNanNumberText();
 
-    static void validateNumberText(std::string_view text, const NumberTextNormalizer& alternate = NumberTextNormalizer{});
+    static void validateNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
 
-    static bool isNumberText(std::string_view text, const NumberTextNormalizer& alternate = NumberTextNormalizer{});
-    static bool isPositiveNumberText(std::string_view text, const NumberTextNormalizer& alternate = NumberTextNormalizer{});
-    static bool isNegativeNumberText(std::string_view text, const NumberTextNormalizer& alternate = NumberTextNormalizer{});
-    static bool isZeroNumberText(std::string_view text, const NumberTextNormalizer& alternate = NumberTextNormalizer{});
-    static bool isNegativeZeroNumberText(std::string_view text, const NumberTextNormalizer& alternate = NumberTextNormalizer{});
-    static bool isInfinityNumberText(std::string_view text, const NumberTextNormalizer& alternate = NumberTextNormalizer{});
-    static bool isNanNumberText(std::string_view text, const NumberTextNormalizer& alternate = NumberTextNormalizer{});
+    static bool isNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
+    static bool isPositiveNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
+    static bool isNegativeNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
+    static bool isZeroNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
+    static bool isNegativeZeroNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
+    static bool isInfinityNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
+    static bool isNanNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
 
-    static std::string normalizeNumberText(std::string_view text, const NumberTextNormalizer& alternate = NumberTextNormalizer{});
+    static std::string normalizeNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
 
-    static std::string deleteSignPartNumberText(std::string_view text, const NumberTextNormalizer& alternate = NumberTextNormalizer{});
+    static std::string deleteSignPartNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
 
-    static std::string getSignPartNumberText(std::string_view text, const NumberTextNormalizer& alternate = NumberTextNormalizer{});
-    static std::string getIntegerPartNumberText(std::string_view text, const NumberTextNormalizer& alternate = NumberTextNormalizer{});
-    static std::string getDecimalPartNumberText(std::string_view text, const NumberTextNormalizer& alternate = NumberTextNormalizer{});
+    static std::string getSignPartNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
+    static std::string getIntegerPartNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
+    static std::string getDecimalPartNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
 
     // no impl
     static double toNumber(std::string_view text);
