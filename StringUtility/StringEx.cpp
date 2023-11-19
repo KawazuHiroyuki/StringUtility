@@ -124,9 +124,9 @@ void StringEx::validateNumberText(std::string_view text, const NumberTextNormali
     normalizer.validateNumberText(text);
 }
 
-bool StringEx::isNumberText(std::string_view text, const NumberTextNormalizer& normalizer)
+bool StringEx::isValidNumberText(std::string_view text, const NumberTextNormalizer& normalizer)
 {
-    return normalizer.isNumberText(text);
+    return normalizer.isValidNumberText(text);
 }
 
 bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextNormalizer& normalizer)

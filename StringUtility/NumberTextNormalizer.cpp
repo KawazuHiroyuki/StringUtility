@@ -6,12 +6,12 @@
 
 void NumberTextNormalizer::validateNumberText(std::string_view text) const
 {
-    if (!isNumberText(text)) {
+    if (!isValidNumberText(text)) {
         throw std::runtime_error("invalid number text.");
     }
 }
 
-bool NumberTextNormalizer::isNumberText(std::string_view text) const
+bool NumberTextNormalizer::isValidNumberText(std::string_view text) const
 {
     std::string text2 = StringEx::trimAll(text);
 
@@ -54,6 +54,22 @@ bool NumberTextNormalizer::isNumberText(std::string_view text) const
     if (isInfinity(text2)) {
         return true;
     }
+
+    // 先頭チェック - charconvの仕様に合わせて、先頭の許可/禁止は下記とする。
+    // -OK X
+    // -OK .X
+    // -OK -X
+    // -NG .
+    // -NG -.
+    if (!isValidPrefixNumberText(text2)) {
+        return false;
+    }
+    //if ((1 == text2.size()) && text2.starts_with(getDefaultPointText())) { // NG .
+    //    return false;
+    //}
+    //if ((2 == text2.size()) && text2.starts_with(getDefaultNegativeSignText() + getDefaultPointText())) { // NG -.
+    //    return false;
+    //}
 
     // 末尾チェック
     auto found = std::find_if_not(text2.begin(), text2.end(), [](std::string::value_type c) { return StringEx::containts("-.0123456789", std::string(1, c)); });
@@ -141,13 +157,28 @@ bool NumberTextNormalizer::isZeroNumberText(std::string_view text) const
 
 bool NumberTextNormalizer::isNegativeZeroNumberText(std::string_view text) const
 {
-    if (!isNegativeNumberText(text)) {
-        return false;
+    bool zero = isZeroNumberText(text);
+
+    // -0 → 0
+    // -0. → 0.
+    if (zero && text.starts_with(getDefaultNegativeSignText() + getDefaultZeroText())) {
+        return true;
     }
-    if (!isZeroNumberText(text)) {
-        return false;
+    //if (zero && startsWithNegativeSign(text)) {
+    //    return true;
+    //}
+    // -.0
+    if (zero && text.starts_with(getDefaultNegativeSignText() + getDefaultPointText())) {
+        return true;
     }
-    return true;
+
+    //if (!isNegativeNumberText(text)) {
+    //    return false;
+    //}
+    //if (!isZeroNumberText(text)) {
+    //    return false;
+    //}
+    return false;
 }
 
 bool NumberTextNormalizer::isInfinityNumberText(std::string_view text) const
@@ -187,29 +218,8 @@ std::string NumberTextNormalizer::normalizeNumberText(std::string_view text) con
     text2 = alternate(text2);
     text2 = normalizePositiveSign(text2);
     text2 = normalizeFixedPoint(text2);
+    text2 = normalizeZeroBase(text2);
     text2 = normalizeNegativeZero(text2);
-
-    //if (isFixupFixedPoint() && !containtsNan(text2) && !containtsInfinity(text2)) {
-    //    // X -> X.
-    //    if (!StringEx::containts(text2, getDefaultPointText())) {
-    //        text2 = text2 + getDefaultPointText();
-    //    }
-
-    //    // .X -> 0.X
-    //    if (text2.starts_with(getDefaultPointText())) {
-    //        text2 = getDefaultZeroText() + text2;
-    //    }
-
-    //    // X. -> X.0
-    //    if (text2.ends_with(getDefaultPointText())) {
-    //        text2 = text2 + getDefaultZeroText();
-    //    }
-    //}
-
-    // -0 -> 0
-    //if (isNegativeZeroNumberText(text2)) {
-    //    text2 = deleteSignPartNumberText(text2);
-    //}
 
     // 検証
     validateNumberText(text2);
@@ -232,6 +242,7 @@ std::string NumberTextNormalizer::getSignPartNumberText(std::string_view text) c
     text2 = alternate(text2);
     text2 = normalizePositiveSign(text2);
     text2 = normalizeFixedPoint(text2);
+    text2 = normalizeZeroBase(text2);
 
     // 検証
     validateNumberText(text2);
@@ -257,6 +268,7 @@ std::string NumberTextNormalizer::getIntegerPartNumberText(std::string_view text
     text2 = alternate(text2);
     text2 = normalizePositiveSign(text2);
     text2 = normalizeFixedPoint(text2);
+    text2 = normalizeZeroBase(text2);
 
     // 検証
     validateNumberText(text2);
@@ -287,6 +299,7 @@ std::string NumberTextNormalizer::getDecimalPartNumberText(std::string_view text
     text2 = alternate(text2);
     text2 = normalizePositiveSign(text2);
     text2 = normalizeFixedPoint(text2);
+    text2 = normalizeZeroBase(text2);
 
     // 検証
     validateNumberText(text2);
@@ -310,6 +323,22 @@ std::string NumberTextNormalizer::getDecimalPartNumberText(std::string_view text
         return "";
     }
     return splited.back();
+}
+
+bool NumberTextNormalizer::isValidPrefixNumberText(std::string_view text) const
+{
+    // OK X
+    // OK .X
+    // OK -X
+
+    // NG
+    if ((1 == text.size()) && text.starts_with(getDefaultPointText())) { // NG .
+        return false;
+    }
+    if ((2 == text.size()) && text.starts_with(getDefaultNegativeSignText() + getDefaultPointText())) { // NG -.
+        return false;
+    }
+    return true;
 }
 
 std::size_t NumberTextNormalizer::countPositiveSign(std::string_view text) const
@@ -447,6 +476,17 @@ std::size_t NumberTextNormalizer::countPoint(std::string_view text) const
     return count;
 }
 
+bool NumberTextNormalizer::startsWithPoint(std::string_view text) const
+{
+    if (!m_point.empty() && text.starts_with(m_point)) {
+        return true;
+    }
+    if (text.starts_with(getDefaultNegativeSignText())) {
+        return true;
+    }
+    return false;
+}
+
 bool NumberTextNormalizer::containtsPoint(std::string_view text) const
 {
     if (!m_point.empty() && StringEx::containts(text, m_point)) {
@@ -455,6 +495,22 @@ bool NumberTextNormalizer::containtsPoint(std::string_view text) const
     if (StringEx::containts(text, getDefaultPointText())) {
         return true;
     }
+    return false;
+}
+
+bool NumberTextNormalizer::startsWithNumber(std::string_view text) const
+{
+    for (int number = 0; number < 10; number++) {
+        auto&& valueText = std::string(1, '0' + number);
+        if (text.starts_with(valueText)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool NumberTextNormalizer::isNumber(std::string_view text) const
+{
     return false;
 }
 
@@ -534,22 +590,65 @@ std::string NumberTextNormalizer::normalizeNegativeZero(std::string_view text) c
 
 std::string NumberTextNormalizer::normalizeFixedPoint(std::string_view text) const
 {
-    std::string text2 = StringEx::trimAll(text);
-    if (isFixupFixedPoint() && !containtsNan(text2) && !containtsInfinity(text2)) {
+    std::string text2 = std::string(text);
+    if (containtsNan(text2) || containtsInfinity(text2)) {
+        return text2;
+    }
+
+    if (isFixupFixedPoint()) {
         // X -> X.
         if (!StringEx::containts(text2, getDefaultPointText())) {
             text2 = text2 + getDefaultPointText();
         }
+    }
 
-        // .X -> 0.X
-        if (text2.starts_with(getDefaultPointText())) {
-            text2 = getDefaultZeroText() + text2;
-        }
+    //if (isFixupFixedPoint()) {
+    //    // not fixup .
+    //    // not fixup -.
+    //    if (!isValidPrefixNumberText(text2)) {
+    //        return text2;
+    //    }
 
-        // X. -> X.0
-        if (text2.ends_with(getDefaultPointText())) {
-            text2 = text2 + getDefaultZeroText();
-        }
+    //    // .X -> 0.X
+    //    if (text2.starts_with(getDefaultPointText())) {
+    //        text2 = getDefaultZeroText() + text2;
+    //    }
+
+    //    // X. -> X.0
+    //    if (text2.ends_with(getDefaultPointText())) {
+    //        text2 = text2 + getDefaultZeroText();
+    //    }
+    //}
+    return text2;
+}
+
+std::string NumberTextNormalizer::normalizeZeroBase(std::string_view text) const
+{
+    std::string text2 = std::string(text);
+    if (containtsNan(text2) || containtsInfinity(text2)) {
+        return text2;
+    }
+
+    // not fixup .
+    // not fixup -.
+    if (!isValidPrefixNumberText(text2)) {
+        return text2;
+    }
+
+    // .X -> 0.X
+    if (text2.starts_with(getDefaultPointText())) {
+        text2 = getDefaultZeroText() + text2;
+    }
+
+    // X. -> X.0
+    if (text2.ends_with(getDefaultPointText())) {
+        text2 = text2 + getDefaultZeroText();
+    }
+
+    // -.X -> -0.X
+    if (text2.starts_with(getDefaultNegativeSignText() + getDefaultPointText())) {
+        std::string zero = getDefaultZeroText();
+        text2.insert(std::next(text2.begin(), 1), zero.begin(), zero.end());
     }
     return text2;
 }

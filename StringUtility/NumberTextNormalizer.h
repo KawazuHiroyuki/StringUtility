@@ -78,6 +78,7 @@ public:
     {
         return "0";
     }
+    //static std::string getDefaultNumberText(int value)
 
     static std::string getDefaultInfinityText()
     {
@@ -94,11 +95,11 @@ public:
     }
 
     void validateNumberText(std::string_view text) const;
-    bool isNumberText(std::string_view text) const;
+    bool isValidNumberText(std::string_view text) const;
     bool isPositiveNumberText(std::string_view text) const;
     bool isNegativeNumberText(std::string_view text) const;
     bool isZeroNumberText(std::string_view text) const;
-    bool isNegativeZeroNumberText(std::string_view text) const;
+    bool isNegativeZeroNumberText(std::string_view text) const; // TODO private
     bool isInfinityNumberText(std::string_view text) const;
     bool isNanNumberText(std::string_view text) const;
 
@@ -111,6 +112,8 @@ public:
     std::string getDecimalPartNumberText(std::string_view text) const;
 
 private:
+    bool isValidPrefixNumberText(std::string_view text) const;
+
     std::size_t countPositiveSign(std::string_view text) const;
     bool containtsPositiveSign(std::string_view text) const;
     bool startsWithPositiveSign(std::string_view text) const;
@@ -130,7 +133,11 @@ private:
     std::string pickupZeroSign(std::string_view text) const;
 
     std::size_t countPoint(std::string_view text) const;
+    bool startsWithPoint(std::string_view text) const;
     bool containtsPoint(std::string_view text) const;
+
+    bool startsWithNumber(std::string_view text) const;
+    bool isNumber(std::string_view text) const;
 
     bool containtsInfinity(std::string_view text) const;
     bool isInfinity(std::string_view text) const;
@@ -138,8 +145,10 @@ private:
     bool containtsNan(std::string_view text) const;
     bool isNan(std::string_view text) const;
 
-    std::string alternate(std::string_view text) const;
+    std::string alternate(std::string_view text) const; // toAlternateText
+    // toDefaultText
     std::string normalizePositiveSign(std::string_view text) const;
     std::string normalizeNegativeZero(std::string_view text) const;
     std::string normalizeFixedPoint(std::string_view text) const;
+    std::string normalizeZeroBase(std::string_view text) const;
 };

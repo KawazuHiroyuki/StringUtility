@@ -23,7 +23,7 @@ public:
 
     static void validateNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
 
-    static bool isNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
+    static bool isValidNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
     static bool isPositiveNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
     static bool isNegativeNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
     static bool isZeroNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});

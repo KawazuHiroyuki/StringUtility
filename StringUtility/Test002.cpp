@@ -5,6 +5,18 @@
 #include "StringEx.h"
 
 void Test002() {
+    assert(StringEx::toNumber("4") == 4.0);
+    assert(StringEx::toNumber("4.2") == 4.2);
+    assert(StringEx::toNumber("4.") == 4.0);
+    assert(StringEx::toNumber(".2") == 0.2);
+    //assert(StringEx::toNumber(".") == 0.0); // NG
+
+    assert(StringEx::toNumber("-4") == -4.0);
+    assert(StringEx::toNumber("-4.2") == -4.2);
+    assert(StringEx::toNumber("-4.") == -4.0);
+    assert(StringEx::toNumber("-.2") == -0.2);
+    //assert(StringEx::toNumber("-.") == -0.0); // NG
+    
     //assert(NumberTextNormalizer{}.countPositiveSign("") == 0);
     //assert(NumberTextNormalizer{}.countPositiveSign("0123456+0123456@0123456++@@") == 3);
     //assert(NumberTextNormalizer{}.setAlternatePositiveSignText("@").countPositiveSign("0123456+0123456@0123456++@@") == 6);
@@ -48,6 +60,13 @@ void Test002() {
 
     //assert(StringEx::isZeroNumberText("", NumberTextAlternaor{}) == false);
 
+    //assert(StringEx::isZeroNumberText(".", NumberTextNormalizer{}) == true);
+    assert(StringEx::isZeroNumberText("0.", NumberTextNormalizer{}) == true);
+    assert(StringEx::isZeroNumberText(".0", NumberTextNormalizer{}) == true);
+    //assert(StringEx::isZeroNumberText("-.", NumberTextNormalizer{}) == true);
+    assert(StringEx::isZeroNumberText("-0.", NumberTextNormalizer{}) == true);
+    assert(StringEx::isZeroNumberText("-.0", NumberTextNormalizer{}) == true);
+
     assert(StringEx::isZeroNumberText("0", NumberTextNormalizer{}) == true);
     assert(StringEx::isZeroNumberText("0.0", NumberTextNormalizer{}) == true);
     assert(StringEx::isZeroNumberText("+0", NumberTextNormalizer{}) == true);
@@ -74,6 +93,13 @@ void Test002() {
     assert(StringEx::isNegativeZeroNumberText("-0.0", NumberTextNormalizer{}) == true);
     assert(StringEx::isNegativeZeroNumberText("±0", NumberTextNormalizer{}.setAlternateZeroSignText("±")) == false);
     assert(StringEx::isNegativeZeroNumberText("±0.0", NumberTextNormalizer{}.setAlternateZeroSignText("±")) == false);
+
+    //assert(StringEx::isNegativeZeroNumberText(".", NumberTextNormalizer{}) == true);
+    assert(StringEx::isNegativeZeroNumberText("0.", NumberTextNormalizer{}) == false);
+    assert(StringEx::isNegativeZeroNumberText(".0", NumberTextNormalizer{}) == false);
+    //assert(StringEx::isNegativeZeroNumberText("-.", NumberTextNormalizer{}) == true);
+    assert(StringEx::isNegativeZeroNumberText("-0.", NumberTextNormalizer{}) == true);
+    assert(StringEx::isNegativeZeroNumberText("-.0", NumberTextNormalizer{}) == true);
 
     assert(StringEx::isPositiveNumberText("1", NumberTextNormalizer{}) == true);
     assert(StringEx::isPositiveNumberText("+1", NumberTextNormalizer{}) == true);
@@ -124,44 +150,51 @@ void Test002() {
     assert(StringEx::isNanNumberText("abc", NumberTextNormalizer{}.setAlternateNanText("abc")) == true);
     assert(StringEx::isNanNumberText("012", NumberTextNormalizer{}.setAlternateNanText("012")) == true);
 
-    assert(StringEx::isNumberText("", {}) == false);
-    assert(StringEx::isNumberText("ABC", {}) == false);
+    assert(StringEx::isValidNumberText("", {}) == false);
+    assert(StringEx::isValidNumberText("ABC", {}) == false);
 
-    assert(StringEx::isNumberText("0", NumberTextNormalizer{}) == true);
-    assert(StringEx::isNumberText("0.0", NumberTextNormalizer{}) == true);
-    assert(StringEx::isNumberText("+0", NumberTextNormalizer{}) == true);
-    assert(StringEx::isNumberText("+0.0", NumberTextNormalizer{}) == true);
-    assert(StringEx::isNumberText("-0", NumberTextNormalizer{}) == true);
-    assert(StringEx::isNumberText("-0.0", NumberTextNormalizer{}) == true);
-    assert(StringEx::isNumberText("±0", NumberTextNormalizer{}.setAlternateZeroSignText("±")) == true);
-    assert(StringEx::isNumberText("±0.0", NumberTextNormalizer{}.setAlternateZeroSignText("±")) == true);
+    //assert(StringEx::isValidNumberText(".", NumberTextNormalizer{}) == true);
+    assert(StringEx::isValidNumberText("0.", NumberTextNormalizer{}) == true);
+    assert(StringEx::isValidNumberText(".0", NumberTextNormalizer{}) == true);
+    //assert(StringEx::isValidNumberText("-.", NumberTextNormalizer{}) == true);
+    assert(StringEx::isValidNumberText("-0.", NumberTextNormalizer{}) == true);
+    assert(StringEx::isValidNumberText("-.0", NumberTextNormalizer{}) == true);
 
-    assert(StringEx::isNumberText("1", NumberTextNormalizer{}) == true);
-    assert(StringEx::isNumberText("0.1", NumberTextNormalizer{}) == true);
-    assert(StringEx::isNumberText("+1", NumberTextNormalizer{}) == true);
-    assert(StringEx::isNumberText("+0.1", NumberTextNormalizer{}) == true);
-    assert(StringEx::isNumberText("-1", NumberTextNormalizer{}) == true);
-    assert(StringEx::isNumberText("-1.0", NumberTextNormalizer{}) == true);
-    assert(StringEx::isNumberText("±1", NumberTextNormalizer{}.setAlternateZeroSignText("±")) == true);
-    assert(StringEx::isNumberText("±0.1", NumberTextNormalizer{}.setAlternateZeroSignText("±")) == true);
+    assert(StringEx::isValidNumberText("0", NumberTextNormalizer{}) == true);
+    assert(StringEx::isValidNumberText("0.0", NumberTextNormalizer{}) == true);
+    assert(StringEx::isValidNumberText("+0", NumberTextNormalizer{}) == true);
+    assert(StringEx::isValidNumberText("+0.0", NumberTextNormalizer{}) == true);
+    assert(StringEx::isValidNumberText("-0", NumberTextNormalizer{}) == true);
+    assert(StringEx::isValidNumberText("-0.0", NumberTextNormalizer{}) == true);
+    assert(StringEx::isValidNumberText("±0", NumberTextNormalizer{}.setAlternateZeroSignText("±")) == true);
+    assert(StringEx::isValidNumberText("±0.0", NumberTextNormalizer{}.setAlternateZeroSignText("±")) == true);
 
-    assert(StringEx::isNumberText("inf", {}) == true);
-    assert(StringEx::isNumberText(" inf ", {}) == true);
-    assert(StringEx::isNumberText("abc", {}) == false);
-    assert(StringEx::isNumberText("abc", NumberTextNormalizer{}.setAlternateInfinityText("abc")) == true);
-    assert(StringEx::isNumberText("012", NumberTextNormalizer{}.setAlternateInfinityText("012")) == true);
+    assert(StringEx::isValidNumberText("1", NumberTextNormalizer{}) == true);
+    assert(StringEx::isValidNumberText("0.1", NumberTextNormalizer{}) == true);
+    assert(StringEx::isValidNumberText("+1", NumberTextNormalizer{}) == true);
+    assert(StringEx::isValidNumberText("+0.1", NumberTextNormalizer{}) == true);
+    assert(StringEx::isValidNumberText("-1", NumberTextNormalizer{}) == true);
+    assert(StringEx::isValidNumberText("-1.0", NumberTextNormalizer{}) == true);
+    assert(StringEx::isValidNumberText("±1", NumberTextNormalizer{}.setAlternateZeroSignText("±")) == true);
+    assert(StringEx::isValidNumberText("±0.1", NumberTextNormalizer{}.setAlternateZeroSignText("±")) == true);
 
-    assert(StringEx::isNumberText("-inf", {}) == true);
-    assert(StringEx::isNumberText(" - inf ", {}) == true);
-    assert(StringEx::isNumberText("abc", {}) == false);
-    assert(StringEx::isNumberText("-abc", NumberTextNormalizer{}.setAlternateInfinityText("abc")) == true);
-    assert(StringEx::isNumberText("-012", NumberTextNormalizer{}.setAlternateInfinityText("012")) == true);
+    assert(StringEx::isValidNumberText("inf", {}) == true);
+    assert(StringEx::isValidNumberText(" inf ", {}) == true);
+    assert(StringEx::isValidNumberText("abc", {}) == false);
+    assert(StringEx::isValidNumberText("abc", NumberTextNormalizer{}.setAlternateInfinityText("abc")) == true);
+    assert(StringEx::isValidNumberText("012", NumberTextNormalizer{}.setAlternateInfinityText("012")) == true);
 
-    assert(StringEx::isNumberText("nan", {}) == true);
-    assert(StringEx::isNumberText(" nan  ", {}) == true);
-    assert(StringEx::isNumberText("abc", {}) == false);
-    assert(StringEx::isNumberText("abc", NumberTextNormalizer{}.setAlternateNanText("abc")) == true);
-    assert(StringEx::isNumberText("012", NumberTextNormalizer{}.setAlternateNanText("012")) == true);
+    assert(StringEx::isValidNumberText("-inf", {}) == true);
+    assert(StringEx::isValidNumberText(" - inf ", {}) == true);
+    assert(StringEx::isValidNumberText("abc", {}) == false);
+    assert(StringEx::isValidNumberText("-abc", NumberTextNormalizer{}.setAlternateInfinityText("abc")) == true);
+    assert(StringEx::isValidNumberText("-012", NumberTextNormalizer{}.setAlternateInfinityText("012")) == true);
+
+    assert(StringEx::isValidNumberText("nan", {}) == true);
+    assert(StringEx::isValidNumberText(" nan  ", {}) == true);
+    assert(StringEx::isValidNumberText("abc", {}) == false);
+    assert(StringEx::isValidNumberText("abc", NumberTextNormalizer{}.setAlternateNanText("abc")) == true);
+    assert(StringEx::isValidNumberText("012", NumberTextNormalizer{}.setAlternateNanText("012")) == true);
 
     assert(StringEx::deleteSignPartNumberText("+012", NumberTextNormalizer{}) == "012");
     assert(StringEx::deleteSignPartNumberText("-012", NumberTextNormalizer{}) == "012");
@@ -213,7 +246,14 @@ void Test002() {
     //assert(StringEx::normalizeNumberText("", true, {}) == "");
     //assert(StringEx::normalizeNumberText("ABC", true, {}) == "");
 
-    assert(StringEx::normalizeNumberText(".", NumberTextNormalizer{}.setFixupFixedPoint()) == "0.0");
+    //assert(StringEx::normalizeNumberText(".", NumberTextNormalizer{}) == "0.0");
+    assert(StringEx::normalizeNumberText("0.", NumberTextNormalizer{}) == "0.0");
+    assert(StringEx::normalizeNumberText(".0", NumberTextNormalizer{}) == "0.0");
+    //assert(StringEx::normalizeNumberText("-.", NumberTextNormalizer{}) == "0.0");
+    assert(StringEx::normalizeNumberText("-0.", NumberTextNormalizer{}) == "0.0");
+    assert(StringEx::normalizeNumberText("-.0", NumberTextNormalizer{}) == "0.0");
+
+
     assert(StringEx::normalizeNumberText("1.", NumberTextNormalizer{}.setFixupFixedPoint()) == "1.0");
     assert(StringEx::normalizeNumberText(".1", NumberTextNormalizer{}.setFixupFixedPoint()) == "0.1");
 
@@ -273,7 +313,7 @@ void Test002() {
     assert(StringEx::getSignPartNumberText("inf", NumberTextNormalizer{}.setKeepPositiveSign()) == "");
     assert(StringEx::getSignPartNumberText("+inf", NumberTextNormalizer{}.setKeepPositiveSign()) == "+");
 
-    assert(StringEx::getSignPartNumberText(".", NumberTextNormalizer{}.setFixupFixedPoint()) == "");
+    //assert(StringEx::getSignPartNumberText(".", NumberTextNormalizer{}.setFixupFixedPoint()) == "");
     assert(StringEx::getSignPartNumberText("0.", NumberTextNormalizer{}.setFixupFixedPoint()) == "");
     assert(StringEx::getSignPartNumberText(".0", NumberTextNormalizer{}.setFixupFixedPoint()) == "");
 
@@ -288,7 +328,7 @@ void Test002() {
     assert(StringEx::getIntegerPartNumberText("inf", NumberTextNormalizer{}) == "");
     assert(StringEx::getIntegerPartNumberText("+inf", NumberTextNormalizer{}) == "");
 
-    assert(StringEx::getIntegerPartNumberText(".", NumberTextNormalizer{}.setFixupFixedPoint()) == "0");
+    //assert(StringEx::getIntegerPartNumberText(".", NumberTextNormalizer{}.setFixupFixedPoint()) == "0");
     assert(StringEx::getIntegerPartNumberText("4.", NumberTextNormalizer{}.setFixupFixedPoint()) == "4");
     assert(StringEx::getIntegerPartNumberText(".4", NumberTextNormalizer{}.setFixupFixedPoint()) == "0");
 
@@ -303,7 +343,7 @@ void Test002() {
     assert(StringEx::getDecimalPartNumberText("inf", NumberTextNormalizer{}) == "");
     assert(StringEx::getDecimalPartNumberText("+inf", NumberTextNormalizer{}) == "");
 
-    assert(StringEx::getDecimalPartNumberText(".", NumberTextNormalizer{}.setFixupFixedPoint()) == "0");
+    //assert(StringEx::getDecimalPartNumberText(".", NumberTextNormalizer{}.setFixupFixedPoint()) == "0");
     assert(StringEx::getDecimalPartNumberText("4.", NumberTextNormalizer{}.setFixupFixedPoint()) == "0");
     assert(StringEx::getDecimalPartNumberText(".4", NumberTextNormalizer{}.setFixupFixedPoint()) == "4");
 }
