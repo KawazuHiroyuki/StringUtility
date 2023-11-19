@@ -140,6 +140,6 @@ private:
     bool containtsNan(std::string_view text) const;
     bool isNan(std::string_view text) const;
 
-    //std::string replace(std::string_view text) const;
-    std::string normalize(std::string_view text) const;
+    std::string alternate(std::string_view text) const;
+    std::string normalizePositiveSing(std::string_view text) const;
 };

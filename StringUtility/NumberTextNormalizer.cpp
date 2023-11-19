@@ -41,7 +41,8 @@ bool NumberTextNormalizer::isNumberText(std::string_view text) const
     }
 
     // ê≥ãKâª
-    text2 = normalize(text2);
+    text2 = alternate(text2);
+    text2 = normalizePositiveSing(text2);
 
     // Nan
     if (isNan(text2)) {
@@ -122,7 +123,8 @@ bool NumberTextNormalizer::isZeroNumberText(std::string_view text) const
     validateNumberText(text2);
 
     // ê≥ãKâª
-    text2 = normalize(text2);
+    text2 = alternate(text2);
+    text2 = normalizePositiveSing(text2);
 
     // êîílïœä∑
     try {
@@ -182,7 +184,8 @@ std::string NumberTextNormalizer::normalizeNumberText(std::string_view text) con
     std::string text2 = StringEx::trimAll(text);
 
     // ê≥ãKâª
-    text2 = normalize(text2);
+    text2 = alternate(text2);
+    text2 = normalizePositiveSing(text2);
 
     if (isFixupFixedPoint() && !containtsNan(text2) && !containtsInfinity(text2)) {
         // X -> X.
@@ -224,7 +227,8 @@ std::string NumberTextNormalizer::getSignPartNumberText(std::string_view text) c
     std::string text2 = StringEx::trimAll(text);
 
     // ê≥ãKâª
-    text2 = normalize(text2);
+    text2 = alternate(text2);
+    text2 = normalizePositiveSing(text2);
 
     // åüèÿ
     validateNumberText(text2);
@@ -247,7 +251,8 @@ std::string NumberTextNormalizer::getIntegerPartNumberText(std::string_view text
     std::string text2 = StringEx::trimAll(text);
 
     // ê≥ãKâª
-    text2 = normalize(text2);
+    text2 = alternate(text2);
+    text2 = normalizePositiveSing(text2);
 
     // åüèÿ
     validateNumberText(text2);
@@ -275,7 +280,8 @@ std::string NumberTextNormalizer::getDecimalPartNumberText(std::string_view text
     std::string text2 = StringEx::trimAll(text);
 
     // ê≥ãKâª
-    text2 = normalize(text2);
+    text2 = alternate(text2);
+    text2 = normalizePositiveSing(text2);
 
     // åüèÿ
     validateNumberText(text2);
@@ -491,26 +497,10 @@ bool NumberTextNormalizer::isNan(std::string_view text) const
     return false;
 }
 
-//std::string NumberTextNormalizer::replace(std::string_view text) const
-//{
-//    std::string text2 = std::string{ text };
-//    text2 = StringEx::replace(text2, m_positiveSign, StringEx::getDefaultPositiveSignNumberText());
-//    text2 = StringEx::replace(text2, m_negativeSign, StringEx::getDefaultNegativeSignNumberText());
-//    text2 = StringEx::replace(text2, m_zeroSign, "");
-//    text2 = StringEx::replace(text2, m_point, StringEx::getDefaultPointNumberText());
-//    text2 = StringEx::replace(text2, m_infinity, StringEx::getDefaultInfinityNumberText());
-//    text2 = StringEx::replace(text2, m_nan, StringEx::getDefaultNanNumberText());
-//    return text2;
-//}
-
-std::string NumberTextNormalizer::normalize(std::string_view text) const
+std::string NumberTextNormalizer::alternate(std::string_view text) const
 {
     std::string text2 = std::string{ text };
-    if (m_keepPositiveSign) {
-        text2 = StringEx::replace(text2, m_positiveSign, getDefaultPositiveSignNumberText());
-    } else {
-        text2 = deletePositiveSign(text2);
-    }
+    text2 = StringEx::replace(text2, m_positiveSign, getDefaultPositiveSignNumberText());
     text2 = StringEx::replace(text2, m_negativeSign, getDefaultNegativeSignNumberText());
     text2 = StringEx::replace(text2, m_zeroSign, "");
     text2 = StringEx::replace(text2, m_point, getDefaultPointNumberText());
@@ -518,3 +508,13 @@ std::string NumberTextNormalizer::normalize(std::string_view text) const
     text2 = StringEx::replace(text2, m_nan, getDefaultNanNumberText());
     return text2;
 }
+
+std::string NumberTextNormalizer::normalizePositiveSing(std::string_view text) const
+{
+    std::string text2 = std::string{ text };
+    if (!m_keepPositiveSign) {
+        text2 = deletePositiveSign(text2);
+    }
+    return text2;
+}
+
