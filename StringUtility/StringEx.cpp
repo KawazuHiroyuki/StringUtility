@@ -124,10 +124,11 @@ bool StringEx::validateNumberText(std::string_view text, const NumberTextAlterna
         }
     }
 
-    // 末尾チェック TODO
-
     // 正規化
     text2 = alternate.normalize(text2);
+
+    // 末尾チェック TODO
+    // 0-9.以外はNG+nan/inf以外はNG
 
     // 数値変換
     const char* str = text2.c_str();
@@ -135,11 +136,6 @@ bool StringEx::validateNumberText(std::string_view text, const NumberTextAlterna
     if (auto [ptr, ec] = std::from_chars(str, str + text2.size(), value); ec != std::errc{}) {
         return false;
     }
-
-    // Zero判定
-    //if (value != 0.0) {
-    //    return false;
-    //}
 
     return true;
 }
@@ -248,6 +244,17 @@ bool StringEx::isNanNumberText(std::string_view text, const NumberTextAlternaor&
         return true;
     }
     return false;
+}
+
+bool StringEx::isNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+{
+    std::string text2 = trimAll(text);
+
+    // 検証
+    if (!validateNumberText(text2, alternate)) {
+        return false;
+    }
+    return true;
 }
 
 std::string StringEx::deleteSignPartNumberText(std::string_view text, const NumberTextAlternaor& alternate)
