@@ -29,6 +29,13 @@ void Test002() {
     assert(StringEx::containts("abcdefgabcdefgabcdefg", "cd") == true);
     assert(StringEx::containts("abcdefgabcdefgabcdefg", "01") == false);
 
+    assert(StringEx::split("", ".") == std::vector<std::string>({}));
+    assert(StringEx::split("abcdefg.abcdefg.abcdefg", "") == std::vector<std::string>({ "abcdefg.abcdefg.abcdefg" }));
+    assert(StringEx::split("a", ".") == std::vector<std::string>({ "a" }));
+    assert(StringEx::split(".abcdefg.abcdefg.abcdefg", ".") == std::vector<std::string>({ "","abcdefg", "abcdefg", "abcdefg"}));
+    assert(StringEx::split("abcdefg.abcdefg.abcdefg", ".") == std::vector<std::string>({ "abcdefg", "abcdefg", "abcdefg" }));
+    assert(StringEx::split("abcdefg.abcdefg.abcdefg.", ".") == std::vector<std::string>({ "abcdefg", "abcdefg", "abcdefg",""}));
+
     assert(StringEx::replace("abcdefgabcdefgabcdefg", "cd", "0123") == "ab0123efgab0123efgab0123efg");
     assert(StringEx::trimAll("   a b cdef g a bcde  fga bcdefg    ") == "abcdefgabcdefgabcdefg");
 
@@ -215,4 +222,15 @@ void Test002() {
     assert(StringEx::deleteSignPartNumberText("＋012", NumberTextAlternaor{}.setPositiveSign("＋")) == "012");
     assert(StringEx::deleteSignPartNumberText("－012", NumberTextAlternaor{}.setNegativeSign("－")) == "012");
     assert(StringEx::deleteSignPartNumberText("±0", NumberTextAlternaor{}.setZeroSign("±")) == "0");
+
+    assert(StringEx::getSignPartNumberText("nan", NumberTextAlternaor{}) == "");
+    assert(StringEx::getSignPartNumberText("-inf", NumberTextAlternaor{}) == "-");
+    assert(StringEx::getSignPartNumberText("-10.5", NumberTextAlternaor{}) == "-");
+    assert(StringEx::getSignPartNumberText("-0", NumberTextAlternaor{}) == "-");
+    assert(StringEx::getSignPartNumberText("0", NumberTextAlternaor{}) == "");
+    assert(StringEx::getSignPartNumberText("+0", NumberTextAlternaor{}) == "+");
+    assert(StringEx::getSignPartNumberText("10.5", NumberTextAlternaor{}) == "");
+    assert(StringEx::getSignPartNumberText("+10.5", NumberTextAlternaor{}) == "+");
+    assert(StringEx::getSignPartNumberText("inf", NumberTextAlternaor{}) == "");
+    assert(StringEx::getSignPartNumberText("+inf", NumberTextAlternaor{}) == "+");
 }

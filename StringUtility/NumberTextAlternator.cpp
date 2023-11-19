@@ -38,6 +38,17 @@ std::string NumberTextAlternaor::deletePositiveSign(std::string_view text) const
     return text2;
 }
 
+std::string NumberTextAlternaor::pickupPositiveSign(std::string_view text) const
+{
+    if (!m_positiveSign.empty() && StringEx::containts(text, m_positiveSign)) {
+        return m_positiveSign;
+    }
+    if (StringEx::containts(text, StringEx::getDefaultPositiveSignNumberText())) {
+        return StringEx::getDefaultPositiveSignNumberText();
+    }
+    return "";
+}
+
 std::size_t NumberTextAlternaor::countNegativeSign(std::string_view text) const
 {
     std::size_t count = StringEx::count(text, m_negativeSign) + StringEx::count(text, StringEx::getDefaultNegativeSignNumberText());
@@ -73,6 +84,17 @@ std::string NumberTextAlternaor::deleteNegativeSign(std::string_view text) const
     return text2;
 }
 
+std::string NumberTextAlternaor::pickupNegativeSign(std::string_view text) const
+{
+    if (!m_negativeSign.empty() && StringEx::containts(text, m_negativeSign)) {
+        return m_negativeSign;
+    }
+    if (StringEx::containts(text, StringEx::getDefaultNegativeSignNumberText())) {
+        return StringEx::getDefaultNegativeSignNumberText();
+    }
+    return "";
+}
+
 std::size_t NumberTextAlternaor::countZeroSign(std::string_view text) const
 {
     std::size_t count = StringEx::count(text, m_zeroSign);
@@ -99,6 +121,14 @@ std::string NumberTextAlternaor::deleteZeroSign(std::string_view text) const {
     std::string text2 = std::string{ text };
     text2 = StringEx::replace(text2, m_zeroSign, "");
     return text2;
+}
+
+std::string NumberTextAlternaor::pickupZeroSign(std::string_view text) const
+{
+    if (!m_zeroSign.empty() && StringEx::containts(text, m_zeroSign)) {
+        return m_zeroSign;
+    }
+    return "";
 }
 
 std::size_t NumberTextAlternaor::countPoint(std::string_view text) const
