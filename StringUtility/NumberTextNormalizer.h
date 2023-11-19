@@ -125,25 +125,26 @@ private:
     bool isNegativeZeroNumberText(std::string_view text) const;
 
     std::size_t countPositiveSign(std::string_view text) const;
-    bool startsWithPositiveSign(std::string_view text) const;
-    std::string deletePositiveSign(std::string_view text) const;
-    std::string pickupPositiveSign(std::string_view text) const;
-
     std::size_t countNegativeSign(std::string_view text) const;
-    bool startsWithNegativeSign(std::string_view text) const;
-    std::string deleteNegativeSign(std::string_view text) const;
-    std::string pickupNegativeSign(std::string_view text) const;
-
     std::size_t countZeroSign(std::string_view text) const;
-    bool startsWithZeroSign(std::string_view text) const;
-    std::string deleteZeroSign(std::string_view text) const;
-    std::string pickupZeroSign(std::string_view text) const;
 
     bool containtsInfinity(std::string_view text) const;
-    bool isInfinity(std::string_view text) const;
-
     bool containtsNan(std::string_view text) const;
+
+    bool isInfinity(std::string_view text) const;
     bool isNan(std::string_view text) const;
+
+    bool startsWithPositiveSign(std::string_view text) const;
+    bool startsWithNegativeSign(std::string_view text) const;
+    bool startsWithZeroSign(std::string_view text) const;
+
+    std::string deletePositiveSign(std::string_view text) const;
+    std::string deleteNegativeSign(std::string_view text) const;
+    std::string deleteZeroSign(std::string_view text) const;
+
+    std::string pickupPositiveSign(std::string_view text) const;
+    std::string pickupNegativeSign(std::string_view text) const;
+    std::string pickupZeroSign(std::string_view text) const;
 
     std::string normalizePositiveSign(std::string_view text, bool keepPositiveSign) const;
     std::string normalizeNegativeZero(std::string_view text) const;

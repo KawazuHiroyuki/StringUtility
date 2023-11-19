@@ -360,69 +360,10 @@ std::size_t NumberTextNormalizer::countPositiveSign(std::string_view text) const
     return count;
 }
 
-bool NumberTextNormalizer::startsWithPositiveSign(std::string_view text) const
-{
-    if (!m_positiveSign.empty() && text.starts_with(m_positiveSign)) {
-        return true;
-    }
-    if (text.starts_with(getDefaultPositiveSignText())) {
-        return true;
-    }
-    return false;
-}
-
-std::string NumberTextNormalizer::deletePositiveSign(std::string_view text) const 
-{
-    std::string text2 = std::string{ text };
-    text2 = StringEx::replace(text2, m_positiveSign, "");
-    text2 = StringEx::replace(text2, getDefaultPositiveSignText(), "");
-    return text2;
-}
-
-std::string NumberTextNormalizer::pickupPositiveSign(std::string_view text) const
-{
-    if (!m_positiveSign.empty() && StringEx::containts(text, m_positiveSign)) {
-        return m_positiveSign;
-    }
-    if (StringEx::containts(text, getDefaultPositiveSignText())) {
-        return getDefaultPositiveSignText();
-    }
-    return "";
-}
-
 std::size_t NumberTextNormalizer::countNegativeSign(std::string_view text) const
 {
     std::size_t count = StringEx::count(text, m_negativeSign) + StringEx::count(text, getDefaultNegativeSignText());
     return count;
-}
-
-bool NumberTextNormalizer::startsWithNegativeSign(std::string_view text) const
-{
-    if (!m_negativeSign.empty() && text.starts_with(m_negativeSign)) {
-        return true;
-    }
-    if (text.starts_with(getDefaultNegativeSignText())) {
-        return true;
-    }
-    return false;
-}
-
-std::string NumberTextNormalizer::deleteNegativeSign(std::string_view text) const {
-    std::string text2 = std::string{ text };
-    text2 = StringEx::replace(text2, m_negativeSign, "");
-    text2 = StringEx::replace(text2, getDefaultNegativeSignText(), "");
-    return text2;
-}
-
-std::string NumberTextNormalizer::pickupNegativeSign(std::string_view text) const
-{
-    if (!m_negativeSign.empty() && StringEx::containts(text, m_negativeSign)) {
-        return m_negativeSign;
-    }
-    if (StringEx::containts(text, getDefaultNegativeSignText())) {
-        return getDefaultNegativeSignText();
-    }
-    return "";
 }
 
 std::size_t NumberTextNormalizer::countZeroSign(std::string_view text) const
@@ -431,45 +372,12 @@ std::size_t NumberTextNormalizer::countZeroSign(std::string_view text) const
     return count;
 }
 
-bool NumberTextNormalizer::startsWithZeroSign(std::string_view text) const
-{
-    if (!m_zeroSign.empty() && text.starts_with(m_zeroSign)) {
-        return true;
-    }
-    return false;
-}
-
-std::string NumberTextNormalizer::deleteZeroSign(std::string_view text) const {
-    std::string text2 = std::string{ text };
-    text2 = StringEx::replace(text2, m_zeroSign, "");
-    return text2;
-}
-
-std::string NumberTextNormalizer::pickupZeroSign(std::string_view text) const
-{
-    if (!m_zeroSign.empty() && StringEx::containts(text, m_zeroSign)) {
-        return m_zeroSign;
-    }
-    return "";
-}
-
 bool NumberTextNormalizer::containtsInfinity(std::string_view text) const
 {
     if (!m_infinity.empty() && StringEx::containts(text, m_infinity)) {
         return true;
     }
     if (StringEx::containts(text, getDefaultInfinityText())) {
-        return true;
-    }
-    return false;
-}
-
-bool NumberTextNormalizer::isInfinity(std::string_view text) const
-{
-    if (!m_infinity.empty() && m_infinity == text) {
-        return true;
-    }
-    if (getDefaultInfinityText() == text) {
         return true;
     }
     return false;
@@ -486,6 +394,17 @@ bool NumberTextNormalizer::containtsNan(std::string_view text) const
     return false;
 }
 
+bool NumberTextNormalizer::isInfinity(std::string_view text) const
+{
+    if (!m_infinity.empty() && m_infinity == text) {
+        return true;
+    }
+    if (getDefaultInfinityText() == text) {
+        return true;
+    }
+    return false;
+}
+
 bool NumberTextNormalizer::isNan(std::string_view text) const
 {
     if (!m_nan.empty() && m_nan == text) {
@@ -495,6 +414,87 @@ bool NumberTextNormalizer::isNan(std::string_view text) const
         return true;
     }
     return false;
+}
+
+bool NumberTextNormalizer::startsWithPositiveSign(std::string_view text) const
+{
+    if (!m_positiveSign.empty() && text.starts_with(m_positiveSign)) {
+        return true;
+    }
+    if (text.starts_with(getDefaultPositiveSignText())) {
+        return true;
+    }
+    return false;
+}
+
+bool NumberTextNormalizer::startsWithNegativeSign(std::string_view text) const
+{
+    if (!m_negativeSign.empty() && text.starts_with(m_negativeSign)) {
+        return true;
+    }
+    if (text.starts_with(getDefaultNegativeSignText())) {
+        return true;
+    }
+    return false;
+}
+
+bool NumberTextNormalizer::startsWithZeroSign(std::string_view text) const
+{
+    if (!m_zeroSign.empty() && text.starts_with(m_zeroSign)) {
+        return true;
+    }
+    return false;
+}
+
+std::string NumberTextNormalizer::deletePositiveSign(std::string_view text) const 
+{
+    std::string text2 = std::string{ text };
+    text2 = StringEx::replace(text2, m_positiveSign, "");
+    text2 = StringEx::replace(text2, getDefaultPositiveSignText(), "");
+    return text2;
+}
+
+std::string NumberTextNormalizer::deleteNegativeSign(std::string_view text) const {
+    std::string text2 = std::string{ text };
+    text2 = StringEx::replace(text2, m_negativeSign, "");
+    text2 = StringEx::replace(text2, getDefaultNegativeSignText(), "");
+    return text2;
+}
+
+std::string NumberTextNormalizer::deleteZeroSign(std::string_view text) const {
+    std::string text2 = std::string{ text };
+    text2 = StringEx::replace(text2, m_zeroSign, "");
+    return text2;
+}
+
+std::string NumberTextNormalizer::pickupPositiveSign(std::string_view text) const
+{
+    if (!m_positiveSign.empty() && StringEx::containts(text, m_positiveSign)) {
+        return m_positiveSign;
+    }
+    if (StringEx::containts(text, getDefaultPositiveSignText())) {
+        return getDefaultPositiveSignText();
+    }
+    return "";
+}
+
+std::string NumberTextNormalizer::pickupNegativeSign(std::string_view text) const
+{
+    if (!m_negativeSign.empty() && StringEx::containts(text, m_negativeSign)) {
+        return m_negativeSign;
+    }
+    if (StringEx::containts(text, getDefaultNegativeSignText())) {
+        return getDefaultNegativeSignText();
+    }
+    return "";
+}
+
+std::string NumberTextNormalizer::pickupZeroSign(std::string_view text) const
+{
+    if (!m_zeroSign.empty() && StringEx::containts(text, m_zeroSign)) {
+        return m_zeroSign;
+    }
+    return "";
 }
 
 std::string NumberTextNormalizer::normalizePositiveSign(std::string_view text, bool keepPositiveSign) const
