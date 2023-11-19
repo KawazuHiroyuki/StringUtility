@@ -42,7 +42,7 @@ bool NumberTextNormalizer::isNumberText(std::string_view text) const
 
     // ³‹K‰»
     text2 = alternate(text2);
-    text2 = normalizePositiveSing(text2);
+    text2 = normalizePositiveSign(text2);
 
     // Nan
     if (isNan(text2)) {
@@ -124,7 +124,7 @@ bool NumberTextNormalizer::isZeroNumberText(std::string_view text) const
 
     // ³‹K‰»
     text2 = alternate(text2);
-    text2 = normalizePositiveSing(text2);
+    text2 = normalizePositiveSign(text2);
 
     // ”’l•ÏŠ·
     try {
@@ -185,29 +185,31 @@ std::string NumberTextNormalizer::normalizeNumberText(std::string_view text) con
 
     // ³‹K‰»
     text2 = alternate(text2);
-    text2 = normalizePositiveSing(text2);
+    text2 = normalizePositiveSign(text2);
+    text2 = normalizeFixedPoint(text2);
+    text2 = normalizeNegativeZero(text2);
 
-    if (isFixupFixedPoint() && !containtsNan(text2) && !containtsInfinity(text2)) {
-        // X -> X.
-        if (!StringEx::containts(text2, getDefaultPointText())) {
-            text2 = text2 + getDefaultPointText();
-        }
+    //if (isFixupFixedPoint() && !containtsNan(text2) && !containtsInfinity(text2)) {
+    //    // X -> X.
+    //    if (!StringEx::containts(text2, getDefaultPointText())) {
+    //        text2 = text2 + getDefaultPointText();
+    //    }
 
-        // .X -> 0.X
-        if (text2.starts_with(getDefaultPointText())) {
-            text2 = getDefaultZeroText() + text2;
-        }
+    //    // .X -> 0.X
+    //    if (text2.starts_with(getDefaultPointText())) {
+    //        text2 = getDefaultZeroText() + text2;
+    //    }
 
-        // X. -> X.0
-        if (text2.ends_with(getDefaultPointText())) {
-            text2 = text2 + getDefaultZeroText();
-        }
-    }
+    //    // X. -> X.0
+    //    if (text2.ends_with(getDefaultPointText())) {
+    //        text2 = text2 + getDefaultZeroText();
+    //    }
+    //}
 
     // -0 -> 0
-    if (isNegativeZeroNumberText(text2)) {
-        text2 = deleteSignPartNumberText(text2);
-    }
+    //if (isNegativeZeroNumberText(text2)) {
+    //    text2 = deleteSignPartNumberText(text2);
+    //}
 
     // ŒŸØ
     validateNumberText(text2);
@@ -228,7 +230,8 @@ std::string NumberTextNormalizer::getSignPartNumberText(std::string_view text) c
 
     // ³‹K‰»
     text2 = alternate(text2);
-    text2 = normalizePositiveSing(text2);
+    text2 = normalizePositiveSign(text2);
+    text2 = normalizeFixedPoint(text2);
 
     // ŒŸØ
     validateNumberText(text2);
@@ -252,7 +255,8 @@ std::string NumberTextNormalizer::getIntegerPartNumberText(std::string_view text
 
     // ³‹K‰»
     text2 = alternate(text2);
-    text2 = normalizePositiveSing(text2);
+    text2 = normalizePositiveSign(text2);
+    text2 = normalizeFixedPoint(text2);
 
     // ŒŸØ
     validateNumberText(text2);
@@ -281,7 +285,8 @@ std::string NumberTextNormalizer::getDecimalPartNumberText(std::string_view text
 
     // ³‹K‰»
     text2 = alternate(text2);
-    text2 = normalizePositiveSing(text2);
+    text2 = normalizePositiveSign(text2);
+    text2 = normalizeFixedPoint(text2);
 
     // ŒŸØ
     validateNumberText(text2);
@@ -509,7 +514,7 @@ std::string NumberTextNormalizer::alternate(std::string_view text) const
     return text2;
 }
 
-std::string NumberTextNormalizer::normalizePositiveSing(std::string_view text) const
+std::string NumberTextNormalizer::normalizePositiveSign(std::string_view text) const
 {
     std::string text2 = std::string{ text };
     if (!m_keepPositiveSign) {
@@ -518,3 +523,33 @@ std::string NumberTextNormalizer::normalizePositiveSing(std::string_view text) c
     return text2;
 }
 
+std::string NumberTextNormalizer::normalizeNegativeZero(std::string_view text) const
+{
+    std::string text2 = StringEx::trimAll(text);
+    if (isNegativeZeroNumberText(text2)) {
+        text2 = deleteSignPartNumberText(text2);
+    }
+    return text2;
+}
+
+std::string NumberTextNormalizer::normalizeFixedPoint(std::string_view text) const
+{
+    std::string text2 = StringEx::trimAll(text);
+    if (isFixupFixedPoint() && !containtsNan(text2) && !containtsInfinity(text2)) {
+        // X -> X.
+        if (!StringEx::containts(text2, getDefaultPointText())) {
+            text2 = text2 + getDefaultPointText();
+        }
+
+        // .X -> 0.X
+        if (text2.starts_with(getDefaultPointText())) {
+            text2 = getDefaultZeroText() + text2;
+        }
+
+        // X. -> X.0
+        if (text2.ends_with(getDefaultPointText())) {
+            text2 = text2 + getDefaultZeroText();
+        }
+    }
+    return text2;
+}

@@ -273,9 +273,9 @@ void Test002() {
     assert(StringEx::getSignPartNumberText("inf", NumberTextNormalizer{}.setKeepPositiveSign()) == "");
     assert(StringEx::getSignPartNumberText("+inf", NumberTextNormalizer{}.setKeepPositiveSign()) == "+");
 
-    //assert(StringEx::getSignPartNumberText(".", NumberTextNormalizer{}) == "");
-    //assert(StringEx::getSignPartNumberText("0.", NumberTextNormalizer{}) == "");
-    //assert(StringEx::getSignPartNumberText(".0", NumberTextNormalizer{}) == "");
+    assert(StringEx::getSignPartNumberText(".", NumberTextNormalizer{}.setFixupFixedPoint()) == "");
+    assert(StringEx::getSignPartNumberText("0.", NumberTextNormalizer{}.setFixupFixedPoint()) == "");
+    assert(StringEx::getSignPartNumberText(".0", NumberTextNormalizer{}.setFixupFixedPoint()) == "");
 
     assert(StringEx::getIntegerPartNumberText("nan", NumberTextNormalizer{}) == "");
     assert(StringEx::getIntegerPartNumberText("-inf", NumberTextNormalizer{}) == "");
@@ -288,6 +288,10 @@ void Test002() {
     assert(StringEx::getIntegerPartNumberText("inf", NumberTextNormalizer{}) == "");
     assert(StringEx::getIntegerPartNumberText("+inf", NumberTextNormalizer{}) == "");
 
+    assert(StringEx::getIntegerPartNumberText(".", NumberTextNormalizer{}.setFixupFixedPoint()) == "0");
+    assert(StringEx::getIntegerPartNumberText("4.", NumberTextNormalizer{}.setFixupFixedPoint()) == "4");
+    assert(StringEx::getIntegerPartNumberText(".4", NumberTextNormalizer{}.setFixupFixedPoint()) == "0");
+
     assert(StringEx::getDecimalPartNumberText("nan", NumberTextNormalizer{}) == "");
     assert(StringEx::getDecimalPartNumberText("-inf", NumberTextNormalizer{}) == "");
     assert(StringEx::getDecimalPartNumberText("-10.5", NumberTextNormalizer{}) == "5");
@@ -298,4 +302,8 @@ void Test002() {
     assert(StringEx::getDecimalPartNumberText("+10.5", NumberTextNormalizer{}) == "5");
     assert(StringEx::getDecimalPartNumberText("inf", NumberTextNormalizer{}) == "");
     assert(StringEx::getDecimalPartNumberText("+inf", NumberTextNormalizer{}) == "");
+
+    assert(StringEx::getDecimalPartNumberText(".", NumberTextNormalizer{}.setFixupFixedPoint()) == "0");
+    assert(StringEx::getDecimalPartNumberText("4.", NumberTextNormalizer{}.setFixupFixedPoint()) == "0");
+    assert(StringEx::getDecimalPartNumberText(".4", NumberTextNormalizer{}.setFixupFixedPoint()) == "4");
 }

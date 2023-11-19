@@ -139,5 +139,7 @@ private:
     bool isNan(std::string_view text) const;
 
     std::string alternate(std::string_view text) const;
-    std::string normalizePositiveSing(std::string_view text) const;
+    std::string normalizePositiveSign(std::string_view text) const;
+    std::string normalizeNegativeZero(std::string_view text) const;
+    std::string normalizeFixedPoint(std::string_view text) const;
 };
