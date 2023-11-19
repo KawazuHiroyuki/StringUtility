@@ -327,35 +327,35 @@ void Test002() {
     assert(StringEx::normalizeNumberText("abc", NumberTextNormalizer{}.setFixupFixedPoint().setAlternateNanText("abc")) == "nan");
     assert(StringEx::normalizeNumberText("012", NumberTextNormalizer{}.setFixupFixedPoint().setAlternateNanText("012")) == "nan");
 
-    assert(StringEx::splitPartNumberText("nan", NumberTextNormalizer{}) == std::vector<std::string>({"", "nan", ""}));
-    assert(StringEx::splitPartNumberText("-inf", NumberTextNormalizer{}) == std::vector<std::string>({ "-", "inf", "" }));
+    assert(StringEx::splitPartNumberText("nan", NumberTextNormalizer{}) == std::vector<std::string>({"", "", ""}));
+    assert(StringEx::splitPartNumberText("-inf", NumberTextNormalizer{}) == std::vector<std::string>({ "-", "", "" }));
     assert(StringEx::splitPartNumberText("-10.5", NumberTextNormalizer{}) == std::vector<std::string>({ "-", "10", "5" }));
     assert(StringEx::splitPartNumberText("-0", NumberTextNormalizer{}) == std::vector<std::string>({ "-", "0", "" }));
     assert(StringEx::splitPartNumberText("0", NumberTextNormalizer{}) == std::vector<std::string>({ "", "0", "" }));
-    assert(StringEx::splitPartNumberText("+0", NumberTextNormalizer{}) == std::vector<std::string>({ "", "0", "" }));
+    assert(StringEx::splitPartNumberText("+0", NumberTextNormalizer{}) == std::vector<std::string>({ "+", "0", "" }));
     assert(StringEx::splitPartNumberText("10.5", NumberTextNormalizer{}) == std::vector<std::string>({ "", "10", "5" }));
-    assert(StringEx::splitPartNumberText("+10.5", NumberTextNormalizer{}) == std::vector<std::string>({ "", "10", "5" }));
-    assert(StringEx::splitPartNumberText("inf", NumberTextNormalizer{}) == std::vector<std::string>({ "", "inf", "" }));
-    assert(StringEx::splitPartNumberText("+inf", NumberTextNormalizer{}) == std::vector<std::string>({ "", "inf", "" }));
+    assert(StringEx::splitPartNumberText("+10.5", NumberTextNormalizer{}) == std::vector<std::string>({ "+", "10", "5" }));
+    assert(StringEx::splitPartNumberText("inf", NumberTextNormalizer{}) == std::vector<std::string>({ "", "", "" }));
+    assert(StringEx::splitPartNumberText("+inf", NumberTextNormalizer{}) == std::vector<std::string>({ "+", "", "" }));
 
     //assert(StringEx::splitPartNumberText(".", NumberTextNormalizer{}) == std::vector<std::string>({ "", "", "" }));
     assert(StringEx::splitPartNumberText("0.", NumberTextNormalizer{}) == std::vector<std::string>({ "", "0", "0" }));
     assert(StringEx::splitPartNumberText(".0", NumberTextNormalizer{}) == std::vector<std::string>({ "", "0", "0" }));
-    assert(StringEx::splitPartNumberText("+0.", NumberTextNormalizer{}) == std::vector<std::string>({ "", "0", "0" }));
-    assert(StringEx::splitPartNumberText("+.0", NumberTextNormalizer{}) == std::vector<std::string>({ "", "0", "0" }));
+    assert(StringEx::splitPartNumberText("+0.", NumberTextNormalizer{}) == std::vector<std::string>({ "+", "0", "0" }));
+    assert(StringEx::splitPartNumberText("+.0", NumberTextNormalizer{}) == std::vector<std::string>({ "+", "0", "0" }));
     //assert(StringEx::splitPartNumberText("-.", NumberTextNormalizer{}) == std::vector<std::string>({ "", "", "" }));
     assert(StringEx::splitPartNumberText("-0.", NumberTextNormalizer{}) == std::vector<std::string>({ "-", "0", "0" }));
     assert(StringEx::splitPartNumberText("-.0", NumberTextNormalizer{}) == std::vector<std::string>({ "-", "0", "0" }));
 
     assert(StringEx::splitPartNumberText("-1", NumberTextNormalizer{}.setFixupFixedPoint()) == std::vector<std::string>({ "-", "1", "0" }));
     assert(StringEx::splitPartNumberText("1", NumberTextNormalizer{}.setFixupFixedPoint()) == std::vector<std::string>({ "", "1", "0" }));
-    assert(StringEx::splitPartNumberText("+1", NumberTextNormalizer{}.setFixupFixedPoint()) == std::vector<std::string>({ "", "1", "0" }));
+    assert(StringEx::splitPartNumberText("+1", NumberTextNormalizer{}.setFixupFixedPoint()) == std::vector<std::string>({ "+", "1", "0" }));
     assert(StringEx::splitPartNumberText("+1", NumberTextNormalizer{}.setKeepPositiveSign().setFixupFixedPoint()) == std::vector<std::string>({ "+", "1", "0" }));
 
     assert(StringEx::splitPartNumberText("1.", NumberTextNormalizer{}) == std::vector<std::string>({ "", "1", "0" }));
     assert(StringEx::splitPartNumberText(".1", NumberTextNormalizer{}) == std::vector<std::string>({ "", "0", "1" }));
-    assert(StringEx::splitPartNumberText("+1.", NumberTextNormalizer{}) == std::vector<std::string>({ "", "1", "0" }));
-    assert(StringEx::splitPartNumberText("+.1", NumberTextNormalizer{}) == std::vector<std::string>({ "", "0", "1" }));
+    assert(StringEx::splitPartNumberText("+1.", NumberTextNormalizer{}) == std::vector<std::string>({ "+", "1", "0" }));
+    assert(StringEx::splitPartNumberText("+.1", NumberTextNormalizer{}) == std::vector<std::string>({ "+", "0", "1" }));
     assert(StringEx::splitPartNumberText("-1.", NumberTextNormalizer{}) == std::vector<std::string>({ "-", "1", "0" }));
     assert(StringEx::splitPartNumberText("-.1", NumberTextNormalizer{}) == std::vector<std::string>({ "-", "0", "1" }));
 

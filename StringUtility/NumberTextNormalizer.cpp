@@ -226,7 +226,7 @@ std::vector<std::string> NumberTextNormalizer::splitPartNumberText(std::string_v
 
     // 正規化
     text2 = toDefaultText(text2);
-    text2 = normalizePositiveSign(text2, isKeepPositiveSign());
+    text2 = normalizePositiveSign(text2, true); // 正符号取得できる必要があるので、正符号は削除しない
     text2 = normalizeFixedPoint(text2);
     text2 = normalizeZeroBase(text2);
 
@@ -235,16 +235,16 @@ std::vector<std::string> NumberTextNormalizer::splitPartNumberText(std::string_v
 
     // Nan
     if (isNan(text2)) {
-        return std::vector<std::string>({"", getDefaultNanText(), ""});
+        return std::vector<std::string>({"", "", ""});
     }
 
     // 符号削除
-    std::string sign = getSignPartNumberText(text2);
+    std::string sign = pickupSign(text2);
     text2 = deleteSignPartNumberText(text2);
 
     // Infinty
     if (isInfinity(text2)) {
-        return std::vector<std::string>({sign, getDefaultInfinityText(), "" });
+        return std::vector<std::string>({sign, "", "" });
     }
 
     // 分割
@@ -258,93 +258,23 @@ std::vector<std::string> NumberTextNormalizer::splitPartNumberText(std::string_v
 
 std::string NumberTextNormalizer::getSignPartNumberText(std::string_view text) const
 {
-    std::string text2 = StringEx::trimAll(text);
-
-    // 正規化
-    text2 = toDefaultText(text2);
-    text2 = normalizePositiveSign(text2, true); // 正符号取得できる必要があるので、正符号は削除しない
-    text2 = normalizeFixedPoint(text2);
-    text2 = normalizeZeroBase(text2);
-
-    // 検証
-    validateNumberText(text2);
-
-    // 符号取り出し
-    std::string sign = pickupPositiveSign(text2);
-    if (!sign.empty()) {
-        return sign;
-    }
-    sign = pickupNegativeSign(text2);
-    if (!sign.empty()) {
-        return sign;
-    }
-    sign = pickupZeroSign(text2);
-    return sign;
+    // 分割
+    auto splited = splitPartNumberText(text);
+    return splited.at(0);
 }
 
 std::string NumberTextNormalizer::getIntegerPartNumberText(std::string_view text) const
 {
-    std::string text2 = StringEx::trimAll(text);
-
-    // 正規化
-    text2 = toDefaultText(text2);
-    text2 = normalizePositiveSign(text2, false); // 後に符号自体削除されるので、正符号削除固定
-    text2 = normalizeFixedPoint(text2);
-    text2 = normalizeZeroBase(text2);
-
-    // 検証
-    validateNumberText(text2);
-
-    // Nan
-    if (isNan(text2)) {
-        return "";
-    }
-
-    // 符号削除
-    text2 = deleteSignPartNumberText(text2);
-
-    // Infinty
-    if (isInfinity(text2)) {
-        return "";
-    }
-
     // 分割
-    auto splited = StringEx::split(text2, getDefaultPointText());
-    return splited.front();
+    auto splited = splitPartNumberText(text);
+    return splited.at(1);
 }
 
 std::string NumberTextNormalizer::getDecimalPartNumberText(std::string_view text) const
 {
-    std::string text2 = StringEx::trimAll(text);
-
-    // 正規化
-    text2 = toDefaultText(text2);
-    text2 = normalizePositiveSign(text2, false); // 後に符号自体削除されるので、正符号削除固定
-    text2 = normalizeFixedPoint(text2);
-    text2 = normalizeZeroBase(text2);
-
-    // 検証
-    validateNumberText(text2);
-
-    // Nan
-    if (isNan(text2)) {
-        return "";
-    }
-
-    // 符号削除
-    text2 = deleteSignPartNumberText(text2);
-
-    // Infinty
-    if (isInfinity(text2)) {
-        return "";
-    }
-
     // 分割
-    auto splited = StringEx::split(text2, getDefaultPointText());
-    if (1 == splited.size()) {
-        return "";
-    }
-    return splited.back();
+    auto splited = splitPartNumberText(text);
+    return splited.at(2);
 }
 
 bool NumberTextNormalizer::isValidPrefixNumberText(std::string_view text) const
@@ -503,6 +433,20 @@ std::string NumberTextNormalizer::deleteZeroSign(std::string_view text) const {
     return text2;
 }
 
+std::string NumberTextNormalizer::pickupSign(std::string_view text) const
+{
+    std::string sign = pickupPositiveSign(text);
+    if (!sign.empty()) {
+        return sign;
+    }
+    sign = pickupNegativeSign(text);
+    if (!sign.empty()) {
+        return sign;
+    }
+    sign = pickupZeroSign(text);
+    return sign;
+}
+
 std::string NumberTextNormalizer::pickupPositiveSign(std::string_view text) const
 {
     if (!m_positiveSign.empty() && StringEx::containts(text, m_positiveSign)) {
@@ -592,6 +536,12 @@ std::string NumberTextNormalizer::normalizeZeroBase(std::string_view text) const
 
     // -.X -> -0.X
     if (text2.starts_with(getDefaultNegativeSignText() + getDefaultPointText())) {
+        std::string zero = getDefaultZeroText();
+        text2.insert(std::next(text2.begin(), 1), zero.begin(), zero.end());
+    }
+
+    // +.X -> +0.X
+    if (text2.starts_with(getDefaultPositiveSignText() + getDefaultPointText())) {
         std::string zero = getDefaultZeroText();
         text2.insert(std::next(text2.begin(), 1), zero.begin(), zero.end());
     }

@@ -142,6 +142,7 @@ private:
     std::string deleteNegativeSign(std::string_view text) const;
     std::string deleteZeroSign(std::string_view text) const;
 
+    std::string pickupSign(std::string_view text) const;
     std::string pickupPositiveSign(std::string_view text) const;
     std::string pickupNegativeSign(std::string_view text) const;
     std::string pickupZeroSign(std::string_view text) const;
