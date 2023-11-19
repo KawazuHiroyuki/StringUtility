@@ -144,10 +144,10 @@ bool StringEx::isZeroNumberText(std::string_view text, const NumberTextNormalize
     return normalizer.isZeroNumberText(text);
 }
 
-bool StringEx::isNegativeZeroNumberText(std::string_view text, const NumberTextNormalizer& normalizer)
-{
-    return normalizer.isNegativeZeroNumberText(text);
-}
+//bool StringEx::isNegativeZeroNumberText(std::string_view text, const NumberTextNormalizer& normalizer)
+//{
+//    return normalizer.isNegativeZeroNumberText(text);
+//}
 
 bool StringEx::isInfinityNumberText(std::string_view text, const NumberTextNormalizer& normalizer)
 {

@@ -4,6 +4,30 @@
 #include <stdexcept>
 #include "StringEx.h"
 
+std::string NumberTextNormalizer::toDefaultText(std::string_view text) const
+{
+    std::string text2 = std::string{ text };
+    text2 = StringEx::replace(text2, m_positiveSign, getDefaultPositiveSignText());
+    text2 = StringEx::replace(text2, m_negativeSign, getDefaultNegativeSignText());
+    text2 = StringEx::replace(text2, m_zeroSign, "");
+    text2 = StringEx::replace(text2, m_point, getDefaultPointText());
+    text2 = StringEx::replace(text2, m_infinity, getDefaultInfinityText());
+    text2 = StringEx::replace(text2, m_nan, getDefaultNanText());
+    return text2;
+}
+
+std::string NumberTextNormalizer::toAlternateText(std::string_view text) const
+{
+    std::string text2 = std::string{ text };
+    text2 = StringEx::replace(text2, getDefaultPositiveSignText(), m_positiveSign);
+    text2 = StringEx::replace(text2, getDefaultNegativeSignText(), m_negativeSign);
+    //text2 = StringEx::replace(text2, m_zeroSign, "");
+    text2 = StringEx::replace(text2, getDefaultPointText(), m_point);
+    text2 = StringEx::replace(text2, getDefaultInfinityText(), m_infinity);
+    text2 = StringEx::replace(text2, getDefaultNanText(), m_nan);
+    return text2;
+}
+
 void NumberTextNormalizer::validateNumberText(std::string_view text) const
 {
     if (!isValidNumberText(text)) {
@@ -41,8 +65,8 @@ bool NumberTextNormalizer::isValidNumberText(std::string_view text) const
     }
 
     // 正規化
-    text2 = alternate(text2);
-    text2 = normalizePositiveSign(text2);
+    text2 = toDefaultText(text2);
+    text2 = normalizePositiveSign(text2, false);
 
     // Nan
     if (isNan(text2)) {
@@ -56,23 +80,13 @@ bool NumberTextNormalizer::isValidNumberText(std::string_view text) const
     }
 
     // 先頭チェック - charconvの仕様に合わせて、先頭の許可/禁止は下記とする。
-    // -OK X
-    // -OK .X
-    // -OK -X
-    // -NG .
-    // -NG -.
     if (!isValidPrefixNumberText(text2)) {
         return false;
     }
-    //if ((1 == text2.size()) && text2.starts_with(getDefaultPointText())) { // NG .
-    //    return false;
-    //}
-    //if ((2 == text2.size()) && text2.starts_with(getDefaultNegativeSignText() + getDefaultPointText())) { // NG -.
-    //    return false;
-    //}
 
     // 末尾チェック
-    auto found = std::find_if_not(text2.begin(), text2.end(), [](std::string::value_type c) { return StringEx::containts("-.0123456789", std::string(1, c)); });
+    auto found = std::find_if_not(text2.begin(), text2.end(), [](std::string::value_type c) { 
+        return StringEx::containts(getDefaultFiniteNumberChars(), std::string(1, c)); });
     if (text2.end() != found) {
         return false; // -0-9.以外はNG
     }
@@ -139,8 +153,8 @@ bool NumberTextNormalizer::isZeroNumberText(std::string_view text) const
     validateNumberText(text2);
 
     // 正規化
-    text2 = alternate(text2);
-    text2 = normalizePositiveSign(text2);
+    text2 = toDefaultText(text2);
+    text2 = normalizePositiveSign(text2, m_keepPositiveSign);
 
     // 数値変換
     try {
@@ -153,32 +167,6 @@ bool NumberTextNormalizer::isZeroNumberText(std::string_view text) const
     catch (...) {
         return false;
     }
-}
-
-bool NumberTextNormalizer::isNegativeZeroNumberText(std::string_view text) const
-{
-    bool zero = isZeroNumberText(text);
-
-    // -0 → 0
-    // -0. → 0.
-    if (zero && text.starts_with(getDefaultNegativeSignText() + getDefaultZeroText())) {
-        return true;
-    }
-    //if (zero && startsWithNegativeSign(text)) {
-    //    return true;
-    //}
-    // -.0
-    if (zero && text.starts_with(getDefaultNegativeSignText() + getDefaultPointText())) {
-        return true;
-    }
-
-    //if (!isNegativeNumberText(text)) {
-    //    return false;
-    //}
-    //if (!isZeroNumberText(text)) {
-    //    return false;
-    //}
-    return false;
 }
 
 bool NumberTextNormalizer::isInfinityNumberText(std::string_view text) const
@@ -215,8 +203,8 @@ std::string NumberTextNormalizer::normalizeNumberText(std::string_view text) con
     std::string text2 = StringEx::trimAll(text);
 
     // 正規化
-    text2 = alternate(text2);
-    text2 = normalizePositiveSign(text2);
+    text2 = toDefaultText(text2);
+    text2 = normalizePositiveSign(text2, m_keepPositiveSign);
     text2 = normalizeFixedPoint(text2);
     text2 = normalizeZeroBase(text2);
     text2 = normalizeNegativeZero(text2);
@@ -239,8 +227,8 @@ std::string NumberTextNormalizer::getSignPartNumberText(std::string_view text) c
     std::string text2 = StringEx::trimAll(text);
 
     // 正規化
-    text2 = alternate(text2);
-    text2 = normalizePositiveSign(text2);
+    text2 = toDefaultText(text2);
+    text2 = normalizePositiveSign(text2, true);
     text2 = normalizeFixedPoint(text2);
     text2 = normalizeZeroBase(text2);
 
@@ -265,8 +253,8 @@ std::string NumberTextNormalizer::getIntegerPartNumberText(std::string_view text
     std::string text2 = StringEx::trimAll(text);
 
     // 正規化
-    text2 = alternate(text2);
-    text2 = normalizePositiveSign(text2);
+    text2 = toDefaultText(text2);
+    text2 = normalizePositiveSign(text2, m_keepPositiveSign);
     text2 = normalizeFixedPoint(text2);
     text2 = normalizeZeroBase(text2);
 
@@ -296,8 +284,8 @@ std::string NumberTextNormalizer::getDecimalPartNumberText(std::string_view text
     std::string text2 = StringEx::trimAll(text);
 
     // 正規化
-    text2 = alternate(text2);
-    text2 = normalizePositiveSign(text2);
+    text2 = toDefaultText(text2);
+    text2 = normalizePositiveSign(text2, m_keepPositiveSign);
     text2 = normalizeFixedPoint(text2);
     text2 = normalizeZeroBase(text2);
 
@@ -327,11 +315,12 @@ std::string NumberTextNormalizer::getDecimalPartNumberText(std::string_view text
 
 bool NumberTextNormalizer::isValidPrefixNumberText(std::string_view text) const
 {
-    // OK X
-    // OK .X
-    // OK -X
+    // OK: charconvの仕様に合わせて、先頭の許可は下記とする。
+    // X
+    // .X
+    // -X
 
-    // NG
+    // NG: charconvの仕様に合わせて、先頭の禁止は下記とする。
     if ((1 == text.size()) && text.starts_with(getDefaultPointText())) { // NG .
         return false;
     }
@@ -341,22 +330,38 @@ bool NumberTextNormalizer::isValidPrefixNumberText(std::string_view text) const
     return true;
 }
 
+bool NumberTextNormalizer::isNegativeZeroNumberText(std::string_view text) const
+{
+    bool zero = isZeroNumberText(text);
+
+    // -0 → 0
+    // -0. → 0.
+    if (zero && text.starts_with(getDefaultNegativeSignText() + getDefaultZeroText())) {
+        return true;
+    }
+    // -.0
+    if (zero && text.starts_with(getDefaultNegativeSignText() + getDefaultPointText())) {
+        return true;
+    }
+    return false;
+}
+
 std::size_t NumberTextNormalizer::countPositiveSign(std::string_view text) const
 {
     std::size_t count = StringEx::count(text, m_positiveSign) + StringEx::count(text, getDefaultPositiveSignText());
     return count;
 }
-
-bool NumberTextNormalizer::containtsPositiveSign(std::string_view text) const
-{
-    if (!m_positiveSign.empty() && StringEx::containts(text, m_positiveSign)) {
-        return true;
-    }
-    if (StringEx::containts(text, getDefaultPositiveSignText())) {
-        return true;
-    }
-    return false;
-}
+//
+//bool NumberTextNormalizer::containtsPositiveSign(std::string_view text) const
+//{
+//    if (!m_positiveSign.empty() && StringEx::containts(text, m_positiveSign)) {
+//        return true;
+//    }
+//    if (StringEx::containts(text, getDefaultPositiveSignText())) {
+//        return true;
+//    }
+//    return false;
+//}
 
 bool NumberTextNormalizer::startsWithPositiveSign(std::string_view text) const
 {
@@ -394,16 +399,16 @@ std::size_t NumberTextNormalizer::countNegativeSign(std::string_view text) const
     return count;
 }
 
-bool NumberTextNormalizer::containtsNegativeSign(std::string_view text) const
-{
-    if (!m_negativeSign.empty() && StringEx::containts(text, m_negativeSign)) {
-        return true;
-    }
-    if (StringEx::containts(text, getDefaultNegativeSignText())) {
-        return true;
-    }
-    return false;
-}
+//bool NumberTextNormalizer::containtsNegativeSign(std::string_view text) const
+//{
+//    if (!m_negativeSign.empty() && StringEx::containts(text, m_negativeSign)) {
+//        return true;
+//    }
+//    if (StringEx::containts(text, getDefaultNegativeSignText())) {
+//        return true;
+//    }
+//    return false;
+//}
 
 bool NumberTextNormalizer::startsWithNegativeSign(std::string_view text) const
 {
@@ -440,13 +445,13 @@ std::size_t NumberTextNormalizer::countZeroSign(std::string_view text) const
     return count;
 }
 
-bool NumberTextNormalizer::containtsZeroSign(std::string_view text) const
-{
-    if (!m_zeroSign.empty() && StringEx::containts(text, m_zeroSign)) {
-        return true;
-    }
-    return false;
-}
+//bool NumberTextNormalizer::containtsZeroSign(std::string_view text) const
+//{
+//    if (!m_zeroSign.empty() && StringEx::containts(text, m_zeroSign)) {
+//        return true;
+//    }
+//    return false;
+//}
 
 bool NumberTextNormalizer::startsWithZeroSign(std::string_view text) const
 {
@@ -470,49 +475,49 @@ std::string NumberTextNormalizer::pickupZeroSign(std::string_view text) const
     return "";
 }
 
-std::size_t NumberTextNormalizer::countPoint(std::string_view text) const
-{
-    std::size_t count = StringEx::count(text, m_point) + StringEx::count(text, getDefaultPointText());
-    return count;
-}
+//std::size_t NumberTextNormalizer::countPoint(std::string_view text) const
+//{
+//    std::size_t count = StringEx::count(text, m_point) + StringEx::count(text, getDefaultPointText());
+//    return count;
+//}
 
-bool NumberTextNormalizer::startsWithPoint(std::string_view text) const
-{
-    if (!m_point.empty() && text.starts_with(m_point)) {
-        return true;
-    }
-    if (text.starts_with(getDefaultNegativeSignText())) {
-        return true;
-    }
-    return false;
-}
+//bool NumberTextNormalizer::startsWithPoint(std::string_view text) const
+//{
+//    if (!m_point.empty() && text.starts_with(m_point)) {
+//        return true;
+//    }
+//    if (text.starts_with(getDefaultNegativeSignText())) {
+//        return true;
+//    }
+//    return false;
+//}
+//
+//bool NumberTextNormalizer::containtsPoint(std::string_view text) const
+//{
+//    if (!m_point.empty() && StringEx::containts(text, m_point)) {
+//        return true;
+//    }
+//    if (StringEx::containts(text, getDefaultPointText())) {
+//        return true;
+//    }
+//    return false;
+//}
 
-bool NumberTextNormalizer::containtsPoint(std::string_view text) const
-{
-    if (!m_point.empty() && StringEx::containts(text, m_point)) {
-        return true;
-    }
-    if (StringEx::containts(text, getDefaultPointText())) {
-        return true;
-    }
-    return false;
-}
-
-bool NumberTextNormalizer::startsWithNumber(std::string_view text) const
-{
-    for (int number = 0; number < 10; number++) {
-        auto&& valueText = std::string(1, '0' + number);
-        if (text.starts_with(valueText)) {
-            return true;
-        }
-    }
-    return false;
-}
-
-bool NumberTextNormalizer::isNumber(std::string_view text) const
-{
-    return false;
-}
+//bool NumberTextNormalizer::startsWithNumber(std::string_view text) const
+//{
+//    for (int number = 0; number < 10; number++) {
+//        auto&& valueText = std::string(1, '0' + number);
+//        if (text.starts_with(valueText)) {
+//            return true;
+//        }
+//    }
+//    return false;
+//}
+//
+//bool NumberTextNormalizer::isNumber(std::string_view text) const
+//{
+//    return false;
+//}
 
 bool NumberTextNormalizer::containtsInfinity(std::string_view text) const
 {
@@ -558,22 +563,10 @@ bool NumberTextNormalizer::isNan(std::string_view text) const
     return false;
 }
 
-std::string NumberTextNormalizer::alternate(std::string_view text) const
+std::string NumberTextNormalizer::normalizePositiveSign(std::string_view text, bool keepPositiveSign) const
 {
     std::string text2 = std::string{ text };
-    text2 = StringEx::replace(text2, m_positiveSign, getDefaultPositiveSignText());
-    text2 = StringEx::replace(text2, m_negativeSign, getDefaultNegativeSignText());
-    text2 = StringEx::replace(text2, m_zeroSign, "");
-    text2 = StringEx::replace(text2, m_point, getDefaultPointText());
-    text2 = StringEx::replace(text2, m_infinity, getDefaultInfinityText());
-    text2 = StringEx::replace(text2, m_nan, getDefaultNanText());
-    return text2;
-}
-
-std::string NumberTextNormalizer::normalizePositiveSign(std::string_view text) const
-{
-    std::string text2 = std::string{ text };
-    if (!m_keepPositiveSign) {
+    if (!keepPositiveSign) {
         text2 = deletePositiveSign(text2);
     }
     return text2;
@@ -601,24 +594,6 @@ std::string NumberTextNormalizer::normalizeFixedPoint(std::string_view text) con
             text2 = text2 + getDefaultPointText();
         }
     }
-
-    //if (isFixupFixedPoint()) {
-    //    // not fixup .
-    //    // not fixup -.
-    //    if (!isValidPrefixNumberText(text2)) {
-    //        return text2;
-    //    }
-
-    //    // .X -> 0.X
-    //    if (text2.starts_with(getDefaultPointText())) {
-    //        text2 = getDefaultZeroText() + text2;
-    //    }
-
-    //    // X. -> X.0
-    //    if (text2.ends_with(getDefaultPointText())) {
-    //        text2 = text2 + getDefaultZeroText();
-    //    }
-    //}
     return text2;
 }
 

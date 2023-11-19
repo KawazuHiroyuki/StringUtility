@@ -27,7 +27,7 @@ public:
     static bool isPositiveNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
     static bool isNegativeNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
     static bool isZeroNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
-    static bool isNegativeZeroNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
+    //static bool isNegativeZeroNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
     static bool isInfinityNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
     static bool isNanNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
 
