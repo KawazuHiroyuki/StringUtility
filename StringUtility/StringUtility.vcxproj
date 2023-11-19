@@ -142,7 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="NumberTextAlternate.cpp" />
+    <ClCompile Include="NumberTextAlternator.cpp" />
     <ClCompile Include="StringEx.cpp" />
     <ClCompile Include="Test001.cpp" />
     <ClCompile Include="Test002.cpp" />
@@ -153,7 +153,7 @@
     <ClInclude Include="AsciiCharacterType.h" />
     <ClInclude Include="BinaryPrefixType.h" />
     <ClInclude Include="BinaryPrefixUtility.h" />
-    <ClInclude Include="NumberTextAlternate.h" />
+    <ClInclude Include="NumberTextAlternator.h" />
     <ClInclude Include="SIPrefixType.h" />
     <ClInclude Include="SIPrefixUtility.h" />
     <ClInclude Include="StringEx.h" />

@@ -27,7 +27,7 @@
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="NumberTextAlternate.cpp">
+    <ClCompile Include="NumberTextAlternator.cpp">
       <Filter>ソース ファイル\002</Filter>
     </ClCompile>
     <ClCompile Include="StringEx.cpp">
@@ -53,7 +53,7 @@
     <ClInclude Include="AsciiCharacterType.h">
       <Filter>ソース ファイル\001</Filter>
     </ClInclude>
-    <ClInclude Include="NumberTextAlternate.h">
+    <ClInclude Include="NumberTextAlternator.h">
       <Filter>ソース ファイル\002</Filter>
     </ClInclude>
     <ClInclude Include="StringEx.h">

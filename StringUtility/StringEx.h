@@ -3,7 +3,7 @@
 #include <string>
 #include <string_view>
 
-#include "NumberTextAlternate.h"
+#include "NumberTextAlternator.h"
 
 class StringEx {
 public:
