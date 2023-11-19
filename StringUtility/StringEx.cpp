@@ -127,8 +127,22 @@ bool StringEx::validateNumberText(std::string_view text, const NumberTextAlterna
     // 正規化
     text2 = alternate.normalize(text2);
 
-    // 末尾チェック TODO
-    // 0-9.以外はNG+nan/inf以外はNG
+    // Nan
+    if (alternate.isNan(text2)) {
+        return true;
+    }
+
+    // Infinity
+    text2 = deleteSignPartNumberText(text2, alternate); // 符号のみ削除
+    if (alternate.isInfinity(text2)) {
+        return true;
+    }
+
+    // 末尾チェック
+    auto found = std::find_if_not(text2.begin(), text2.end(), [](std::string::value_type c) { return containts("-.0123456789", std::string(1, c)); });
+    if (text2.end() != found) {
+        return false; // -0-9.以外はNG
+    }
 
     // 数値変換
     const char* str = text2.c_str();

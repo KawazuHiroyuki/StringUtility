@@ -33,7 +33,7 @@ public:
 
     static std::string deleteSignPartNumberText(std::string_view text, const NumberTextAlternaor& alternate);
 
-    static std::string getSignPartNumberText();
-    static std::string getIntegerPartNumberText();
-    static std::string getDecimalPartNumberText();
+    static std::string getSignPartNumberText(std::string_view text, const NumberTextAlternaor& alternate);
+    static std::string getIntegerPartNumberText(std::string_view text, const NumberTextAlternaor& alternate);
+    static std::string getDecimalPartNumberText(std::string_view text, const NumberTextAlternaor& alternate);
 };

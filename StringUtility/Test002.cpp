@@ -76,7 +76,7 @@ void Test002() {
     assert(StringEx::validateNumberText("", NumberTextAlternaor{}) == false);
     assert(StringEx::validateNumberText("A", NumberTextAlternaor{}) == false);
     assert(StringEx::validateNumberText("A10", NumberTextAlternaor{}) == false);
-    assert(StringEx::validateNumberText("10A", NumberTextAlternaor{}) == true); // TODO false
+    assert(StringEx::validateNumberText("10A", NumberTextAlternaor{}) == false);
 
     assert(StringEx::validateNumberText("10", NumberTextAlternaor{}) == true);
     assert(StringEx::validateNumberText("10.5", NumberTextAlternaor{}) == true);
