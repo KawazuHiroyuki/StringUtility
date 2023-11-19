@@ -9,6 +9,7 @@
 
 class NumberTextNormalizer {
     bool m_keepPositiveSign = false;
+    bool m_keepNegativeZero = false;
     bool m_fixupFixedPoint = false;
     std::string m_positiveSign;
     std::string m_negativeSign;
@@ -24,6 +25,14 @@ public:
     }
     bool isKeepPositiveSign() const {
         return m_keepPositiveSign;
+    }
+
+    NumberTextNormalizer& setKeepNegativeZero(bool keep = true) {
+        m_keepNegativeZero = keep;
+        return *this;
+    }
+    bool isKeepNegativeZero() const {
+        return m_keepNegativeZero;
     }
 
     NumberTextNormalizer& setFixupFixedPoint(bool fixup = true) {
@@ -148,7 +157,7 @@ private:
     std::string pickupZeroSign(std::string_view text) const;
 
     std::string normalizePositiveSign(std::string_view text, bool keepPositiveSign) const;
-    std::string normalizeNegativeZero(std::string_view text) const;
+    std::string normalizeNegativeZero(std::string_view text, bool keepNegativeZero) const;
     std::string normalizeFixedPoint(std::string_view text) const;
     std::string normalizeZeroBase(std::string_view text) const;
 };

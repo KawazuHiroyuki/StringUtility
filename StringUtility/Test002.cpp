@@ -16,6 +16,16 @@ void Test002() {
     assert(StringEx::toNumber("-4.") == -4.0);
     assert(StringEx::toNumber("-.2") == -0.2);
     //assert(StringEx::toNumber("-.") == -0.0); // NG
+
+    assert(StringEx::toNumber("0") == 0.0);
+    assert(StringEx::toNumber("0.0") == 0.0);
+    assert(StringEx::toNumber("0.") == 0.0);
+    assert(StringEx::toNumber(".0") == 0.0);
+
+    assert(StringEx::toNumber("-0") == -0.0);
+    assert(StringEx::toNumber("-0.0") == -0.0);
+    assert(StringEx::toNumber("-0.") == -0.0);
+    assert(StringEx::toNumber("-.0") == -0.0);
     
     //assert(NumberTextNormalizer{}.countPositiveSign("") == 0);
     //assert(NumberTextNormalizer{}.countPositiveSign("0123456+0123456@0123456++@@") == 3);
@@ -241,6 +251,9 @@ void Test002() {
     assert(StringEx::normalizeNumberText("-0.0", NumberTextNormalizer{}) == "0.0");
     assert(StringEx::normalizeNumberText("±0", NumberTextNormalizer{}.setAlternateZeroSignText("±")) == "0");
     assert(StringEx::normalizeNumberText("±0.0", NumberTextNormalizer{}.setAlternateZeroSignText("±")) == "0.0");
+
+    assert(StringEx::normalizeNumberText("-0", NumberTextNormalizer{}.setKeepNegativeZero()) == "-0");
+    assert(StringEx::normalizeNumberText("-0.0", NumberTextNormalizer{}.setKeepNegativeZero()) == "-0.0");
 
     assert(StringEx::normalizeNumberText("1", NumberTextNormalizer{}) == "1");
     assert(StringEx::normalizeNumberText("0.1", NumberTextNormalizer{}) == "0.1");

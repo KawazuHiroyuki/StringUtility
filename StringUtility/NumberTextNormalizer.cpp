@@ -213,7 +213,7 @@ std::string NumberTextNormalizer::normalizeNumberText(std::string_view text) con
     text2 = normalizePositiveSign(text2, isKeepPositiveSign());
     text2 = normalizeFixedPoint(text2);
     text2 = normalizeZeroBase(text2);
-    text2 = normalizeNegativeZero(text2);
+    text2 = normalizeNegativeZero(text2, isKeepNegativeZero());
 
     // 検証
     validateNumberText(text2);
@@ -229,6 +229,7 @@ std::vector<std::string> NumberTextNormalizer::splitPartNumberText(std::string_v
     text2 = normalizePositiveSign(text2, true); // 正符号取得できる必要があるので、正符号は削除しない
     text2 = normalizeFixedPoint(text2);
     text2 = normalizeZeroBase(text2);
+    text2 = normalizeNegativeZero(text2, true); // 負符号取得できる必要があるので、負符号は削除しない
 
     // 検証
     validateNumberText(text2);
@@ -486,10 +487,10 @@ std::string NumberTextNormalizer::normalizePositiveSign(std::string_view text, b
     return text2;
 }
 
-std::string NumberTextNormalizer::normalizeNegativeZero(std::string_view text) const
+std::string NumberTextNormalizer::normalizeNegativeZero(std::string_view text, bool keepNegativeZero) const
 {
     std::string text2 = StringEx::trimAll(text);
-    if (isNegativeZeroNumberText(text2)) {
+    if (!keepNegativeZero && isNegativeZeroNumberText(text2)) {
         text2 = deleteSignPartNumberText(text2);
     }
     return text2;
