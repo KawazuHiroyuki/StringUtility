@@ -2,13 +2,13 @@
 
 #include "StringEx.h"
 
-std::size_t NumberTextAlternaor::countPositiveSign(std::string_view text) const
+std::size_t NumberTextNormalizer::countPositiveSign(std::string_view text) const
 {
     std::size_t count = StringEx::count(text, m_positiveSign) + StringEx::count(text, StringEx::getDefaultPositiveSignNumberText());
     return count;
 }
 
-bool NumberTextAlternaor::containtsPositiveSign(std::string_view text) const
+bool NumberTextNormalizer::containtsPositiveSign(std::string_view text) const
 {
     if (!m_positiveSign.empty() && StringEx::containts(text, m_positiveSign)) {
         return true;
@@ -19,7 +19,7 @@ bool NumberTextAlternaor::containtsPositiveSign(std::string_view text) const
     return false;
 }
 
-bool NumberTextAlternaor::startsWithPositiveSign(std::string_view text) const
+bool NumberTextNormalizer::startsWithPositiveSign(std::string_view text) const
 {
     if (!m_positiveSign.empty() && text.starts_with(m_positiveSign)) {
         return true;
@@ -30,7 +30,7 @@ bool NumberTextAlternaor::startsWithPositiveSign(std::string_view text) const
     return false;
 }
 
-std::string NumberTextAlternaor::deletePositiveSign(std::string_view text) const 
+std::string NumberTextNormalizer::deletePositiveSign(std::string_view text) const 
 {
     std::string text2 = std::string{ text };
     text2 = StringEx::replace(text2, m_positiveSign, "");
@@ -38,7 +38,7 @@ std::string NumberTextAlternaor::deletePositiveSign(std::string_view text) const
     return text2;
 }
 
-std::string NumberTextAlternaor::pickupPositiveSign(std::string_view text) const
+std::string NumberTextNormalizer::pickupPositiveSign(std::string_view text) const
 {
     if (!m_positiveSign.empty() && StringEx::containts(text, m_positiveSign)) {
         return m_positiveSign;
@@ -49,13 +49,13 @@ std::string NumberTextAlternaor::pickupPositiveSign(std::string_view text) const
     return "";
 }
 
-std::size_t NumberTextAlternaor::countNegativeSign(std::string_view text) const
+std::size_t NumberTextNormalizer::countNegativeSign(std::string_view text) const
 {
     std::size_t count = StringEx::count(text, m_negativeSign) + StringEx::count(text, StringEx::getDefaultNegativeSignNumberText());
     return count;
 }
 
-bool NumberTextAlternaor::containtsNegativeSign(std::string_view text) const
+bool NumberTextNormalizer::containtsNegativeSign(std::string_view text) const
 {
     if (!m_negativeSign.empty() && StringEx::containts(text, m_negativeSign)) {
         return true;
@@ -66,7 +66,7 @@ bool NumberTextAlternaor::containtsNegativeSign(std::string_view text) const
     return false;
 }
 
-bool NumberTextAlternaor::startsWithNegativeSign(std::string_view text) const
+bool NumberTextNormalizer::startsWithNegativeSign(std::string_view text) const
 {
     if (!m_negativeSign.empty() && text.starts_with(m_negativeSign)) {
         return true;
@@ -77,14 +77,14 @@ bool NumberTextAlternaor::startsWithNegativeSign(std::string_view text) const
     return false;
 }
 
-std::string NumberTextAlternaor::deleteNegativeSign(std::string_view text) const {
+std::string NumberTextNormalizer::deleteNegativeSign(std::string_view text) const {
     std::string text2 = std::string{ text };
     text2 = StringEx::replace(text2, m_negativeSign, "");
     text2 = StringEx::replace(text2, StringEx::getDefaultNegativeSignNumberText(), "");
     return text2;
 }
 
-std::string NumberTextAlternaor::pickupNegativeSign(std::string_view text) const
+std::string NumberTextNormalizer::pickupNegativeSign(std::string_view text) const
 {
     if (!m_negativeSign.empty() && StringEx::containts(text, m_negativeSign)) {
         return m_negativeSign;
@@ -95,13 +95,13 @@ std::string NumberTextAlternaor::pickupNegativeSign(std::string_view text) const
     return "";
 }
 
-std::size_t NumberTextAlternaor::countZeroSign(std::string_view text) const
+std::size_t NumberTextNormalizer::countZeroSign(std::string_view text) const
 {
     std::size_t count = StringEx::count(text, m_zeroSign);
     return count;
 }
 
-bool NumberTextAlternaor::containtsZeroSign(std::string_view text) const
+bool NumberTextNormalizer::containtsZeroSign(std::string_view text) const
 {
     if (!m_zeroSign.empty() && StringEx::containts(text, m_zeroSign)) {
         return true;
@@ -109,7 +109,7 @@ bool NumberTextAlternaor::containtsZeroSign(std::string_view text) const
     return false;
 }
 
-bool NumberTextAlternaor::startsWithZeroSign(std::string_view text) const
+bool NumberTextNormalizer::startsWithZeroSign(std::string_view text) const
 {
     if (!m_zeroSign.empty() && text.starts_with(m_zeroSign)) {
         return true;
@@ -117,13 +117,13 @@ bool NumberTextAlternaor::startsWithZeroSign(std::string_view text) const
     return false;
 }
 
-std::string NumberTextAlternaor::deleteZeroSign(std::string_view text) const {
+std::string NumberTextNormalizer::deleteZeroSign(std::string_view text) const {
     std::string text2 = std::string{ text };
     text2 = StringEx::replace(text2, m_zeroSign, "");
     return text2;
 }
 
-std::string NumberTextAlternaor::pickupZeroSign(std::string_view text) const
+std::string NumberTextNormalizer::pickupZeroSign(std::string_view text) const
 {
     if (!m_zeroSign.empty() && StringEx::containts(text, m_zeroSign)) {
         return m_zeroSign;
@@ -131,13 +131,13 @@ std::string NumberTextAlternaor::pickupZeroSign(std::string_view text) const
     return "";
 }
 
-std::size_t NumberTextAlternaor::countPoint(std::string_view text) const
+std::size_t NumberTextNormalizer::countPoint(std::string_view text) const
 {
     std::size_t count = StringEx::count(text, m_point) + StringEx::count(text, StringEx::getDefaultPointNumberText());
     return count;
 }
 
-bool NumberTextAlternaor::containtsPoint(std::string_view text) const
+bool NumberTextNormalizer::containtsPoint(std::string_view text) const
 {
     if (!m_point.empty() && StringEx::containts(text, m_point)) {
         return true;
@@ -148,7 +148,7 @@ bool NumberTextAlternaor::containtsPoint(std::string_view text) const
     return false;
 }
 
-bool NumberTextAlternaor::containtsInfinity(std::string_view text) const
+bool NumberTextNormalizer::containtsInfinity(std::string_view text) const
 {
     if (!m_infinity.empty() && StringEx::containts(text, m_infinity)) {
         return true;
@@ -159,7 +159,7 @@ bool NumberTextAlternaor::containtsInfinity(std::string_view text) const
     return false;
 }
 
-bool NumberTextAlternaor::isInfinity(std::string_view text) const
+bool NumberTextNormalizer::isInfinity(std::string_view text) const
 {
     if (!m_infinity.empty() && m_infinity == text) {
         return true;
@@ -170,7 +170,7 @@ bool NumberTextAlternaor::isInfinity(std::string_view text) const
     return false;
 }
 
-bool NumberTextAlternaor::containtsNan(std::string_view text) const
+bool NumberTextNormalizer::containtsNan(std::string_view text) const
 {
     if (!m_nan.empty() && StringEx::containts(text, m_nan)) {
         return true;
@@ -181,7 +181,7 @@ bool NumberTextAlternaor::containtsNan(std::string_view text) const
     return false;
 }
 
-bool NumberTextAlternaor::isNan(std::string_view text) const
+bool NumberTextNormalizer::isNan(std::string_view text) const
 {
     if (!m_nan.empty() && m_nan == text) {
         return true;
@@ -192,7 +192,7 @@ bool NumberTextAlternaor::isNan(std::string_view text) const
     return false;
 }
 
-std::string NumberTextAlternaor::replace(std::string_view text) const
+std::string NumberTextNormalizer::replace(std::string_view text) const
 {
     std::string text2 = std::string{ text };
     text2 = StringEx::replace(text2, m_positiveSign, StringEx::getDefaultPositiveSignNumberText());
@@ -204,10 +204,10 @@ std::string NumberTextAlternaor::replace(std::string_view text) const
     return text2;
 }
 
-std::string NumberTextAlternaor::normalize(std::string_view text, bool keepPositiveSign) const
+std::string NumberTextNormalizer::normalize(std::string_view text) const
 {
     std::string text2 = std::string{ text };
-    if (keepPositiveSign) {
+    if (m_keepPositiveSign) {
         text2 = StringEx::replace(text2, m_positiveSign, StringEx::getDefaultPositiveSignNumberText());
     } else {
         text2 = deletePositiveSign(text2);

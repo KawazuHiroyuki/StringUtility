@@ -123,14 +123,14 @@ std::string StringEx::getDefaultNanNumberText()
     return text;
 }
 
-void StringEx::validateNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+void StringEx::validateNumberText(std::string_view text, const NumberTextNormalizer& alternate)
 {
     if (!isNumberText(text, alternate)) {
         throw std::runtime_error("invalid number text.");
     }
 }
 
-bool StringEx::isNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+bool StringEx::isNumberText(std::string_view text, const NumberTextNormalizer& alternate)
 {
     std::string text2 = trimAll(text);
 
@@ -189,7 +189,7 @@ bool StringEx::isNumberText(std::string_view text, const NumberTextAlternaor& al
     }
 }
 
-bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextNormalizer& alternate)
 {
     std::string text2 = trimAll(text);
 
@@ -214,7 +214,7 @@ bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextAlter
     return true; // ïÑçÜãLçÜÇ»Çµ=Positive
 }
 
-bool StringEx::isNegativeNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+bool StringEx::isNegativeNumberText(std::string_view text, const NumberTextNormalizer& alternate)
 {
     std::string text2 = trimAll(text);
 
@@ -233,7 +233,7 @@ bool StringEx::isNegativeNumberText(std::string_view text, const NumberTextAlter
     return false;
 }
 
-bool StringEx::isZeroNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+bool StringEx::isZeroNumberText(std::string_view text, const NumberTextNormalizer& alternate)
 {
     std::string text2 = trimAll(text);
 
@@ -256,7 +256,7 @@ bool StringEx::isZeroNumberText(std::string_view text, const NumberTextAlternaor
     }
 }
 
-bool StringEx::isNegativeZeroNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+bool StringEx::isNegativeZeroNumberText(std::string_view text, const NumberTextNormalizer& alternate)
 {
     if (!isNegativeNumberText(text, alternate)) {
         return false;
@@ -267,7 +267,7 @@ bool StringEx::isNegativeZeroNumberText(std::string_view text, const NumberTextA
     return true;
 }
 
-bool StringEx::isInfinityNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+bool StringEx::isInfinityNumberText(std::string_view text, const NumberTextNormalizer& alternate)
 {
     std::string text2 = trimAll(text);
 
@@ -282,7 +282,7 @@ bool StringEx::isInfinityNumberText(std::string_view text, const NumberTextAlter
     return false;
 }
 
-bool StringEx::isNanNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+bool StringEx::isNanNumberText(std::string_view text, const NumberTextNormalizer& alternate)
 {
     std::string text2 = trimAll(text);
 
@@ -296,7 +296,7 @@ bool StringEx::isNanNumberText(std::string_view text, const NumberTextAlternaor&
     return false;
 }
 
-std::string StringEx::normalizeNumberText(std::string_view text, bool fixedPoint, const NumberTextAlternaor& alternate)
+std::string StringEx::normalizeNumberText(std::string_view text, const NumberTextNormalizer& alternate)
 {
     std::string text2 = trimAll(text);
 
@@ -309,7 +309,7 @@ std::string StringEx::normalizeNumberText(std::string_view text, bool fixedPoint
     // Infinity
     bool containtsInfinity = alternate.containtsInfinity(text2);
 
-    if (fixedPoint && !containtsNan && !containtsInfinity) {
+    if (alternate.isFixupFixedPoint() && !containtsNan && !containtsInfinity) {
         // X -> X.
         if (!containts(text2, getDefaultPointNumberText())) {
             text2 = text2 + getDefaultPointNumberText();
@@ -336,7 +336,7 @@ std::string StringEx::normalizeNumberText(std::string_view text, bool fixedPoint
     return text2;
 }
 
-std::string StringEx::deleteSignPartNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+std::string StringEx::deleteSignPartNumberText(std::string_view text, const NumberTextNormalizer& alternate)
 {
     std::string text2 = alternate.deletePositiveSign(text);
     text2 = alternate.deleteNegativeSign(text2);
@@ -344,12 +344,12 @@ std::string StringEx::deleteSignPartNumberText(std::string_view text, const Numb
     return text2;
 }
 
-std::string StringEx::getSignPartNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+std::string StringEx::getSignPartNumberText(std::string_view text, const NumberTextNormalizer& alternate)
 {
     std::string text2 = trimAll(text);
 
     // ê≥ãKâª
-    text2 = alternate.normalize(text2, true);
+    text2 = alternate.normalize(text2);
 
     // åüèÿ
     validateNumberText(text2, alternate);
@@ -367,7 +367,7 @@ std::string StringEx::getSignPartNumberText(std::string_view text, const NumberT
     return sign;
 }
 
-std::string StringEx::getIntegerPartNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+std::string StringEx::getIntegerPartNumberText(std::string_view text, const NumberTextNormalizer& alternate)
 {
     std::string text2 = trimAll(text);
 
@@ -395,7 +395,7 @@ std::string StringEx::getIntegerPartNumberText(std::string_view text, const Numb
     return splited.front();
 }
 
-std::string StringEx::getDecimalPartNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+std::string StringEx::getDecimalPartNumberText(std::string_view text, const NumberTextNormalizer& alternate)
 {
     std::string text2 = trimAll(text);
 

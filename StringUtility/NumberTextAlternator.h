@@ -6,7 +6,9 @@
 #include <vector>
 #include <optional>
 
-class NumberTextAlternaor {
+class NumberTextNormalizer {
+    bool m_keepPositiveSign = false;
+    bool m_fixupFixedPoint = false;
     std::string m_positiveSign;
     std::string m_negativeSign;
     std::string m_zeroSign;
@@ -15,27 +17,43 @@ class NumberTextAlternaor {
     std::string m_nan;
 
 public:
-    NumberTextAlternaor& setPositiveSign(std::string_view alternate) {
+    NumberTextNormalizer& setKeepPositiveSign(bool keep = true) {
+        m_keepPositiveSign = keep;
+        return *this;
+    }
+    bool isKeepPositiveSign() const {
+        return m_keepPositiveSign;
+    }
+
+    NumberTextNormalizer& setFixupFixedPoint(bool fixup = true) {
+        m_fixupFixedPoint = fixup;
+        return *this;
+    }
+    bool isFixupFixedPoint() const {
+        return m_fixupFixedPoint;
+    }
+
+    NumberTextNormalizer& setPositiveSign(std::string_view alternate) {
         m_positiveSign = std::string{ alternate };
         return *this;
     }
-    NumberTextAlternaor& setNegativeSign(std::string_view alternate) {
+    NumberTextNormalizer& setNegativeSign(std::string_view alternate) {
         m_negativeSign = std::string{ alternate };
         return *this;
     }
-    NumberTextAlternaor& setZeroSign(std::string_view alternate) {
+    NumberTextNormalizer& setZeroSign(std::string_view alternate) {
         m_zeroSign = std::string{ alternate };
         return *this;
     }
-    NumberTextAlternaor& setPoint(std::string_view alternate) {
+    NumberTextNormalizer& setPoint(std::string_view alternate) {
         m_point = std::string{ alternate };
         return *this;
     }
-    NumberTextAlternaor& setInfinity(std::string_view alternate) {
+    NumberTextNormalizer& setInfinity(std::string_view alternate) {
         m_infinity = std::string{ alternate };
         return *this;
     }
-    NumberTextAlternaor& setNan(std::string_view alternate) {
+    NumberTextNormalizer& setNan(std::string_view alternate) {
         m_nan = std::string{alternate};
         return *this;
     }
@@ -68,5 +86,5 @@ public:
     bool isNan(std::string_view text) const;
 
     std::string replace(std::string_view text) const;
-    std::string normalize(std::string_view text, bool keepPositiveSign = false) const;
+    std::string normalize(std::string_view text) const;
 };
