@@ -20,8 +20,7 @@ public:
     static std::string getDefaultInfinityNumberText();
     static std::string getDefaultNanNumberText();
 
-    static bool validateSingPartNumberText(std::string_view text, const NumberTextAlternaor& alternate);
-    static bool validateNumberPartNumberText(std::string_view text, const NumberTextAlternaor& alternate);
+    static bool validateNumberText(std::string_view text, const NumberTextAlternaor& alternate);
 
     static bool isPositiveNumberText(std::string_view text, const NumberTextAlternaor& alternate);
     static bool isNegativeNumberText(std::string_view text, const NumberTextAlternaor& alternate);
