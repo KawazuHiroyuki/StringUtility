@@ -93,6 +93,26 @@ public:
         return text;
     }
 
+    void validateNumberText(std::string_view text) const;
+    bool isNumberText(std::string_view text) const;
+    bool isPositiveNumberText(std::string_view text) const;
+    bool isNegativeNumberText(std::string_view text) const;
+    bool isZeroNumberText(std::string_view text) const;
+    bool isNegativeZeroNumberText(std::string_view text) const;
+    bool isInfinityNumberText(std::string_view text) const;
+    bool isNanNumberText(std::string_view text) const;
+
+    std::string normalizeNumberText(std::string_view text) const;
+
+    std::string deleteSignPartNumberText(std::string_view text) const;
+
+    std::string getSignPartNumberText(std::string_view text) const;
+    std::string getIntegerPartNumberText(std::string_view text) const;
+    std::string getDecimalPartNumberText(std::string_view text) const;
+
+private:
+
+
     std::size_t countPositiveSign(std::string_view text) const;
     bool containtsPositiveSign(std::string_view text) const;
     bool startsWithPositiveSign(std::string_view text) const;

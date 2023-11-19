@@ -1,6 +1,305 @@
 #include "NumberTextNormalizer.h"
 
+#include <algorithm>
+#include <stdexcept>
 #include "StringEx.h"
+
+void NumberTextNormalizer::validateNumberText(std::string_view text) const
+{
+    if (!isNumberText(text)) {
+        throw std::runtime_error("invalid number text.");
+    }
+}
+
+bool NumberTextNormalizer::isNumberText(std::string_view text) const
+{
+    std::string text2 = StringEx::trimAll(text);
+
+    // 符号重複チェック
+    int positive = countPositiveSign(text2);
+    int negative = countNegativeSign(text2);
+    int zero = countZeroSign(text2);
+    if ((positive + negative + zero) > 1) {
+        return false;
+    }
+
+    // 符号先頭チェック
+    if (positive != 0) {
+        if (!startsWithPositiveSign(text2)) {
+            return false;
+        }
+    }
+    if (negative != 0) {
+        if (!startsWithNegativeSign(text2)) {
+            return false;
+        }
+    }
+    if (zero != 0) {
+        if (!startsWithZeroSign(text2)) {
+            return false;
+        }
+    }
+
+    // 正規化
+    text2 = normalize(text2);
+
+    // Nan
+    if (isNan(text2)) {
+        return true;
+    }
+
+    // Infinity
+    text2 = deleteSignPartNumberText(text2); // 符号のみ削除
+    if (isInfinity(text2)) {
+        return true;
+    }
+
+    // 末尾チェック
+    auto found = std::find_if_not(text2.begin(), text2.end(), [](std::string::value_type c) { return StringEx::containts("-.0123456789", std::string(1, c)); });
+    if (text2.end() != found) {
+        return false; // -0-9.以外はNG
+    }
+
+    // 数値変換
+    try {
+        double value = StringEx::toNumber(text2);
+        return true;
+    }
+    catch (...) {
+        return false;
+    }
+}
+
+bool NumberTextNormalizer::isPositiveNumberText(std::string_view text) const
+{
+    std::string text2 = StringEx::trimAll(text);
+
+    // 検証
+    validateNumberText(text2);
+
+    // Nanは常にfalse
+    if (isNan(text2)) {
+        return false;
+    }
+
+    // Positive判定
+    if (startsWithPositiveSign(text2)) {
+        return true;
+    }
+    if (startsWithZeroSign(text2) && isZeroNumberText(text2)) { // Positive扱い
+        return true;
+    }
+    if (startsWithNegativeSign(text2)) {
+        return false;
+    }
+    return true; // 符号記号なし=Positive
+}
+
+bool NumberTextNormalizer::isNegativeNumberText(std::string_view text) const
+{
+    std::string text2 = StringEx::trimAll(text);
+
+    // 検証
+    validateNumberText(text2);
+
+    // Nanは常にfalse
+    if (isNan(text2)) {
+        return false;
+    }
+
+    // Negative判定
+    if (startsWithNegativeSign(text2)) {
+        return true;
+    }
+    return false;
+}
+
+bool NumberTextNormalizer::isZeroNumberText(std::string_view text) const
+{
+    std::string text2 = StringEx::trimAll(text);
+
+    // 検証
+    validateNumberText(text2);
+
+    // 正規化
+    text2 = normalize(text2);
+
+    // 数値変換
+    try {
+        double value = StringEx::toNumber(text2);
+        if (value == 0.0) {
+            return true;
+        }
+        return false;
+    }
+    catch (...) {
+        return false;
+    }
+}
+
+bool NumberTextNormalizer::isNegativeZeroNumberText(std::string_view text) const
+{
+    if (!isNegativeNumberText(text)) {
+        return false;
+    }
+    if (!isZeroNumberText(text)) {
+        return false;
+    }
+    return true;
+}
+
+bool NumberTextNormalizer::isInfinityNumberText(std::string_view text) const
+{
+    std::string text2 = StringEx::trimAll(text);
+
+    // 検証
+    validateNumberText(text2);
+
+    // Infinity判定
+    text2 = deleteSignPartNumberText(text2); // 符号のみ削除
+    if (isInfinity(text2)) {
+        return true;
+    }
+    return false;
+}
+
+bool NumberTextNormalizer::isNanNumberText(std::string_view text) const
+{
+    std::string text2 = StringEx::trimAll(text);
+
+    // 検証
+    validateNumberText(text2);
+
+    // Nan判定
+    if (isNan(text2)) {
+        return true;
+    }
+    return false;
+}
+
+std::string NumberTextNormalizer::normalizeNumberText(std::string_view text) const
+{
+    std::string text2 = StringEx::trimAll(text);
+
+    // 正規化
+    text2 = normalize(text2);
+
+    if (isFixupFixedPoint() && !containtsNan(text2) && !containtsInfinity(text2)) {
+        // X -> X.
+        if (!StringEx::containts(text2, getDefaultPointNumberText())) {
+            text2 = text2 + getDefaultPointNumberText();
+        }
+
+        // .X -> 0.X
+        if (text2.starts_with(getDefaultPointNumberText())) {
+            text2 = getDefaultZeroNumberText() + text2;
+        }
+
+        // X. -> X.0
+        if (text2.ends_with(getDefaultPointNumberText())) {
+            text2 = text2 + getDefaultZeroNumberText();
+        }
+    }
+
+    // -0 -> 0
+    if (isNegativeZeroNumberText(text2)) {
+        text2 = deleteSignPartNumberText(text2);
+    }
+
+    // 検証
+    validateNumberText(text2);
+    return text2;
+}
+
+std::string NumberTextNormalizer::deleteSignPartNumberText(std::string_view text) const
+{
+    std::string text2 = deletePositiveSign(text);
+    text2 = deleteNegativeSign(text2);
+    text2 = deleteZeroSign(text2);
+    return text2;
+}
+
+std::string NumberTextNormalizer::getSignPartNumberText(std::string_view text) const
+{
+    std::string text2 = StringEx::trimAll(text);
+
+    // 正規化
+    text2 = normalize(text2);
+
+    // 検証
+    validateNumberText(text2);
+
+    // 符号取り出し
+    std::string sign = pickupPositiveSign(text2);
+    if (!sign.empty()) {
+        return sign;
+    }
+    sign = pickupNegativeSign(text2);
+    if (!sign.empty()) {
+        return sign;
+    }
+    sign = pickupZeroSign(text2);
+    return sign;
+}
+
+std::string NumberTextNormalizer::getIntegerPartNumberText(std::string_view text) const
+{
+    std::string text2 = StringEx::trimAll(text);
+
+    // 正規化
+    text2 = normalize(text2);
+
+    // 検証
+    validateNumberText(text2);
+
+    // Nan
+    if (isNan(text2)) {
+        return "";
+    }
+
+    // 符号符号削除
+    text2 = deleteSignPartNumberText(text2);
+
+    // Infinty
+    if (isInfinity(text2)) {
+        return "";
+    }
+
+    // 分割
+    auto splited = StringEx::split(text2, getDefaultPointNumberText());
+    return splited.front();
+}
+
+std::string NumberTextNormalizer::getDecimalPartNumberText(std::string_view text) const
+{
+    std::string text2 = StringEx::trimAll(text);
+
+    // 正規化
+    text2 = normalize(text2);
+
+    // 検証
+    validateNumberText(text2);
+
+    // Nan
+    if (isNan(text2)) {
+        return "";
+    }
+
+    // 符号符号削除
+    text2 = deleteSignPartNumberText(text2);
+
+    // Infinty
+    if (isInfinity(text2)) {
+        return "";
+    }
+
+    // 分割
+    auto splited = StringEx::split(text2, getDefaultPointNumberText());
+    if (1 == splited.size()) {
+        return "";
+    }
+    return splited.back();
+}
 
 std::size_t NumberTextNormalizer::countPositiveSign(std::string_view text) const
 {

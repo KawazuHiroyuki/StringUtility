@@ -5,19 +5,19 @@
 #include "StringEx.h"
 
 void Test002() {
-    assert(NumberTextNormalizer{}.countPositiveSign("") == 0);
-    assert(NumberTextNormalizer{}.countPositiveSign("0123456+0123456@0123456++@@") == 3);
-    assert(NumberTextNormalizer{}.setPositiveSign("@").countPositiveSign("0123456+0123456@0123456++@@") == 6);
-    assert(NumberTextNormalizer{}.setPositiveSign("@@").countPositiveSign("0@@1234560123456@0123456@@") == 2);
+    //assert(NumberTextNormalizer{}.countPositiveSign("") == 0);
+    //assert(NumberTextNormalizer{}.countPositiveSign("0123456+0123456@0123456++@@") == 3);
+    //assert(NumberTextNormalizer{}.setPositiveSign("@").countPositiveSign("0123456+0123456@0123456++@@") == 6);
+    //assert(NumberTextNormalizer{}.setPositiveSign("@@").countPositiveSign("0@@1234560123456@0123456@@") == 2);
 
-    assert(NumberTextNormalizer{}.countNegativeSign("") == 0);
-    assert(NumberTextNormalizer{}.countNegativeSign("0123456-0123456@0123456--@@") == 3);
-    assert(NumberTextNormalizer{}.setNegativeSign("@").countNegativeSign("0123456+0123456@0123456--@@") == 5);
-    assert(NumberTextNormalizer{}.setNegativeSign("@@").countNegativeSign("0@@1234560123456@0123456@@") == 2);
+    //assert(NumberTextNormalizer{}.countNegativeSign("") == 0);
+    //assert(NumberTextNormalizer{}.countNegativeSign("0123456-0123456@0123456--@@") == 3);
+    //assert(NumberTextNormalizer{}.setNegativeSign("@").countNegativeSign("0123456+0123456@0123456--@@") == 5);
+    //assert(NumberTextNormalizer{}.setNegativeSign("@@").countNegativeSign("0@@1234560123456@0123456@@") == 2);
 
-    assert(NumberTextNormalizer{}.countZeroSign("") == 0);
-    assert(NumberTextNormalizer{}.countZeroSign("0123456-0123456@0123456±±@@") == 0);
-    assert(NumberTextNormalizer{}.setZeroSign("±").countZeroSign("0123456±0123456@0123456±±@@") == 3);
+    //assert(NumberTextNormalizer{}.countZeroSign("") == 0);
+    //assert(NumberTextNormalizer{}.countZeroSign("0123456-0123456@0123456±±@@") == 0);
+    //assert(NumberTextNormalizer{}.setZeroSign("±").countZeroSign("0123456±0123456@0123456±±@@") == 3);
 
     assert(StringEx::count("", "cd") == 0);
     assert(StringEx::count("abcdefgabcdefgabcdefg", "") == 0);
@@ -273,9 +273,9 @@ void Test002() {
     assert(StringEx::getSignPartNumberText("inf", NumberTextNormalizer{}.setKeepPositiveSign()) == "");
     assert(StringEx::getSignPartNumberText("+inf", NumberTextNormalizer{}.setKeepPositiveSign()) == "+");
 
-    //assert(StringEx::getSignPartNumberText(".", NumberTextAlternaor{}) == "");
-    //assert(StringEx::getSignPartNumberText("0.", NumberTextAlternaor{}) == "");
-    //assert(StringEx::getSignPartNumberText(".0", NumberTextAlternaor{}) == "");
+    //assert(StringEx::getSignPartNumberText(".", NumberTextNormalizer{}) == "");
+    //assert(StringEx::getSignPartNumberText("0.", NumberTextNormalizer{}) == "");
+    //assert(StringEx::getSignPartNumberText(".0", NumberTextNormalizer{}) == "");
 
     assert(StringEx::getIntegerPartNumberText("nan", NumberTextNormalizer{}) == "");
     assert(StringEx::getIntegerPartNumberText("-inf", NumberTextNormalizer{}) == "");
