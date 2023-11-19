@@ -285,6 +285,8 @@ bool NumberTextNormalizer::isValidPrefixNumberText(std::string_view text) const
     // .X
     // -X
 
+
+    // TODO Alternateのチェックも入れる
     // NG: charconvの仕様に合わせて、先頭の禁止は下記とする。
     if ((1 == text.size()) && text.starts_with(getDefaultPointText())) { // NG .
         return false;
@@ -309,6 +311,7 @@ bool NumberTextNormalizer::isNegativeZeroNumberText(std::string_view text) const
 {
     bool zero = isZeroNumberText(text);
 
+    // TODO Alternateのチェックも入れる
     // -0 → 0
     // -0. → 0.
     if (zero && text.starts_with(getDefaultNegativeSignText() + getDefaultZeroText())) {
