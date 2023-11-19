@@ -351,17 +351,6 @@ std::size_t NumberTextNormalizer::countPositiveSign(std::string_view text) const
     std::size_t count = StringEx::count(text, m_positiveSign) + StringEx::count(text, getDefaultPositiveSignText());
     return count;
 }
-//
-//bool NumberTextNormalizer::containtsPositiveSign(std::string_view text) const
-//{
-//    if (!m_positiveSign.empty() && StringEx::containts(text, m_positiveSign)) {
-//        return true;
-//    }
-//    if (StringEx::containts(text, getDefaultPositiveSignText())) {
-//        return true;
-//    }
-//    return false;
-//}
 
 bool NumberTextNormalizer::startsWithPositiveSign(std::string_view text) const
 {
@@ -399,17 +388,6 @@ std::size_t NumberTextNormalizer::countNegativeSign(std::string_view text) const
     return count;
 }
 
-//bool NumberTextNormalizer::containtsNegativeSign(std::string_view text) const
-//{
-//    if (!m_negativeSign.empty() && StringEx::containts(text, m_negativeSign)) {
-//        return true;
-//    }
-//    if (StringEx::containts(text, getDefaultNegativeSignText())) {
-//        return true;
-//    }
-//    return false;
-//}
-
 bool NumberTextNormalizer::startsWithNegativeSign(std::string_view text) const
 {
     if (!m_negativeSign.empty() && text.starts_with(m_negativeSign)) {
@@ -445,14 +423,6 @@ std::size_t NumberTextNormalizer::countZeroSign(std::string_view text) const
     return count;
 }
 
-//bool NumberTextNormalizer::containtsZeroSign(std::string_view text) const
-//{
-//    if (!m_zeroSign.empty() && StringEx::containts(text, m_zeroSign)) {
-//        return true;
-//    }
-//    return false;
-//}
-
 bool NumberTextNormalizer::startsWithZeroSign(std::string_view text) const
 {
     if (!m_zeroSign.empty() && text.starts_with(m_zeroSign)) {
@@ -474,50 +444,6 @@ std::string NumberTextNormalizer::pickupZeroSign(std::string_view text) const
     }
     return "";
 }
-
-//std::size_t NumberTextNormalizer::countPoint(std::string_view text) const
-//{
-//    std::size_t count = StringEx::count(text, m_point) + StringEx::count(text, getDefaultPointText());
-//    return count;
-//}
-
-//bool NumberTextNormalizer::startsWithPoint(std::string_view text) const
-//{
-//    if (!m_point.empty() && text.starts_with(m_point)) {
-//        return true;
-//    }
-//    if (text.starts_with(getDefaultNegativeSignText())) {
-//        return true;
-//    }
-//    return false;
-//}
-//
-//bool NumberTextNormalizer::containtsPoint(std::string_view text) const
-//{
-//    if (!m_point.empty() && StringEx::containts(text, m_point)) {
-//        return true;
-//    }
-//    if (StringEx::containts(text, getDefaultPointText())) {
-//        return true;
-//    }
-//    return false;
-//}
-
-//bool NumberTextNormalizer::startsWithNumber(std::string_view text) const
-//{
-//    for (int number = 0; number < 10; number++) {
-//        auto&& valueText = std::string(1, '0' + number);
-//        if (text.starts_with(valueText)) {
-//            return true;
-//        }
-//    }
-//    return false;
-//}
-//
-//bool NumberTextNormalizer::isNumber(std::string_view text) const
-//{
-//    return false;
-//}
 
 bool NumberTextNormalizer::containtsInfinity(std::string_view text) const
 {
