@@ -91,32 +91,32 @@ std::string StringEx::trimAll(std::string_view text)
 
 std::string StringEx::getDefaultPositiveSignNumberText()
 {
-    return NumberTextNormalizer::getDefaultPositiveSignNumberText();
+    return NumberTextNormalizer::getDefaultPositiveSignText();
 }
 
 std::string StringEx::getDefaultNegativeSignNumberText()
 {
-    return NumberTextNormalizer::getDefaultNegativeSignNumberText();
+    return NumberTextNormalizer::getDefaultNegativeSignText();
 }
 
 std::string StringEx::getDefaultPointNumberText()
 {
-    return NumberTextNormalizer::getDefaultPointNumberText();
+    return NumberTextNormalizer::getDefaultPointText();
 }
 
 std::string StringEx::getDefaultZeroNumberText()
 {
-    return NumberTextNormalizer::getDefaultZeroNumberText();
+    return NumberTextNormalizer::getDefaultZeroText();
 }
 
 std::string StringEx::getDefaultInfinityNumberText()
 {
-    return NumberTextNormalizer::getDefaultInfinityNumberText();
+    return NumberTextNormalizer::getDefaultInfinityText();
 }
 
 std::string StringEx::getDefaultNanNumberText()
 {
-    return NumberTextNormalizer::getDefaultNanNumberText();
+    return NumberTextNormalizer::getDefaultNanText();
 }
 
 void StringEx::validateNumberText(std::string_view text, const NumberTextNormalizer& normalizer)

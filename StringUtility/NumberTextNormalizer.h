@@ -34,59 +34,59 @@ public:
         return m_fixupFixedPoint;
     }
 
-    NumberTextNormalizer& setPositiveSign(std::string_view alternate) {
+    NumberTextNormalizer& setAlternatePositiveSignText(std::string_view alternate) {
         m_positiveSign = std::string{ alternate };
         return *this;
     }
-    NumberTextNormalizer& setNegativeSign(std::string_view alternate) {
+    NumberTextNormalizer& setAlternateNegativeSignText(std::string_view alternate) {
         m_negativeSign = std::string{ alternate };
         return *this;
     }
-    NumberTextNormalizer& setZeroSign(std::string_view alternate) {
+    NumberTextNormalizer& setAlternateZeroSignText(std::string_view alternate) {
         m_zeroSign = std::string{ alternate };
         return *this;
     }
-    NumberTextNormalizer& setPoint(std::string_view alternate) {
+    NumberTextNormalizer& setAlternatePointText(std::string_view alternate) {
         m_point = std::string{ alternate };
         return *this;
     }
-    NumberTextNormalizer& setInfinity(std::string_view alternate) {
+    NumberTextNormalizer& setAlternateInfinityText(std::string_view alternate) {
         m_infinity = std::string{ alternate };
         return *this;
     }
-    NumberTextNormalizer& setNan(std::string_view alternate) {
+    NumberTextNormalizer& setAlternateNanText(std::string_view alternate) {
         m_nan = std::string{alternate};
         return *this;
     }
 
-    static std::string getDefaultPositiveSignNumberText()
+    static std::string getDefaultPositiveSignText()
     {
         return "+";
     }
 
-    static std::string getDefaultNegativeSignNumberText()
+    static std::string getDefaultNegativeSignText()
     {
         return "-";
     }
 
-    static std::string getDefaultPointNumberText()
+    static std::string getDefaultPointText()
     {
         return ".";
     }
 
-    static std::string getDefaultZeroNumberText()
+    static std::string getDefaultZeroText()
     {
         return "0";
     }
 
-    static std::string getDefaultInfinityNumberText()
+    static std::string getDefaultInfinityText()
     {
         static constexpr double value = std::numeric_limits<double>::infinity();
         std::string text = std::to_string(value);
         return text;
     }
 
-    static std::string getDefaultNanNumberText()
+    static std::string getDefaultNanText()
     {
         static constexpr double value = std::numeric_limits<double>::quiet_NaN();
         std::string text = std::to_string(value);
@@ -111,8 +111,6 @@ public:
     std::string getDecimalPartNumberText(std::string_view text) const;
 
 private:
-
-
     std::size_t countPositiveSign(std::string_view text) const;
     bool containtsPositiveSign(std::string_view text) const;
     bool startsWithPositiveSign(std::string_view text) const;
