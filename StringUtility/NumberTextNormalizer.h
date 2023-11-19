@@ -121,6 +121,7 @@ public:
 
 private:
     bool isValidPrefixNumberText(std::string_view text) const;
+    bool isValidFiniteNumberText(std::string_view text) const;
     bool isNegativeZeroNumberText(std::string_view text) const;
 
     std::size_t countPositiveSign(std::string_view text) const;

@@ -84,11 +84,9 @@ bool NumberTextNormalizer::isValidNumberText(std::string_view text) const
         return false;
     }
 
-    // 末尾チェック
-    auto found = std::find_if_not(text2.begin(), text2.end(), [](std::string::value_type c) { 
-        return StringEx::containts(getDefaultFiniteNumberChars(), std::string(1, c)); });
-    if (text2.end() != found) {
-        return false; // -0-9.以外はNG
+    // 有限数値テキストチェック
+    if (!isValidFiniteNumberText(text2)) {
+        return false;
     }
 
     // 数値変換
@@ -154,7 +152,7 @@ bool NumberTextNormalizer::isZeroNumberText(std::string_view text) const
 
     // 正規化
     text2 = toDefaultText(text2);
-    text2 = normalizePositiveSign(text2, m_keepPositiveSign);
+    text2 = normalizePositiveSign(text2, false); // ゼロ確認時は正符号不要
 
     // 数値変換
     try {
@@ -204,7 +202,7 @@ std::string NumberTextNormalizer::normalizeNumberText(std::string_view text) con
 
     // 正規化
     text2 = toDefaultText(text2);
-    text2 = normalizePositiveSign(text2, m_keepPositiveSign);
+    text2 = normalizePositiveSign(text2, isKeepPositiveSign());
     text2 = normalizeFixedPoint(text2);
     text2 = normalizeZeroBase(text2);
     text2 = normalizeNegativeZero(text2);
@@ -228,7 +226,7 @@ std::string NumberTextNormalizer::getSignPartNumberText(std::string_view text) c
 
     // 正規化
     text2 = toDefaultText(text2);
-    text2 = normalizePositiveSign(text2, true);
+    text2 = normalizePositiveSign(text2, true); // 正符号取得できる必要があるので、正符号は削除しない
     text2 = normalizeFixedPoint(text2);
     text2 = normalizeZeroBase(text2);
 
@@ -254,7 +252,7 @@ std::string NumberTextNormalizer::getIntegerPartNumberText(std::string_view text
 
     // 正規化
     text2 = toDefaultText(text2);
-    text2 = normalizePositiveSign(text2, m_keepPositiveSign);
+    text2 = normalizePositiveSign(text2, false); // 後に符号自体削除されるので、正符号削除固定
     text2 = normalizeFixedPoint(text2);
     text2 = normalizeZeroBase(text2);
 
@@ -266,7 +264,7 @@ std::string NumberTextNormalizer::getIntegerPartNumberText(std::string_view text
         return "";
     }
 
-    // 符号符号削除
+    // 符号削除
     text2 = deleteSignPartNumberText(text2);
 
     // Infinty
@@ -285,7 +283,7 @@ std::string NumberTextNormalizer::getDecimalPartNumberText(std::string_view text
 
     // 正規化
     text2 = toDefaultText(text2);
-    text2 = normalizePositiveSign(text2, m_keepPositiveSign);
+    text2 = normalizePositiveSign(text2, false); // 後に符号自体削除されるので、正符号削除固定
     text2 = normalizeFixedPoint(text2);
     text2 = normalizeZeroBase(text2);
 
@@ -326,6 +324,16 @@ bool NumberTextNormalizer::isValidPrefixNumberText(std::string_view text) const
     }
     if ((2 == text.size()) && text.starts_with(getDefaultNegativeSignText() + getDefaultPointText())) { // NG -.
         return false;
+    }
+    return true;
+}
+
+bool NumberTextNormalizer::isValidFiniteNumberText(std::string_view text) const
+{
+    auto found = std::find_if_not(text.begin(), text.end(), [](std::string::value_type c) {
+        return StringEx::containts(getDefaultFiniteNumberChars(), std::string(1, c)); });
+    if (text.end() != found) {
+        return false; // -0-9.以外はNG
     }
     return true;
 }
