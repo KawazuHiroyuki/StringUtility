@@ -233,4 +233,26 @@ void Test002() {
     assert(StringEx::getSignPartNumberText("+10.5", NumberTextAlternaor{}) == "+");
     assert(StringEx::getSignPartNumberText("inf", NumberTextAlternaor{}) == "");
     assert(StringEx::getSignPartNumberText("+inf", NumberTextAlternaor{}) == "+");
+
+    assert(StringEx::getIntegerPartNumberText("nan", NumberTextAlternaor{}) == "");
+    assert(StringEx::getIntegerPartNumberText("-inf", NumberTextAlternaor{}) == "");
+    assert(StringEx::getIntegerPartNumberText("-10.5", NumberTextAlternaor{}) == "10");
+    assert(StringEx::getIntegerPartNumberText("-0", NumberTextAlternaor{}) == "0");
+    assert(StringEx::getIntegerPartNumberText("0", NumberTextAlternaor{}) == "0");
+    assert(StringEx::getIntegerPartNumberText("+0", NumberTextAlternaor{}) == "0");
+    assert(StringEx::getIntegerPartNumberText("10.5", NumberTextAlternaor{}) == "10");
+    assert(StringEx::getIntegerPartNumberText("+10.5", NumberTextAlternaor{}) == "10");
+    assert(StringEx::getIntegerPartNumberText("inf", NumberTextAlternaor{}) == "");
+    assert(StringEx::getIntegerPartNumberText("+inf", NumberTextAlternaor{}) == "");
+
+    assert(StringEx::getDecimalPartNumberText("nan", NumberTextAlternaor{}) == "");
+    assert(StringEx::getDecimalPartNumberText("-inf", NumberTextAlternaor{}) == "");
+    assert(StringEx::getDecimalPartNumberText("-10.5", NumberTextAlternaor{}) == "5");
+    assert(StringEx::getDecimalPartNumberText("-0", NumberTextAlternaor{}) == "");
+    assert(StringEx::getDecimalPartNumberText("0", NumberTextAlternaor{}) == "");
+    assert(StringEx::getDecimalPartNumberText("+0", NumberTextAlternaor{}) == "");
+    assert(StringEx::getDecimalPartNumberText("10.5", NumberTextAlternaor{}) == "5");
+    assert(StringEx::getDecimalPartNumberText("+10.5", NumberTextAlternaor{}) == "5");
+    assert(StringEx::getDecimalPartNumberText("inf", NumberTextAlternaor{}) == "");
+    assert(StringEx::getDecimalPartNumberText("+inf", NumberTextAlternaor{}) == "");
 }

@@ -343,7 +343,25 @@ std::string StringEx::getIntegerPartNumberText(std::string_view text, const Numb
         throw std::runtime_error("invalid number text.");
     }
 
-    return "";
+    // Nan
+    if (isNanNumberText(text2, alternate)) {
+        return "";
+    }
+
+    // Infinty
+    if (isInfinityNumberText(text2, alternate)) {
+        return "";
+    }
+
+    // ³‹K‰»
+    text2 = alternate.normalize(text2);
+
+    // •„†•„†íœ
+    text2 = deleteSignPartNumberText(text2, alternate);
+
+    // •ªŠ„
+    auto splited = split(text2, getDefaultPointNumberText());
+    return splited.front();
 }
 
 std::string StringEx::getDecimalPartNumberText(std::string_view text, const NumberTextAlternaor& alternate)
@@ -355,5 +373,26 @@ std::string StringEx::getDecimalPartNumberText(std::string_view text, const Numb
         throw std::runtime_error("invalid number text.");
     }
 
-    return "";
+    // Nan
+    if (isNanNumberText(text2, alternate)) {
+        return "";
+    }
+
+    // Infinty
+    if (isInfinityNumberText(text2, alternate)) {
+        return "";
+    }
+
+    // ³‹K‰»
+    text2 = alternate.normalize(text2);
+
+    // •„†•„†íœ
+    text2 = deleteSignPartNumberText(text2, alternate);
+
+    // •ªŠ„
+    auto splited = split(text2, getDefaultPointNumberText());
+    if (1 == splited.size()) {
+        return "";
+    }
+    return splited.back();
 }
