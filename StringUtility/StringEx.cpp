@@ -260,6 +260,17 @@ bool StringEx::isZeroNumberText(std::string_view text, const NumberTextAlternaor
     return true;
 }
 
+bool StringEx::isNegativeZeroNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+{
+    if (!isNegativeNumberText(text, alternate)) {
+        return false;
+    }
+    if (!isZeroNumberText(text, alternate)) {
+        return false;
+    }
+    return true;
+}
+
 bool StringEx::isInfinityNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
     std::string text2 = trimAll(text);

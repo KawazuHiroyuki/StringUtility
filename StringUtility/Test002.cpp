@@ -156,6 +156,15 @@ void Test002() {
     assert(StringEx::isZeroNumberText("±1", NumberTextAlternaor{}.setZeroSign("±")) == false);
     assert(StringEx::isZeroNumberText("±0.1", NumberTextAlternaor{}.setZeroSign("±")) == false);
 
+    assert(StringEx::isNegativeZeroNumberText("0", NumberTextAlternaor{}) == false);
+    assert(StringEx::isNegativeZeroNumberText("0.0", NumberTextAlternaor{}) == false);
+    assert(StringEx::isNegativeZeroNumberText("+0", NumberTextAlternaor{}) == false);
+    assert(StringEx::isNegativeZeroNumberText("+0.0", NumberTextAlternaor{}) == false);
+    assert(StringEx::isNegativeZeroNumberText("-0", NumberTextAlternaor{}) == true);
+    assert(StringEx::isNegativeZeroNumberText("-0.0", NumberTextAlternaor{}) == true);
+    assert(StringEx::isNegativeZeroNumberText("±0", NumberTextAlternaor{}.setZeroSign("±")) == false);
+    assert(StringEx::isNegativeZeroNumberText("±0.0", NumberTextAlternaor{}.setZeroSign("±")) == false);
+
     assert(StringEx::isInfinityNumberText("", {}) == false);
     assert(StringEx::isInfinityNumberText("inf", {}) == true);
     assert(StringEx::isInfinityNumberText(" inf ", {}) == true);

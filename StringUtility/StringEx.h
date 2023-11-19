@@ -26,6 +26,7 @@ public:
     static bool isPositiveNumberText(std::string_view text, const NumberTextAlternaor& alternate);
     static bool isNegativeNumberText(std::string_view text, const NumberTextAlternaor& alternate);
     static bool isZeroNumberText(std::string_view text, const NumberTextAlternaor& alternate);
+    static bool isNegativeZeroNumberText(std::string_view text, const NumberTextAlternaor& alternate);
     static bool isInfinityNumberText(std::string_view text, const NumberTextAlternaor& alternate);
     static bool isNanNumberText(std::string_view text, const NumberTextAlternaor& alternate);
     static bool isNumberText(std::string_view text, const NumberTextAlternaor& alternate);
