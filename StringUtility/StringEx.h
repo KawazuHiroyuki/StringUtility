@@ -4,7 +4,7 @@
 #include <string_view>
 #include <cstddef>
 #include <vector>
-#include "NumberTextAlternator.h"
+#include "NumberTextNormalizer.h"
 
 class StringEx {
 public:

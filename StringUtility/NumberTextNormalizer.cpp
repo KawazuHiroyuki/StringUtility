@@ -1,4 +1,4 @@
-#include "NumberTextAlternator.h"
+#include "NumberTextNormalizer.h"
 
 #include "StringEx.h"
 
