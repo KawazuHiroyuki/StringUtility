@@ -102,6 +102,7 @@ public:
 
     std::string toDefaultText(std::string_view text) const;
     std::string toAlternateText(std::string_view text) const;
+    std::string deleteSignPartNumberText(std::string_view text) const;
     
     void validateNumberText(std::string_view text) const;
     bool isValidNumberText(std::string_view text) const;
@@ -113,8 +114,7 @@ public:
 
     std::string normalizeNumberText(std::string_view text) const;
 
-    std::string deleteSignPartNumberText(std::string_view text) const;
-
+    std::vector<std::string> splitPartNumberText(std::string_view text) const;
     std::string getSignPartNumberText(std::string_view text) const;
     std::string getIntegerPartNumberText(std::string_view text) const;
     std::string getDecimalPartNumberText(std::string_view text) const;
@@ -124,15 +124,15 @@ private:
     bool isValidFiniteNumberText(std::string_view text) const;
     bool isNegativeZeroNumberText(std::string_view text) const;
 
+    bool isInfinity(std::string_view text) const;
+    bool isNan(std::string_view text) const;
+
     std::size_t countPositiveSign(std::string_view text) const;
     std::size_t countNegativeSign(std::string_view text) const;
     std::size_t countZeroSign(std::string_view text) const;
 
     bool containtsInfinity(std::string_view text) const;
     bool containtsNan(std::string_view text) const;
-
-    bool isInfinity(std::string_view text) const;
-    bool isNan(std::string_view text) const;
 
     bool startsWithPositiveSign(std::string_view text) const;
     bool startsWithNegativeSign(std::string_view text) const;

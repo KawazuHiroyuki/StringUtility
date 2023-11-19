@@ -169,6 +169,11 @@ std::string StringEx::deleteSignPartNumberText(std::string_view text, const Numb
     return normalizer.deleteSignPartNumberText(text);
 }
 
+std::vector<std::string> StringEx::splitPartNumberText(std::string_view text, const NumberTextNormalizer& normalizer)
+{
+    return normalizer.splitPartNumberText(text);
+}
+
 std::string StringEx::getSignPartNumberText(std::string_view text, const NumberTextNormalizer& normalizer)
 {
     return normalizer.getSignPartNumberText(text);

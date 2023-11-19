@@ -35,6 +35,7 @@ public:
 
     static std::string deleteSignPartNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
 
+    static std::vector<std::string> splitPartNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
     static std::string getSignPartNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
     static std::string getIntegerPartNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});
     static std::string getDecimalPartNumberText(std::string_view text, const NumberTextNormalizer& normalizer = NumberTextNormalizer{});

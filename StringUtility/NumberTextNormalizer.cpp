@@ -28,6 +28,14 @@ std::string NumberTextNormalizer::toAlternateText(std::string_view text) const
     return text2;
 }
 
+std::string NumberTextNormalizer::deleteSignPartNumberText(std::string_view text) const
+{
+    std::string text2 = deletePositiveSign(text);
+    text2 = deleteNegativeSign(text2);
+    text2 = deleteZeroSign(text2);
+    return text2;
+}
+
 void NumberTextNormalizer::validateNumberText(std::string_view text) const
 {
     if (!isValidNumberText(text)) {
@@ -212,12 +220,40 @@ std::string NumberTextNormalizer::normalizeNumberText(std::string_view text) con
     return text2;
 }
 
-std::string NumberTextNormalizer::deleteSignPartNumberText(std::string_view text) const
+std::vector<std::string> NumberTextNormalizer::splitPartNumberText(std::string_view text) const
 {
-    std::string text2 = deletePositiveSign(text);
-    text2 = deleteNegativeSign(text2);
-    text2 = deleteZeroSign(text2);
-    return text2;
+    std::string text2 = StringEx::trimAll(text);
+
+    // ê≥ãKâª
+    text2 = toDefaultText(text2);
+    text2 = normalizePositiveSign(text2, isKeepPositiveSign());
+    text2 = normalizeFixedPoint(text2);
+    text2 = normalizeZeroBase(text2);
+
+    // åüèÿ
+    validateNumberText(text2);
+
+    // Nan
+    if (isNan(text2)) {
+        return std::vector<std::string>({"", getDefaultNanText(), ""});
+    }
+
+    // ïÑçÜçÌèú
+    std::string sign = getSignPartNumberText(text2);
+    text2 = deleteSignPartNumberText(text2);
+
+    // Infinty
+    if (isInfinity(text2)) {
+        return std::vector<std::string>({sign, getDefaultInfinityText(), "" });
+    }
+
+    // ï™äÑ
+    auto splited = StringEx::split(text2, getDefaultPointText());
+    splited.insert(splited.begin(), sign);
+    if (3 != splited.size()) {
+        splited.emplace_back("");
+    }
+    return splited;
 }
 
 std::string NumberTextNormalizer::getSignPartNumberText(std::string_view text) const
@@ -295,7 +331,7 @@ std::string NumberTextNormalizer::getDecimalPartNumberText(std::string_view text
         return "";
     }
 
-    // ïÑçÜïÑçÜçÌèú
+    // ïÑçÜçÌèú
     text2 = deleteSignPartNumberText(text2);
 
     // Infinty
@@ -354,6 +390,28 @@ bool NumberTextNormalizer::isNegativeZeroNumberText(std::string_view text) const
     return false;
 }
 
+bool NumberTextNormalizer::isInfinity(std::string_view text) const
+{
+    if (!m_infinity.empty() && m_infinity == text) {
+        return true;
+    }
+    if (getDefaultInfinityText() == text) {
+        return true;
+    }
+    return false;
+}
+
+bool NumberTextNormalizer::isNan(std::string_view text) const
+{
+    if (!m_nan.empty() && m_nan == text) {
+        return true;
+    }
+    if (getDefaultNanText() == text) {
+        return true;
+    }
+    return false;
+}
+
 std::size_t NumberTextNormalizer::countPositiveSign(std::string_view text) const
 {
     std::size_t count = StringEx::count(text, m_positiveSign) + StringEx::count(text, getDefaultPositiveSignText());
@@ -389,28 +447,6 @@ bool NumberTextNormalizer::containtsNan(std::string_view text) const
         return true;
     }
     if (StringEx::containts(text, getDefaultNanText())) {
-        return true;
-    }
-    return false;
-}
-
-bool NumberTextNormalizer::isInfinity(std::string_view text) const
-{
-    if (!m_infinity.empty() && m_infinity == text) {
-        return true;
-    }
-    if (getDefaultInfinityText() == text) {
-        return true;
-    }
-    return false;
-}
-
-bool NumberTextNormalizer::isNan(std::string_view text) const
-{
-    if (!m_nan.empty() && m_nan == text) {
-        return true;
-    }
-    if (getDefaultNanText() == text) {
         return true;
     }
     return false;
