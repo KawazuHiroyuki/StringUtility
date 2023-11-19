@@ -204,10 +204,14 @@ std::string NumberTextAlternaor::replace(std::string_view text) const
     return text2;
 }
 
-std::string NumberTextAlternaor::normalize(std::string_view text) const
+std::string NumberTextAlternaor::normalize(std::string_view text, bool keepPositiveSign) const
 {
     std::string text2 = std::string{ text };
-    text2 = deletePositiveSign(text2);
+    if (keepPositiveSign) {
+        text2 = StringEx::replace(text2, m_positiveSign, StringEx::getDefaultPositiveSignNumberText());
+    } else {
+        text2 = deletePositiveSign(text2);
+    }
     text2 = StringEx::replace(text2, m_negativeSign, StringEx::getDefaultNegativeSignNumberText());
     text2 = StringEx::replace(text2, m_zeroSign, "");
     text2 = StringEx::replace(text2, m_point, StringEx::getDefaultPointNumberText());

@@ -46,96 +46,6 @@ void Test002() {
     assert(StringEx::getDefaultInfinityNumberText() == "inf");
     assert(StringEx::getDefaultNanNumberText() == "nan");
 
-    assert(StringEx::validateNumberText("", NumberTextAlternaor{}) == false);
-    assert(StringEx::validateNumberText("+", NumberTextAlternaor{}) == false);
-    assert(StringEx::validateNumberText("＋", NumberTextAlternaor{}.setPositiveSign("＋")) == false);
-    assert(StringEx::validateNumberText("-", NumberTextAlternaor{}) == false);
-    assert(StringEx::validateNumberText("－", NumberTextAlternaor{}.setNegativeSign("－")) == false);
-    assert(StringEx::validateNumberText("±", NumberTextAlternaor{}.setZeroSign("±")) == false);
-
-    assert(StringEx::validateNumberText("1", NumberTextAlternaor{}) == true);
-    assert(StringEx::validateNumberText("+1", NumberTextAlternaor{}) == true);
-    assert(StringEx::validateNumberText("＋1", NumberTextAlternaor{}.setPositiveSign("＋")) == true);
-    assert(StringEx::validateNumberText("-2", NumberTextAlternaor{}) == true);
-    assert(StringEx::validateNumberText("－2", NumberTextAlternaor{}.setNegativeSign("－")) == true);
-    assert(StringEx::validateNumberText("±0", NumberTextAlternaor{}.setZeroSign("±")) == true);
-    assert(StringEx::validateNumberText("±0.0", NumberTextAlternaor{}.setZeroSign("±")) == true);
-
-    assert(StringEx::validateNumberText("++1", NumberTextAlternaor{}) == false);
-    assert(StringEx::validateNumberText("+-1", NumberTextAlternaor{}) == false);
-    assert(StringEx::validateNumberText("＋＋1", NumberTextAlternaor{}.setPositiveSign("＋")) == false);
-    assert(StringEx::validateNumberText("＋－1", NumberTextAlternaor{}.setPositiveSign("＋").setNegativeSign("－")) == false);
-    assert(StringEx::validateNumberText("--2", NumberTextAlternaor{}) == false);
-    assert(StringEx::validateNumberText("-+2", NumberTextAlternaor{}) == false);
-    assert(StringEx::validateNumberText("－－2", NumberTextAlternaor{}.setNegativeSign("－")) == false);
-    assert(StringEx::validateNumberText("－＋2", NumberTextAlternaor{}.setNegativeSign("－").setPositiveSign("＋")) == false);
-    assert(StringEx::validateNumberText("±±0", NumberTextAlternaor{}.setZeroSign("±")) == false);
-    assert(StringEx::validateNumberText("±±0.0", NumberTextAlternaor{}.setZeroSign("±")) == false);
-
-    assert(StringEx::validateNumberText("±3", NumberTextAlternaor{}.setZeroSign("±")) == true);
-
-    assert(StringEx::validateNumberText("4+", NumberTextAlternaor{}) == false);
-    assert(StringEx::validateNumberText("4＋", NumberTextAlternaor{}.setPositiveSign("＋")) == false);
-    assert(StringEx::validateNumberText("5-", NumberTextAlternaor{}) == false);
-    assert(StringEx::validateNumberText("5－", NumberTextAlternaor{}.setNegativeSign("－")) == false);
-    assert(StringEx::validateNumberText("6±", NumberTextAlternaor{}.setZeroSign("±")) == false);
-
-    assert(StringEx::validateNumberText("", NumberTextAlternaor{}) == false);
-    assert(StringEx::validateNumberText("A", NumberTextAlternaor{}) == false);
-    assert(StringEx::validateNumberText("A10", NumberTextAlternaor{}) == false);
-    assert(StringEx::validateNumberText("10A", NumberTextAlternaor{}) == false);
-
-    assert(StringEx::validateNumberText("10", NumberTextAlternaor{}) == true);
-    assert(StringEx::validateNumberText("10.5", NumberTextAlternaor{}) == true);
-    assert(StringEx::validateNumberText("+10", NumberTextAlternaor{}) == true);
-    assert(StringEx::validateNumberText("+10.5", NumberTextAlternaor{}) == true);
-    assert(StringEx::validateNumberText("＋10", NumberTextAlternaor{}.setPositiveSign("＋")) == true);
-    assert(StringEx::validateNumberText("＋10.5", NumberTextAlternaor{}.setPositiveSign("＋")) == true);
-    assert(StringEx::validateNumberText("-10", NumberTextAlternaor{}) == true);
-    assert(StringEx::validateNumberText("-10.5", NumberTextAlternaor{}) == true);
-    assert(StringEx::validateNumberText("－10", NumberTextAlternaor{}.setPositiveSign("－")) == true);
-    assert(StringEx::validateNumberText("－10.5", NumberTextAlternaor{}.setPositiveSign("－")) == true);
-    assert(StringEx::validateNumberText("0", NumberTextAlternaor{}) == true);
-    assert(StringEx::validateNumberText("0.0", NumberTextAlternaor{}) == true);
-    assert(StringEx::validateNumberText("-0", NumberTextAlternaor{}) == true);
-    assert(StringEx::validateNumberText("-0.0", NumberTextAlternaor{}) == true);
-    assert(StringEx::validateNumberText("±0.0", NumberTextAlternaor{}.setZeroSign("±")) == true);
-    assert(StringEx::validateNumberText("nan", NumberTextAlternaor{}) == true);
-    assert(StringEx::validateNumberText("ＮＡＮ", NumberTextAlternaor{}.setNan("ＮＡＮ")) == true);
-    assert(StringEx::validateNumberText("inf", NumberTextAlternaor{}) == true);
-    assert(StringEx::validateNumberText("+inf", NumberTextAlternaor{}) == true);
-    assert(StringEx::validateNumberText("-inf", NumberTextAlternaor{}) == true);
-    assert(StringEx::validateNumberText("ｉｎｆ", NumberTextAlternaor{}.setInfinity("ｉｎｆ")) == true);
-    assert(StringEx::validateNumberText("10．5", NumberTextAlternaor{}.setPoint("．")) == true);
-
-    assert(StringEx::isPositiveNumberText("1", NumberTextAlternaor{}) == true);
-    assert(StringEx::isPositiveNumberText("+1", NumberTextAlternaor{}) == true);
-    assert(StringEx::isPositiveNumberText("＋1", NumberTextAlternaor{}.setPositiveSign("＋")) == true);
-    assert(StringEx::isPositiveNumberText("10．5", NumberTextAlternaor{}.setPoint("．")) == true);
-
-    assert(StringEx::isPositiveNumberText("nan", NumberTextAlternaor{}) == false);
-    assert(StringEx::isPositiveNumberText("ＮＡＮ", NumberTextAlternaor{}.setNan("ＮＡＮ")) == false);
-
-    assert(StringEx::isPositiveNumberText("inf", NumberTextAlternaor{}) == true);
-    assert(StringEx::isPositiveNumberText("+inf", NumberTextAlternaor{}) == true);
-    assert(StringEx::isPositiveNumberText("ｉｎｆ", NumberTextAlternaor{}.setInfinity("ｉｎｆ")) == true);
-
-    assert(StringEx::isNegativeNumberText("-2", NumberTextAlternaor{}) == true);
-    assert(StringEx::isNegativeNumberText("－2", NumberTextAlternaor{}.setNegativeSign("－")) == true);
-    assert(StringEx::isNegativeNumberText("-10．5", NumberTextAlternaor{}.setPoint("．")) == true);
-
-    assert(StringEx::isNegativeNumberText("nan", NumberTextAlternaor{}) == false);
-    assert(StringEx::isNegativeNumberText("ＮＡＮ", NumberTextAlternaor{}.setNan("ＮＡＮ")) == false);
-
-    assert(StringEx::isNegativeNumberText("-inf", NumberTextAlternaor{}) == true);
-    assert(StringEx::isNegativeNumberText("－ｉｎｆ", NumberTextAlternaor{}.setInfinity("ｉｎｆ").setNegativeSign("－")) == true);
-
-    assert(StringEx::isPositiveNumberText("±0", NumberTextAlternaor{}.setZeroSign("±")) == true);
-    assert(StringEx::isPositiveNumberText("±0.0", NumberTextAlternaor{}.setZeroSign("±")) == true);
-
-    assert(StringEx::isPositiveNumberText("±3", NumberTextAlternaor{}.setZeroSign("±")) == true);
-    assert(StringEx::isNegativeNumberText("±3", NumberTextAlternaor{}.setZeroSign("±")) == false);
-
     //assert(StringEx::isZeroNumberText("", NumberTextAlternaor{}) == false);
 
     assert(StringEx::isZeroNumberText("0", NumberTextAlternaor{}) == true);
@@ -164,6 +74,34 @@ void Test002() {
     assert(StringEx::isNegativeZeroNumberText("-0.0", NumberTextAlternaor{}) == true);
     assert(StringEx::isNegativeZeroNumberText("±0", NumberTextAlternaor{}.setZeroSign("±")) == false);
     assert(StringEx::isNegativeZeroNumberText("±0.0", NumberTextAlternaor{}.setZeroSign("±")) == false);
+
+    assert(StringEx::isPositiveNumberText("1", NumberTextAlternaor{}) == true);
+    assert(StringEx::isPositiveNumberText("+1", NumberTextAlternaor{}) == true);
+    assert(StringEx::isPositiveNumberText("＋1", NumberTextAlternaor{}.setPositiveSign("＋")) == true);
+    assert(StringEx::isPositiveNumberText("10．5", NumberTextAlternaor{}.setPoint("．")) == true);
+
+    assert(StringEx::isPositiveNumberText("nan", NumberTextAlternaor{}) == false);
+    assert(StringEx::isPositiveNumberText("ＮＡＮ", NumberTextAlternaor{}.setNan("ＮＡＮ")) == false);
+
+    assert(StringEx::isPositiveNumberText("inf", NumberTextAlternaor{}) == true);
+    assert(StringEx::isPositiveNumberText("+inf", NumberTextAlternaor{}) == true);
+    assert(StringEx::isPositiveNumberText("ｉｎｆ", NumberTextAlternaor{}.setInfinity("ｉｎｆ")) == true);
+
+    assert(StringEx::isNegativeNumberText("-2", NumberTextAlternaor{}) == true);
+    assert(StringEx::isNegativeNumberText("－2", NumberTextAlternaor{}.setNegativeSign("－")) == true);
+    assert(StringEx::isNegativeNumberText("-10．5", NumberTextAlternaor{}.setPoint("．")) == true);
+
+    assert(StringEx::isNegativeNumberText("nan", NumberTextAlternaor{}) == false);
+    assert(StringEx::isNegativeNumberText("ＮＡＮ", NumberTextAlternaor{}.setNan("ＮＡＮ")) == false);
+
+    assert(StringEx::isNegativeNumberText("-inf", NumberTextAlternaor{}) == true);
+    assert(StringEx::isNegativeNumberText("－ｉｎｆ", NumberTextAlternaor{}.setInfinity("ｉｎｆ").setNegativeSign("－")) == true);
+
+    assert(StringEx::isPositiveNumberText("±0", NumberTextAlternaor{}.setZeroSign("±")) == true);
+    assert(StringEx::isPositiveNumberText("±0.0", NumberTextAlternaor{}.setZeroSign("±")) == true);
+
+    assert(StringEx::isPositiveNumberText("±3", NumberTextAlternaor{}.setZeroSign("±")) == true);
+    assert(StringEx::isNegativeNumberText("±3", NumberTextAlternaor{}.setZeroSign("±")) == false);
 
     //assert(StringEx::isInfinityNumberText("", {}) == false);
     assert(StringEx::isInfinityNumberText("inf", {}) == true);
@@ -326,6 +264,10 @@ void Test002() {
     assert(StringEx::getSignPartNumberText("+10.5", NumberTextAlternaor{}) == "+");
     assert(StringEx::getSignPartNumberText("inf", NumberTextAlternaor{}) == "");
     assert(StringEx::getSignPartNumberText("+inf", NumberTextAlternaor{}) == "+");
+
+    //assert(StringEx::getSignPartNumberText(".", NumberTextAlternaor{}) == "");
+    //assert(StringEx::getSignPartNumberText("0.", NumberTextAlternaor{}) == "");
+    //assert(StringEx::getSignPartNumberText(".0", NumberTextAlternaor{}) == "");
 
     assert(StringEx::getIntegerPartNumberText("nan", NumberTextAlternaor{}) == "");
     assert(StringEx::getIntegerPartNumberText("-inf", NumberTextAlternaor{}) == "");

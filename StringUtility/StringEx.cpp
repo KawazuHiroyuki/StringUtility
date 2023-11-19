@@ -63,9 +63,6 @@ std::vector<std::string> StringEx::split(std::string_view text, std::string_view
 
         first = found;
         std::advance(first, separator.size());
-        //if (text.end() == first) {
-        //    break;
-        //}
     }
 
     return splited;
@@ -126,7 +123,14 @@ std::string StringEx::getDefaultNanNumberText()
     return text;
 }
 
-bool StringEx::validateNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+void StringEx::validateNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+{
+    if (!isNumberText(text, alternate)) {
+        throw std::runtime_error("invalid number text.");
+    }
+}
+
+bool StringEx::isNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
     std::string text2 = trimAll(text);
 
@@ -176,13 +180,13 @@ bool StringEx::validateNumberText(std::string_view text, const NumberTextAlterna
     }
 
     // ”’l•ÏŠ·
-    const char* str = text2.c_str();
-    double value{};
-    if (auto [ptr, ec] = std::from_chars(str, str + text2.size(), value); ec != std::errc{}) {
+    try {
+        double value = toNumber(text2);
+        return true;
+    }
+    catch (...) {
         return false;
     }
-
-    return true;
 }
 
 bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextAlternaor& alternate)
@@ -190,9 +194,7 @@ bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextAlter
     std::string text2 = trimAll(text);
 
     // ŒŸØ
-    if (!validateNumberText(text2, alternate)) {
-        throw std::runtime_error("invalid number text.");
-    }
+    validateNumberText(text2, alternate);
 
     // Nan‚Íí‚Éfalse
     if (alternate.isNan(text2)) {
@@ -217,9 +219,7 @@ bool StringEx::isNegativeNumberText(std::string_view text, const NumberTextAlter
     std::string text2 = trimAll(text);
 
     // ŒŸØ
-    if (!validateNumberText(text2, alternate)) {
-        throw std::runtime_error("invalid number text.");
-    }
+    validateNumberText(text2, alternate);
 
     // Nan‚Íí‚Éfalse
     if (alternate.isNan(text2)) {
@@ -238,26 +238,22 @@ bool StringEx::isZeroNumberText(std::string_view text, const NumberTextAlternaor
     std::string text2 = trimAll(text);
 
     // ŒŸØ
-    if (!validateNumberText(text2, alternate)) {
-        throw std::runtime_error("invalid number text.");
-    }
+    validateNumberText(text2, alternate);
 
     // ³‹K‰»
     text2 = alternate.normalize(text2);
 
     // ”’l•ÏŠ·
-    const char* str = text2.c_str();
-    double value{};
-    if (auto [ptr, ec] = std::from_chars(str, str + text2.size(), value); ec != std::errc{}) {
+    try {
+        double value = toNumber(text2);
+        if (value == 0.0) {
+            return true;
+        }
         return false;
     }
-
-    // Zero”»’è
-    if (value != 0.0) {
+    catch (...) {
         return false;
     }
-
-    return true;
 }
 
 bool StringEx::isNegativeZeroNumberText(std::string_view text, const NumberTextAlternaor& alternate)
@@ -276,9 +272,7 @@ bool StringEx::isInfinityNumberText(std::string_view text, const NumberTextAlter
     std::string text2 = trimAll(text);
 
     // ŒŸØ
-    if (!validateNumberText(text2, alternate)) {
-        throw std::runtime_error("invalid number text.");
-    }
+    validateNumberText(text2, alternate);
 
     // Infinity”»’è
     text2 = deleteSignPartNumberText(text2, alternate); // •„†‚Ì‚İíœ
@@ -293,26 +287,13 @@ bool StringEx::isNanNumberText(std::string_view text, const NumberTextAlternaor&
     std::string text2 = trimAll(text);
 
     // ŒŸØ
-    if (!validateNumberText(text2, alternate)) {
-        throw std::runtime_error("invalid number text.");
-    }
+    validateNumberText(text2, alternate);
 
     // Nan”»’è
     if (alternate.isNan(text2)) {
         return true;
     }
     return false;
-}
-
-bool StringEx::isNumberText(std::string_view text, const NumberTextAlternaor& alternate)
-{
-    std::string text2 = trimAll(text);
-
-    // ŒŸØ
-    if (!validateNumberText(text2, alternate)) {
-        return false;
-    }
-    return true;
 }
 
 std::string StringEx::normalizeNumberText(std::string_view text, bool fixedPoint, const NumberTextAlternaor& alternate)
@@ -351,9 +332,7 @@ std::string StringEx::normalizeNumberText(std::string_view text, bool fixedPoint
     }
 
     // ŒŸØ
-    if (!validateNumberText(text2, alternate)) {
-        throw std::runtime_error("invalid number text.");
-    }
+    validateNumberText(text2, alternate);
     return text2;
 }
 
@@ -370,9 +349,10 @@ std::string StringEx::getSignPartNumberText(std::string_view text, const NumberT
     std::string text2 = trimAll(text);
 
     // ŒŸØ
-    if (!validateNumberText(text2, alternate)) {
-        throw std::runtime_error("invalid number text.");
-    }
+    validateNumberText(text2, alternate);
+
+    // ³‹K‰»
+    text2 = alternate.normalize(text2, true);
 
     // •„†æ‚èo‚µ
     std::string sign = alternate.pickupPositiveSign(text2);
@@ -391,26 +371,24 @@ std::string StringEx::getIntegerPartNumberText(std::string_view text, const Numb
 {
     std::string text2 = trimAll(text);
 
-    // ŒŸØ
-    if (!validateNumberText(text2, alternate)) {
-        throw std::runtime_error("invalid number text.");
-    }
-
-    // Nan
-    if (isNanNumberText(text2, alternate)) {
-        return "";
-    }
-
-    // Infinty
-    if (isInfinityNumberText(text2, alternate)) {
-        return "";
-    }
-
     // ³‹K‰»
     text2 = alternate.normalize(text2);
 
+    // ŒŸØ
+    validateNumberText(text2, alternate);
+
+    // Nan
+    if (alternate.isNan(text2)) {
+        return "";
+    }
+
     // •„†•„†íœ
     text2 = deleteSignPartNumberText(text2, alternate);
+
+    // Infinty
+    if (alternate.isInfinity(text2)) {
+        return "";
+    }
 
     // •ªŠ„
     auto splited = split(text2, getDefaultPointNumberText());
@@ -421,26 +399,24 @@ std::string StringEx::getDecimalPartNumberText(std::string_view text, const Numb
 {
     std::string text2 = trimAll(text);
 
-    // ŒŸØ
-    if (!validateNumberText(text2, alternate)) {
-        throw std::runtime_error("invalid number text.");
-    }
-
-    // Nan
-    if (isNanNumberText(text2, alternate)) {
-        return "";
-    }
-
-    // Infinty
-    if (isInfinityNumberText(text2, alternate)) {
-        return "";
-    }
-
     // ³‹K‰»
     text2 = alternate.normalize(text2);
 
+    // ŒŸØ
+    validateNumberText(text2, alternate);
+
+    // Nan
+    if (alternate.isNan(text2)) {
+        return "";
+    }
+
     // •„†•„†íœ
     text2 = deleteSignPartNumberText(text2, alternate);
+
+    // Infinty
+    if (alternate.isInfinity(text2)) {
+        return "";
+    }
 
     // •ªŠ„
     auto splited = split(text2, getDefaultPointNumberText());
@@ -448,4 +424,18 @@ std::string StringEx::getDecimalPartNumberText(std::string_view text, const Numb
         return "";
     }
     return splited.back();
+}
+
+
+double StringEx::toNumber(std::string_view text)
+{
+    std::string text2 = trimAll(text);
+
+    // ”’l•ÏŠ·
+    const char* str = text2.c_str();
+    double value{};
+    if (auto [ptr, ec] = std::from_chars(str, str + text2.size(), value); ec != std::errc{}) {
+        throw std::runtime_error("invalid number text.");
+    }
+    return value;
 }

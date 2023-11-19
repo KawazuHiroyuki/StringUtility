@@ -68,5 +68,5 @@ public:
     bool isNan(std::string_view text) const;
 
     std::string replace(std::string_view text) const;
-    std::string normalize(std::string_view text) const;
+    std::string normalize(std::string_view text, bool keepPositiveSign = false) const;
 };
