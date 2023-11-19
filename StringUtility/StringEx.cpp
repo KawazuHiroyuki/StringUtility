@@ -348,11 +348,11 @@ std::string StringEx::getSignPartNumberText(std::string_view text, const NumberT
 {
     std::string text2 = trimAll(text);
 
-    // ŒŸØ
-    validateNumberText(text2, alternate);
-
     // ³‹K‰»
     text2 = alternate.normalize(text2, true);
+
+    // ŒŸØ
+    validateNumberText(text2, alternate);
 
     // •„†æ‚èo‚µ
     std::string sign = alternate.pickupPositiveSign(text2);
