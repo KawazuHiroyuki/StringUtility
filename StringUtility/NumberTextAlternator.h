@@ -2,7 +2,9 @@
 
 #include <string_view>
 #include <string>
+#include <cstddef>
 #include <vector>
+#include <optional>
 
 class NumberTextAlternaor {
     std::string m_positiveSign;
@@ -38,18 +40,22 @@ public:
         return *this;
     }
 
+    std::size_t countPositiveSign(std::string_view text) const;
     bool containtsPositiveSign(std::string_view text) const;
     bool startsWithPositiveSign(std::string_view text) const;
     std::string deletePositiveSign(std::string_view text) const;
 
+    std::size_t countNegativeSign(std::string_view text) const;
     bool containtsNegativeSign(std::string_view text) const;
     bool startsWithNegativeSign(std::string_view text) const;
     std::string deleteNegativeSign(std::string_view text) const;
 
+    std::size_t countZeroSign(std::string_view text) const;
     bool containtsZeroSign(std::string_view text) const;
     bool startsWithZeroSign(std::string_view text) const;
     std::string deleteZeroSign(std::string_view text) const;
 
+    std::size_t countPoint(std::string_view text) const;
     bool containtsPoint(std::string_view text) const;
 
     bool containtsInfinity(std::string_view text) const;

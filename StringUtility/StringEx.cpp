@@ -1,8 +1,32 @@
 #include "StringEx.h"
 
+#include <algorithm>
 #include <limits>
 #include <string>
 #include <stdexcept>
+
+std::size_t StringEx::count(std::string_view text, std::string_view find)
+{
+    std::size_t count = 0;
+    if (find.empty()) {
+        return count;
+    }
+    auto first = std::begin(text);
+    while (true)
+    {
+        auto found = std::search(first, text.end(), find.begin(), find.end());
+        if (text.end() == found) {
+            break;
+        }
+
+        count++;
+        first = std::next(found, find.size());
+        if (text.end() == first) {
+            break;
+        }
+    }
+    return count;
+}
 
 bool StringEx::containts(std::string_view text, std::string_view find)
 {
@@ -77,9 +101,9 @@ bool StringEx::isInfinityNumberText(std::string_view text, const NumberTextAlter
     if (alternate.isInfinity(text2)) {
         return true;
     }
-    if (getDefaultInfinityNumberText() == text2) {
-        return true;
-    }
+    //if (getDefaultInfinityNumberText() == text2) {
+    //    return true;
+    //}
     return false;
 }
 
@@ -92,9 +116,9 @@ bool StringEx::isNanNumberText(std::string_view text, const NumberTextAlternaor&
     if (alternate.isNan(text2)) {
         return true;
     }
-    if (getDefaultNanNumberText() == text2) {
-        return true;
-    }
+    //if (getDefaultNanNumberText() == text2) {
+    //    return true;
+    //}
     return false;
 }
 
@@ -111,9 +135,9 @@ bool StringEx::validateSingPart(std::string_view text, const NumberTextAlternaor
     if (alternate.containtsPositiveSign(text2)) {
         positive++;
     }
-    if (containts(text2, getDefaultPositiveSignNumberText())) {
-        positive++;
-    }
+    //if (containts(text2, getDefaultPositiveSignNumberText())) {
+    //    positive++;
+    //}
     if (positive != 0) {
         return false;
     }

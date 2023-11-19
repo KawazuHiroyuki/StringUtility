@@ -4,6 +4,8 @@
 #include "StringEx.h"
 
 void Test002() {
+    std::cout << StringEx::count("abcdefgabcdefgabcdefg", "cd") << std::endl;
+    std::cout << StringEx::count("0123456789012345678901234567890", "1234567890") << std::endl;
     std::cout << StringEx::containts("abcdefgabcdefgabcdefg", "cd") << std::endl;
     std::cout << StringEx::containts("abcdefgabcdefgabcdefg", "01") << std::endl;
     std::cout << StringEx::replace("abcdefgabcdefgabcdefg", "cd", "0123") << std::endl;

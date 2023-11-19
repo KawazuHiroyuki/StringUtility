@@ -2,11 +2,13 @@
 
 #include <string>
 #include <string_view>
+#include <cstddef>
 
 #include "NumberTextAlternator.h"
 
 class StringEx {
 public:
+    static std::size_t count(std::string_view text, std::string_view find);
     static bool containts(std::string_view text, std::string_view find);
     static std::string replace(std::string_view text, std::string_view from, std::string_view to);
     static std::string trimAll(std::string_view text);
