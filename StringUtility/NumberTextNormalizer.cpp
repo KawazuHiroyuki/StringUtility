@@ -502,7 +502,10 @@ std::string NumberTextNormalizer::normalizeNegativeZero(std::string_view text, b
 std::string NumberTextNormalizer::normalizeFixedPoint(std::string_view text) const
 {
     std::string text2 = std::string(text);
-    if (containtsNan(text2) || containtsInfinity(text2)) {
+    if (containtsNan(text2)) {
+        return text2;
+    }
+    if (containtsInfinity(text2)) {
         return text2;
     }
 
@@ -518,7 +521,10 @@ std::string NumberTextNormalizer::normalizeFixedPoint(std::string_view text) con
 std::string NumberTextNormalizer::normalizeZeroBase(std::string_view text) const
 {
     std::string text2 = std::string(text);
-    if (containtsNan(text2) || containtsInfinity(text2)) {
+    if (containtsNan(text2)) {
+        return text2;
+    }
+    if (containtsInfinity(text2)) {
         return text2;
     }
 
@@ -528,6 +534,7 @@ std::string NumberTextNormalizer::normalizeZeroBase(std::string_view text) const
         return text2;
     }
 
+    // TODO Alternateのチェックも入れる
     // .X -> 0.X
     if (text2.starts_with(getDefaultPointText())) {
         text2 = getDefaultZeroText() + text2;
