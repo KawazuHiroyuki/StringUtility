@@ -146,43 +146,6 @@ bool StringEx::validateNumberPartNumberText(std::string_view text, const NumberT
     return true;
 }
 
-bool StringEx::isInfinityNumberText(std::string_view text, const NumberTextAlternaor& alternate)
-{
-    // ŒŸØ
-    if (!validateSingPartNumberText(text, alternate)) {
-        return false;
-    }
-    if (!validateNumberPartNumberText(text, alternate)) {
-        return false;
-    }
-
-    // Infinity”»’è
-    std::string text2 = trimAll(text);
-    text2 = deleteSignPartNumberText(text2, alternate); // •„†‚Ì‚İíœ
-    if (alternate.isInfinity(text2)) {
-        return true;
-    }
-    return false;
-}
-
-bool StringEx::isNanNumberText(std::string_view text, const NumberTextAlternaor& alternate)
-{
-    // ŒŸØ
-    if (!validateSingPartNumberText(text, alternate)) {
-        return false;
-    }
-    if (!validateNumberPartNumberText(text, alternate)) {
-        return false;
-    }
-
-    // Nan”»’è
-    std::string text2 = trimAll(text);
-    if (alternate.isNan(text2)) {
-        return true;
-    }
-    return false;
-}
-
 bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
     std::string text2 = trimAll(text);
@@ -246,6 +209,43 @@ bool StringEx::isZeroNumberText(std::string_view text, const NumberTextAlternaor
     }
 
     return true;
+}
+
+bool StringEx::isInfinityNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+{
+    // ŒŸØ
+    if (!validateSingPartNumberText(text, alternate)) {
+        return false;
+    }
+    if (!validateNumberPartNumberText(text, alternate)) {
+        return false;
+    }
+
+    // Infinity”»’è
+    std::string text2 = trimAll(text);
+    text2 = deleteSignPartNumberText(text2, alternate); // •„†‚Ì‚İíœ
+    if (alternate.isInfinity(text2)) {
+        return true;
+    }
+    return false;
+}
+
+bool StringEx::isNanNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+{
+    // ŒŸØ
+    if (!validateSingPartNumberText(text, alternate)) {
+        return false;
+    }
+    if (!validateNumberPartNumberText(text, alternate)) {
+        return false;
+    }
+
+    // Nan”»’è
+    std::string text2 = trimAll(text);
+    if (alternate.isNan(text2)) {
+        return true;
+    }
+    return false;
 }
 
 std::string StringEx::deleteSignPartNumberText(std::string_view text, const NumberTextAlternaor& alternate)
