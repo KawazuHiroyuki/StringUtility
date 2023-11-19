@@ -19,10 +19,16 @@ void Test002() {
     assert(NumberTextAlternaor{}.countZeroSign("0123456-0123456@0123456±±@@") == 0);
     assert(NumberTextAlternaor{}.setZeroSign("±").countZeroSign("0123456±0123456@0123456±±@@") == 3);
 
+    assert(StringEx::count("", "cd") == 0);
+    assert(StringEx::count("abcdefgabcdefgabcdefg", "") == 0);
     assert(StringEx::count("abcdefgabcdefgabcdefg", "cd") == 3);
     assert(StringEx::count("0123456789012345678901234567890", "1234567890") == 3);
+
+    assert(StringEx::containts("", "cd") == false);
+    assert(StringEx::containts("abcdefgabcdefgabcdefg", "") == false);
     assert(StringEx::containts("abcdefgabcdefgabcdefg", "cd") == true);
     assert(StringEx::containts("abcdefgabcdefgabcdefg", "01") == false);
+
     assert(StringEx::replace("abcdefgabcdefgabcdefg", "cd", "0123") == "ab0123efgab0123efgab0123efg");
     assert(StringEx::trimAll("   a b cdef g a bcde  fga bcdefg    ") == "abcdefgabcdefgabcdefg");
 
@@ -38,7 +44,7 @@ void Test002() {
     assert(StringEx::validateSingPartNumberText("＋", NumberTextAlternaor{}.setPositiveSign("＋")) == true);
     assert(StringEx::validateSingPartNumberText("-", NumberTextAlternaor{}) == true);
     assert(StringEx::validateSingPartNumberText("－", NumberTextAlternaor{}.setNegativeSign("－")) == true);
-    //assert(StringEx::validateSingPartNumberText("±", NumberTextAlternaor{}.setZeroSign("±")) == true);
+    assert(StringEx::validateSingPartNumberText("±", NumberTextAlternaor{}.setZeroSign("±")) == false); // 0がないとNG
     assert(StringEx::validateSingPartNumberText("+1", NumberTextAlternaor{}) == true);
     assert(StringEx::validateSingPartNumberText("＋1", NumberTextAlternaor{}.setPositiveSign("＋")) == true);
     assert(StringEx::validateSingPartNumberText("-2", NumberTextAlternaor{}) == true);
@@ -57,7 +63,7 @@ void Test002() {
     assert(StringEx::validateNumberPartNumberText("", NumberTextAlternaor{}) == false);
     assert(StringEx::validateNumberPartNumberText("A", NumberTextAlternaor{}) == false);
     assert(StringEx::validateNumberPartNumberText("A10", NumberTextAlternaor{}) == false);
-    assert(StringEx::validateNumberPartNumberText("10A", NumberTextAlternaor{}) == true); // TODO
+    assert(StringEx::validateNumberPartNumberText("10A", NumberTextAlternaor{}) == true); // TODO false
 
     assert(StringEx::validateNumberPartNumberText("10", NumberTextAlternaor{}) == true);
     assert(StringEx::validateNumberPartNumberText("10.5", NumberTextAlternaor{}) == true);

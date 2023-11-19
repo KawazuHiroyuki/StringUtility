@@ -128,8 +128,9 @@ bool NumberTextAlternaor::containtsInfinity(std::string_view text) const
     return false;
 }
 
-bool NumberTextAlternaor::isInfinity(std::string_view text) const {
-    if (m_infinity == text) {
+bool NumberTextAlternaor::isInfinity(std::string_view text) const
+{
+    if (!m_infinity.empty() && m_infinity == text) {
         return true;
     }
     if (StringEx::getDefaultInfinityNumberText() == text) {
@@ -149,8 +150,9 @@ bool NumberTextAlternaor::containtsNan(std::string_view text) const
     return false;
 }
 
-bool NumberTextAlternaor::isNan(std::string_view text) const {
-    if (m_nan == text) {
+bool NumberTextAlternaor::isNan(std::string_view text) const
+{
+    if (!m_nan.empty() && m_nan == text) {
         return true;
     }
     if (StringEx::getDefaultNanNumberText() == text) {

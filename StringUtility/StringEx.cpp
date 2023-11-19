@@ -31,6 +31,9 @@ std::size_t StringEx::count(std::string_view text, std::string_view find)
 
 bool StringEx::containts(std::string_view text, std::string_view find)
 {
+    if (find.empty()) {
+        return false;
+    }
     if (std::string::npos == text.find(find)) {
         return false;
     }
@@ -94,11 +97,8 @@ std::string StringEx::getDefaultNanNumberText()
 
 bool StringEx::isInfinityNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
-    if (text.empty()) {
-        return false;
-    }
     std::string text2 = trimAll(text);
-    text2 = deleteSignPartNumberText(text2, alternate);
+    text2 = deleteSignPartNumberText(text2, alternate); // 符号のみ削除
     if (alternate.isInfinity(text2)) {
         return true;
     }
@@ -107,9 +107,6 @@ bool StringEx::isInfinityNumberText(std::string_view text, const NumberTextAlter
 
 bool StringEx::isNanNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
-    if (text.empty()) {
-        return false;
-    }
     std::string text2 = trimAll(text);
     if (alternate.isNan(text2)) {
         return true;
@@ -119,10 +116,6 @@ bool StringEx::isNanNumberText(std::string_view text, const NumberTextAlternaor&
 
 bool StringEx::validateSingPartNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
-    if (text.empty()) {
-        return true;
-    }
-
     std::string text2 = trimAll(text);
 
     // 重複チェック
@@ -157,10 +150,6 @@ bool StringEx::validateSingPartNumberText(std::string_view text, const NumberTex
 
 bool StringEx::validateNumberPartNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
-    if (text.empty()) {
-        return false;
-    }
-
     // TODO NG 10AA
 
     std::string text2 = trimAll(text);
@@ -243,9 +232,6 @@ bool StringEx::isZeroNumberText(std::string_view text, const NumberTextAlternaor
 
 std::string StringEx::deleteSignPartNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
-    if (text.empty()) {
-        return std::string{text};
-    }
     std::string text2 = alternate.deletePositiveSign(text);
     text2 = alternate.deleteNegativeSign(text2);
     text2 = alternate.deleteZeroSign(text2);
