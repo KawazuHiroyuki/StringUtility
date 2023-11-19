@@ -14,6 +14,9 @@ bool StringEx::containts(std::string_view text, std::string_view find)
 
 std::string StringEx::replace(std::string_view text, std::string_view from, std::string_view to)
 {
+    if (from.empty()) {
+        return std::string{text};
+    }
     std::string text2 = std::string{text};
     while (true) {
         auto found = text2.find(from);
@@ -64,7 +67,7 @@ std::string StringEx::getDefaultNanNumberText()
     return text;
 }
 
-bool StringEx::isInfinityNumberText(std::string_view text, const NumberTextAlternate& alternate)
+bool StringEx::isInfinityNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
     if (text.empty()) {
         return false;
@@ -80,7 +83,7 @@ bool StringEx::isInfinityNumberText(std::string_view text, const NumberTextAlter
     return false;
 }
 
-bool StringEx::isNanNumberText(std::string_view text, const NumberTextAlternate& alternate)
+bool StringEx::isNanNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
     if (text.empty()) {
         return false;
@@ -95,7 +98,7 @@ bool StringEx::isNanNumberText(std::string_view text, const NumberTextAlternate&
     return false;
 }
 
-bool StringEx::validateSingPart(std::string_view text, const NumberTextAlternate& alternate)
+bool StringEx::validateSingPart(std::string_view text, const NumberTextAlternaor& alternate)
 {
     if (text.empty()) {
         return true;
@@ -155,7 +158,7 @@ bool StringEx::validateSingPart(std::string_view text, const NumberTextAlternate
     return true;
 }
 
-bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextAlternate& alternate)
+bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
     std::string text2 = trimAll(text);
     if (!validateSingPart(text2, alternate)) {
@@ -179,7 +182,7 @@ bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextAlter
     return true; // ïÑçÜãLçÜÇ»Çµ=Positive
 }
 
-bool StringEx::isNegativeNumberText(std::string_view text, const NumberTextAlternate& alternate)
+bool StringEx::isNegativeNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
     std::string text2 = trimAll(text);
     if (!validateSingPart(text2, alternate)) {
@@ -194,7 +197,7 @@ bool StringEx::isNegativeNumberText(std::string_view text, const NumberTextAlter
     return false;
 }
 
-std::string StringEx::deleteSignPartNumberText(std::string_view text, const NumberTextAlternate& alternate)
+std::string StringEx::deleteSignPartNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
     if (text.empty()) {
         return std::string{text};

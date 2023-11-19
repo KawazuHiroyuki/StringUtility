@@ -18,18 +18,18 @@ public:
     static std::string getDefaultInfinityNumberText();
     static std::string getDefaultNanNumberText();
 
-    static bool validateSingPart(std::string_view text, const NumberTextAlternate& alternate);
+    static bool validateSingPart(std::string_view text, const NumberTextAlternaor& alternate);
 
-    static bool isPositiveNumberText(std::string_view text, const NumberTextAlternate& alternate);
-    static bool isNegativeNumberText(std::string_view text, const NumberTextAlternate& alternate);
-    static bool isZeroNumberText(std::string_view text, const NumberTextAlternate& alternate);
-    static bool isInfinityNumberText(std::string_view text, const NumberTextAlternate& alternate);
-    static bool isNanNumberText(std::string_view text, const NumberTextAlternate& alternate);
-    static bool isNumberText(std::string_view text, const NumberTextAlternate& alternate);
+    static bool isPositiveNumberText(std::string_view text, const NumberTextAlternaor& alternate);
+    static bool isNegativeNumberText(std::string_view text, const NumberTextAlternaor& alternate);
+    static bool isZeroNumberText(std::string_view text, const NumberTextAlternaor& alternate);
+    static bool isInfinityNumberText(std::string_view text, const NumberTextAlternaor& alternate);
+    static bool isNanNumberText(std::string_view text, const NumberTextAlternaor& alternate);
+    static bool isNumberText(std::string_view text, const NumberTextAlternaor& alternate);
 
-    static std::string normalizeNumberText(std::string_view text, const NumberTextAlternate& alternate);
+    static std::string normalizeNumberText(std::string_view text, const NumberTextAlternaor& alternate);
 
-    static std::string deleteSignPartNumberText(std::string_view text, const NumberTextAlternate& alternate);
+    static std::string deleteSignPartNumberText(std::string_view text, const NumberTextAlternaor& alternate);
 
     static std::string getSignPartNumberText();
     static std::string getIntegerPartNumberText();

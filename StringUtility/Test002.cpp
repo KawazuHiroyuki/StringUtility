@@ -20,19 +20,19 @@ void Test002() {
     std::cout << StringEx::isInfinityNumberText("inf", {}) << std::endl;
     std::cout << StringEx::isInfinityNumberText(" inf ", {}) << std::endl;
     std::cout << StringEx::isInfinityNumberText("abc", {}) << std::endl;
-    std::cout << StringEx::isInfinityNumberText("abc", NumberTextAlternate{}.setInfinity("abc").setInfinity("012")) << std::endl;
-    std::cout << StringEx::isInfinityNumberText("012", NumberTextAlternate{}.setInfinity("abc").setInfinity("012")) << std::endl;
+    std::cout << StringEx::isInfinityNumberText("abc", NumberTextAlternaor{}.setInfinity("abc").setInfinity("012")) << std::endl;
+    std::cout << StringEx::isInfinityNumberText("012", NumberTextAlternaor{}.setInfinity("abc").setInfinity("012")) << std::endl;
 
     std::cout << StringEx::isInfinityNumberText("-inf", {}) << std::endl;
     std::cout << StringEx::isInfinityNumberText(" - inf ", {}) << std::endl;
     std::cout << StringEx::isInfinityNumberText("abc", {}) << std::endl;
-    std::cout << StringEx::isInfinityNumberText("-abc", NumberTextAlternate{}.setInfinity("abc").setInfinity("012")) << std::endl;
-    std::cout << StringEx::isInfinityNumberText("-012", NumberTextAlternate{}.setInfinity("abc").setInfinity("012")) << std::endl;
+    std::cout << StringEx::isInfinityNumberText("-abc", NumberTextAlternaor{}.setInfinity("abc").setInfinity("012")) << std::endl;
+    std::cout << StringEx::isInfinityNumberText("-012", NumberTextAlternaor{}.setInfinity("abc").setInfinity("012")) << std::endl;
 
     std::cout << StringEx::isNanNumberText("", {}) << std::endl;
     std::cout << StringEx::isNanNumberText("nan", {}) << std::endl;
     std::cout << StringEx::isNanNumberText(" nan  ", {}) << std::endl;
     std::cout << StringEx::isNanNumberText("abc", {}) << std::endl;
-    std::cout << StringEx::isNanNumberText("abc", NumberTextAlternate{}.setNan("abc").setNan("012")) << std::endl;
-    std::cout << StringEx::isNanNumberText("012", NumberTextAlternate{}.setNan("abc").setNan("012")) << std::endl;
+    std::cout << StringEx::isNanNumberText("abc", NumberTextAlternaor{}.setNan("abc").setNan("012")) << std::endl;
+    std::cout << StringEx::isNanNumberText("012", NumberTextAlternaor{}.setNan("abc").setNan("012")) << std::endl;
 }

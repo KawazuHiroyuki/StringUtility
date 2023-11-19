@@ -2,13 +2,21 @@
 
 #include "StringEx.h"
 
-std::string NumberTextAlternate::deletePositiveSign(std::string_view text) const {
+std::string NumberTextAlternaor::deletePositiveSign(std::string_view text) const {
     std::string text2 = std::string{ text };
     text2 = StringEx::replace(text2, m_positiveSign, "");
     return text2;
 }
 
-bool NumberTextAlternate::startsWithPositiveSign(std::string_view text) const
+bool NumberTextAlternaor::containtsPositiveSign(std::string_view text) const
+{
+    if (StringEx::containts(text, m_positiveSign)) {
+        return true;
+    }
+    return false;
+}
+
+bool NumberTextAlternaor::startsWithPositiveSign(std::string_view text) const
 {
     if (text.starts_with(m_positiveSign)) {
         return true;
@@ -16,7 +24,15 @@ bool NumberTextAlternate::startsWithPositiveSign(std::string_view text) const
     return false;
 }
 
-bool NumberTextAlternate::startsWithNegativeSign(std::string_view text) const
+bool NumberTextAlternaor::containtsNegativeSign(std::string_view text) const
+{
+    if (StringEx::containts(text, m_negativeSign)) {
+        return true;
+    }
+    return false;
+}
+
+bool NumberTextAlternaor::startsWithNegativeSign(std::string_view text) const
 {
     if (text.starts_with(m_negativeSign)) {
         return true;
@@ -24,13 +40,20 @@ bool NumberTextAlternate::startsWithNegativeSign(std::string_view text) const
     return false;
 }
 
-std::string NumberTextAlternate::deleteNegativeSign(std::string_view text) const {
+std::string NumberTextAlternaor::deleteNegativeSign(std::string_view text) const {
     std::string text2 = std::string{ text };
     text2 = StringEx::replace(text2, m_negativeSign, "");
     return text2;
 }
 
-bool NumberTextAlternate::startsWithZeroSign(std::string_view text) const
+bool NumberTextAlternaor::containtsZeroSign(std::string_view text) const
+{
+    if (StringEx::containts(text, m_zeroSign)) {
+        return true;
+    }
+    return false;
+}
+bool NumberTextAlternaor::startsWithZeroSign(std::string_view text) const
 {
     if (text.starts_with(m_zeroSign)) {
         return true;
@@ -38,14 +61,14 @@ bool NumberTextAlternate::startsWithZeroSign(std::string_view text) const
     return false;
 }
 
-std::string NumberTextAlternate::deleteZeroSign(std::string_view text) const {
+std::string NumberTextAlternaor::deleteZeroSign(std::string_view text) const {
     std::string text2 = std::string{ text };
     text2 = StringEx::replace(text2, m_zeroSign, "");
     return text2;
 }
 
 
-bool NumberTextAlternate::isInfinity(std::string_view text) const {
+bool NumberTextAlternaor::isInfinity(std::string_view text) const {
     if (m_infinity == text) {
         return true;
     }
@@ -53,7 +76,7 @@ bool NumberTextAlternate::isInfinity(std::string_view text) const {
 }
 
 
-bool NumberTextAlternate::isNan(std::string_view text) const {
+bool NumberTextAlternaor::isNan(std::string_view text) const {
     if (m_nan == text) {
         return true;
     }

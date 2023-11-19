@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-class NumberTextAlternate {
+class NumberTextAlternaor {
     std::string m_positiveSign;
     std::string m_negativeSign;
     std::string m_zeroSign;
@@ -13,27 +13,27 @@ class NumberTextAlternate {
     std::string m_nan;
 
 public:
-    NumberTextAlternate& setPositiveSign(std::string_view alternate) {
+    NumberTextAlternaor& setPositiveSign(std::string_view alternate) {
         m_positiveSign = std::string{ alternate };
         return *this;
     }
-    NumberTextAlternate& setNegativeSign(std::string_view alternate) {
+    NumberTextAlternaor& setNegativeSign(std::string_view alternate) {
         m_negativeSign = std::string{ alternate };
         return *this;
     }
-    NumberTextAlternate& setZeroSign(std::string_view alternate) {
+    NumberTextAlternaor& setZeroSign(std::string_view alternate) {
         m_zeroSign = std::string{ alternate };
         return *this;
     }
-    NumberTextAlternate& setPoint(std::string_view alternate) {
+    NumberTextAlternaor& setPoint(std::string_view alternate) {
         m_point = std::string{ alternate };
         return *this;
     }
-    NumberTextAlternate& setInfinity(std::string_view alternate) {
+    NumberTextAlternaor& setInfinity(std::string_view alternate) {
         m_infinity = std::string{ alternate };
         return *this;
     }
-    NumberTextAlternate& setNan(std::string_view alternate) {
+    NumberTextAlternaor& setNan(std::string_view alternate) {
         m_nan = std::string{alternate};
         return *this;
     }
