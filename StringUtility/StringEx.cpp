@@ -239,7 +239,7 @@ bool StringEx::isZeroNumberText(std::string_view text, const NumberTextAlternaor
 
     // ŒŸØ
     if (!validateNumberText(text2, alternate)) {
-        return false;
+        throw std::runtime_error("invalid number text.");
     }
 
     // ³‹K‰»
@@ -277,7 +277,7 @@ bool StringEx::isInfinityNumberText(std::string_view text, const NumberTextAlter
 
     // ŒŸØ
     if (!validateNumberText(text2, alternate)) {
-        return false;
+        throw std::runtime_error("invalid number text.");
     }
 
     // Infinity”»’è
@@ -294,7 +294,7 @@ bool StringEx::isNanNumberText(std::string_view text, const NumberTextAlternaor&
 
     // ŒŸØ
     if (!validateNumberText(text2, alternate)) {
-        return false;
+        throw std::runtime_error("invalid number text.");
     }
 
     // Nan”»’è
@@ -323,32 +323,30 @@ std::string StringEx::normalizeNumberText(std::string_view text, bool fixedPoint
     text2 = alternate.normalize(text2);
 
     // Nan
-    if (isNanNumberText(text2, alternate)) {
-        return text2;
-    }
+    bool containtsNan = alternate.containtsNan(text2);
 
     // Infinity
-    if (isInfinityNumberText(text2, alternate)) {
-        return text2;
-    }
+    bool containtsInfinity = alternate.containtsInfinity(text2);
 
-    // X -> X.
-    if (fixedPoint && !containts(text2, getDefaultPointNumberText())) {
-        text2 = text2 + getDefaultPointNumberText();
-    }
+    if (fixedPoint && !containtsNan && !containtsInfinity) {
+        // X -> X.
+        if (!containts(text2, getDefaultPointNumberText())) {
+            text2 = text2 + getDefaultPointNumberText();
+        }
 
-    // .X -> 0.X
-    if (fixedPoint && text2.starts_with(getDefaultPointNumberText())) {
-        text2 = getDefaultZeroNumberText() + text2;
-    }
+        // .X -> 0.X
+        if (text2.starts_with(getDefaultPointNumberText())) {
+            text2 = getDefaultZeroNumberText() + text2;
+        }
 
-    // X. -> X.0
-    if (fixedPoint && text2.ends_with(getDefaultPointNumberText())) {
-        text2 = text2 + getDefaultZeroNumberText();
+        // X. -> X.0
+        if (text2.ends_with(getDefaultPointNumberText())) {
+            text2 = text2 + getDefaultZeroNumberText();
+        }
     }
 
     // -0 -> 0
-    if (isNegativeZeroNumberText(text, alternate)) {
+    if (isNegativeZeroNumberText(text2, alternate)) {
         text2 = deleteSignPartNumberText(text2, alternate);
     }
 
