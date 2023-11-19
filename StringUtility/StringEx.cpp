@@ -4,6 +4,7 @@
 #include <limits>
 #include <string>
 #include <stdexcept>
+#include <charconv>
 
 std::size_t StringEx::count(std::string_view text, std::string_view find)
 {
@@ -101,9 +102,6 @@ bool StringEx::isInfinityNumberText(std::string_view text, const NumberTextAlter
     if (alternate.isInfinity(text2)) {
         return true;
     }
-    //if (getDefaultInfinityNumberText() == text2) {
-    //    return true;
-    //}
     return false;
 }
 
@@ -116,13 +114,10 @@ bool StringEx::isNanNumberText(std::string_view text, const NumberTextAlternaor&
     if (alternate.isNan(text2)) {
         return true;
     }
-    //if (getDefaultNanNumberText() == text2) {
-    //    return true;
-    //}
     return false;
 }
 
-bool StringEx::validateSingPart(std::string_view text, const NumberTextAlternaor& alternate)
+bool StringEx::validateSingPartNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
     if (text.empty()) {
         return true;
@@ -131,46 +126,21 @@ bool StringEx::validateSingPart(std::string_view text, const NumberTextAlternaor
     std::string text2 = trimAll(text);
 
     // 重複チェック
-    int positive = 0;
-    if (alternate.containtsPositiveSign(text2)) {
-        positive++;
-    }
-    //if (containts(text2, getDefaultPositiveSignNumberText())) {
-    //    positive++;
-    //}
-    if (positive != 0) {
-        return false;
-    }
-
-    int negative = 0;
-    if (alternate.containtsNegativeSign(text2)) {
-        negative++;
-    }
-    if (containts(text2, getDefaultNegativeSignNumberText())) {
-        negative++;
-    }
-    if (negative != 0) {
-        return false;
-    }
-
-    int zero = 0;
-    if (alternate.containtsZeroSign(text2)) {
-        zero++;
-    }
-
-    int sum = positive + negative + zero;
+    int positive = alternate.countPositiveSign(text2);
+    int negative = alternate.countNegativeSign(text2);
+    int zero = alternate.countZeroSign(text2);
     if ((positive + negative + zero) > 1) {
         return false;
     }
 
     // 符号先頭チェック
     if (positive != 0) {
-        if (!alternate.startsWithPositiveSign(text2) && !text2.starts_with(getDefaultPositiveSignNumberText())) {
+        if (!alternate.startsWithPositiveSign(text2)) {
             return false;
         }
     }
     if (negative != 0) {
-        if (!alternate.startsWithNegativeSign(text2) && !text2.starts_with(getDefaultNegativeSignNumberText())) {
+        if (!alternate.startsWithNegativeSign(text2)) {
             return false;
         }
     }
@@ -178,29 +148,53 @@ bool StringEx::validateSingPart(std::string_view text, const NumberTextAlternaor
         if (!alternate.startsWithZeroSign(text2)) {
             return false;
         }
+        //if (alternate.startsWithZeroSign(text2)) {
+        //    return false;
+        //}
+        // TODO !isZero
     }
+    return true;
+}
+
+bool StringEx::validateNumberPartNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+{
+    if (text.empty()) {
+        return false;
+    }
+
+    std::string text2 = trimAll(text);
+    //text2 = deleteSignPartNumberText(text2, alternate);
+    //text2 = alternate.replace(text2);
+    text2 = alternate.normalize(text2);
+
+    const char* str = text2.c_str();
+    double value{};
+
+    if (auto [ptr, ec] = std::from_chars(str, str + text2.size(), value); ec != std::errc{}) {
+        return false;
+    }
+
     return true;
 }
 
 bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
     std::string text2 = trimAll(text);
-    if (!validateSingPart(text2, alternate)) {
+
+    if (alternate.isNan(text2)) {
+        return false;
+    }
+
+    if (!validateSingPartNumberText(text2, alternate)) {
         throw std::runtime_error("invalid sign part.");
     }
     if (alternate.startsWithPositiveSign(text2)) {
         return true;
     }
-    if (text.starts_with(getDefaultPositiveSignNumberText())) {
-        return true;
-    }
     if (alternate.startsWithZeroSign(text2)) { // Positive扱い
-        return true;
+        return true; // TODO isZero
     }
     if (alternate.startsWithNegativeSign(text2)) {
-        return false;
-    }
-    if (text.starts_with(getDefaultNegativeSignNumberText())) {
         return false;
     }
     return true; // 符号記号なし=Positive
@@ -209,13 +203,10 @@ bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextAlter
 bool StringEx::isNegativeNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
     std::string text2 = trimAll(text);
-    if (!validateSingPart(text2, alternate)) {
+    if (!validateSingPartNumberText(text2, alternate)) {
         throw std::runtime_error("invalid sign part.");
     }
     if (alternate.startsWithNegativeSign(text2)) {
-        return true;
-    }
-    if (text.starts_with(getDefaultNegativeSignNumberText())) {
         return true;
     }
     return false;
@@ -227,10 +218,7 @@ std::string StringEx::deleteSignPartNumberText(std::string_view text, const Numb
         return std::string{text};
     }
     std::string text2 = alternate.deletePositiveSign(text);
-    text2 = replace(text2, getDefaultPositiveSignNumberText(), "");
     text2 = alternate.deleteNegativeSign(text2);
-    text2 = replace(text2, getDefaultNegativeSignNumberText(), "");
     text2 = alternate.deleteZeroSign(text2);
     return text2;
 }
-

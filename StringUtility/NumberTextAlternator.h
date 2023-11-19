@@ -64,5 +64,6 @@ public:
     bool containtsNan(std::string_view text) const;
     bool isNan(std::string_view text) const;
 
-    // replace
+    std::string replace(std::string_view text) const;
+    std::string normalize(std::string_view text) const;
 };
