@@ -30,7 +30,8 @@ bool NumberTextAlternaor::startsWithPositiveSign(std::string_view text) const
     return false;
 }
 
-std::string NumberTextAlternaor::deletePositiveSign(std::string_view text) const {
+std::string NumberTextAlternaor::deletePositiveSign(std::string_view text) const 
+{
     std::string text2 = std::string{ text };
     text2 = StringEx::replace(text2, m_positiveSign, "");
     text2 = StringEx::replace(text2, StringEx::getDefaultPositiveSignNumberText(), "");
@@ -163,9 +164,6 @@ bool NumberTextAlternaor::isNan(std::string_view text) const
 
 std::string NumberTextAlternaor::replace(std::string_view text) const
 {
-    if (text.empty()) {
-        return "";
-    }
     std::string text2 = std::string{ text };
     text2 = StringEx::replace(text2, m_positiveSign, StringEx::getDefaultPositiveSignNumberText());
     text2 = StringEx::replace(text2, m_negativeSign, StringEx::getDefaultNegativeSignNumberText());
@@ -178,9 +176,6 @@ std::string NumberTextAlternaor::replace(std::string_view text) const
 
 std::string NumberTextAlternaor::normalize(std::string_view text) const
 {
-    if (text.empty()) {
-        return "";
-    }
     std::string text2 = std::string{ text };
     text2 = deletePositiveSign(text2);
     text2 = StringEx::replace(text2, m_negativeSign, StringEx::getDefaultNegativeSignNumberText());

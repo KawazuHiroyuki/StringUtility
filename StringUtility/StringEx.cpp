@@ -122,6 +122,7 @@ bool StringEx::validateSingPartNumberText(std::string_view text, const NumberTex
         if (!alternate.startsWithZeroSign(text2)) {
             return false;
         }
+        // ゼロ符号始まりの場合のみ、数値部の0判定必要
         if (alternate.startsWithZeroSign(text2) && !isZeroNumberText(text2, alternate)) {
             return false;
         }
@@ -149,10 +150,13 @@ bool StringEx::validateNumberPartNumberText(std::string_view text, const NumberT
 bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
     std::string text2 = trimAll(text);
+
+    // Nanは常にfalse
     if (alternate.isNan(text2)) {
         return false;
     }
 
+    // 検証
     if (!validateSingPartNumberText(text2, alternate)) {
         throw std::runtime_error("invalid sign part.");
     }
@@ -160,6 +164,7 @@ bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextAlter
         throw std::runtime_error("invalid number part.");
     }
 
+    // Positive判定
     if (alternate.startsWithPositiveSign(text2)) {
         return true;
     }
@@ -175,10 +180,13 @@ bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextAlter
 bool StringEx::isNegativeNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
     std::string text2 = trimAll(text);
+
+    // Nanは常にfalse
     if (alternate.isNan(text2)) {
         return false;
     }
 
+    // 検証
     if (!validateSingPartNumberText(text2, alternate)) {
         throw std::runtime_error("invalid sign part.");
     }
@@ -186,6 +194,7 @@ bool StringEx::isNegativeNumberText(std::string_view text, const NumberTextAlter
         throw std::runtime_error("invalid number part.");
     }
 
+    // Negative判定
     if (alternate.startsWithNegativeSign(text2)) {
         return true;
     }
@@ -194,16 +203,18 @@ bool StringEx::isNegativeNumberText(std::string_view text, const NumberTextAlter
 
 bool StringEx::isZeroNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
+    // 正規化
     std::string text2 = trimAll(text);
     text2 = alternate.normalize(text2);
 
+    // 数値変換
     const char* str = text2.c_str();
     double value{};
-
     if (auto [ptr, ec] = std::from_chars(str, str + text2.size(), value); ec != std::errc{}) {
         return false;
     }
 
+    // Zero判定
     if (value != 0.0) {
         return false;
     }
