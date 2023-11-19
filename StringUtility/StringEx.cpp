@@ -148,10 +148,9 @@ bool StringEx::validateSingPartNumberText(std::string_view text, const NumberTex
         if (!alternate.startsWithZeroSign(text2)) {
             return false;
         }
-        //if (alternate.startsWithZeroSign(text2)) {
-        //    return false;
-        //}
-        // TODO !isZero
+        if (alternate.startsWithZeroSign(text2) && !isZeroNumberText(text2, alternate)) {
+            return false;
+        }
     }
     return true;
 }
@@ -162,9 +161,9 @@ bool StringEx::validateNumberPartNumberText(std::string_view text, const NumberT
         return false;
     }
 
+    // TODO NG 10AA
+
     std::string text2 = trimAll(text);
-    //text2 = deleteSignPartNumberText(text2, alternate);
-    //text2 = alternate.replace(text2);
     text2 = alternate.normalize(text2);
 
     const char* str = text2.c_str();
@@ -180,7 +179,6 @@ bool StringEx::validateNumberPartNumberText(std::string_view text, const NumberT
 bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
     std::string text2 = trimAll(text);
-
     if (alternate.isNan(text2)) {
         return false;
     }
@@ -188,11 +186,15 @@ bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextAlter
     if (!validateSingPartNumberText(text2, alternate)) {
         throw std::runtime_error("invalid sign part.");
     }
+    if (!validateNumberPartNumberText(text2, alternate)) {
+        throw std::runtime_error("invalid number part.");
+    }
+
     if (alternate.startsWithPositiveSign(text2)) {
         return true;
     }
-    if (alternate.startsWithZeroSign(text2)) { // Positiveˆµ‚¢
-        return true; // TODO isZero
+    if (alternate.startsWithZeroSign(text2) && isZeroNumberText(text2, alternate)) { // Positiveˆµ‚¢
+        return true;
     }
     if (alternate.startsWithNegativeSign(text2)) {
         return false;
@@ -203,13 +205,40 @@ bool StringEx::isPositiveNumberText(std::string_view text, const NumberTextAlter
 bool StringEx::isNegativeNumberText(std::string_view text, const NumberTextAlternaor& alternate)
 {
     std::string text2 = trimAll(text);
+    if (alternate.isNan(text2)) {
+        return false;
+    }
+
     if (!validateSingPartNumberText(text2, alternate)) {
         throw std::runtime_error("invalid sign part.");
     }
+    if (!validateNumberPartNumberText(text2, alternate)) {
+        throw std::runtime_error("invalid number part.");
+    }
+
     if (alternate.startsWithNegativeSign(text2)) {
         return true;
     }
     return false;
+}
+
+bool StringEx::isZeroNumberText(std::string_view text, const NumberTextAlternaor& alternate)
+{
+    std::string text2 = trimAll(text);
+    text2 = alternate.normalize(text2);
+
+    const char* str = text2.c_str();
+    double value{};
+
+    if (auto [ptr, ec] = std::from_chars(str, str + text2.size(), value); ec != std::errc{}) {
+        return false;
+    }
+
+    if (value != 0.0) {
+        return false;
+    }
+
+    return true;
 }
 
 std::string StringEx::deleteSignPartNumberText(std::string_view text, const NumberTextAlternaor& alternate)
